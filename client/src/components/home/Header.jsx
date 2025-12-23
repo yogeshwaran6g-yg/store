@@ -2,7 +2,7 @@ import { FaShoppingCart, FaUserCircle, FaBars, FaRocket } from "react-icons/fa";
 
 const Header = () => {
   return (
-    <header className="sticky top-0 z-50 bg-primary dark:bg-primary-dark backdrop-blur-md border-b border-primary-dark dark:border-primary">
+    <header className="sticky top-0 z-40 bg-primary dark:bg-primary-dark backdrop-blur-md border-b border-primary-dark dark:border-primary">
       <div className="layout-container max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20 gap-4">
 
