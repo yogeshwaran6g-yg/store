@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Books",
+    "description": "Books and literature category",
+    "icon": "https://cdn.example.com/icons/books.png"
+  },
+  {
+    "name": "Coloring",
+    "description": "Coloring books and activities",
+    "icon": "https://cdn.example.com/icons/coloring.png"
+  },
+  {
+    "name": "Flash cards",
+    "description": "Educational flash cards category",
+    "icon": "https://cdn.example.com/icons/flashcards.png"
+  }
+]

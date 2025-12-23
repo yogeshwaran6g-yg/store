@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: #e95144;
+  --color-primary-dark: #e9454d;
+  --color-secondary: #fccf39;
+
+  --color-accent-purple: #a55eea;
+  --color-accent-green: #2bcbba;
+
+  --color-background-light: #f8fbfc;
+  --color-background-dark: #101c22;
+
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #1e2a30;
+}
+
+
+/* FORCE LIGHT UI */
+html {
+  color-scheme: light;
+}
+
+.dark {
+  all: unset;
+}

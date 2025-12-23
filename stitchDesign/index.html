@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<!-- #e95144
+#e9454d -->
+
+<!-- #fccf39 -->
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Kids Product Store Homepage</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#e95144",
+              "primary-dark": "#e9454d",
+              secondary: "#fccf39",
+              "accent-purple": "#a55eea",
+              "accent-green": "#2bcbba",
+              "background-light": "#f8fbfc",
+              "background-dark": "#101c22",
+              "surface-light": "#ffffff",
+              "surface-dark": "#1e2a30",
+            },
+            fontFamily: {
+              display: ["Plus Jakarta Sans", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              lg: "1rem",
+              xl: "1.5rem",
+              "2xl": "2rem",
+              full: "9999px",
+            },
+            boxShadow: {
+              soft: "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
+              glow: "0 0 15px rgba(233, 81, 68, 0.3)",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .text-stroke-w {
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 transition-colors duration-200"
+  >
+    <div class="flex flex-col min-h-screen">
+      <!-- Top Navigation Bar -->
+      <header
+        class="sticky top-0 z-50 bg-primary dark:bg-primary-dark backdrop-blur-md border-b border-primary-dark dark:border-primary"
+      >
+        <div
+          class="layout-container max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8"
+        >
+          <div class="flex items-center justify-between h-20 gap-4">
+            <!-- Logo -->
+            <div class="flex items-center gap-2 flex-shrink-0 cursor-pointer">
+              <div
+                class="size-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-glow"
+              >
+                <span class="material-symbols-outlined text-[28px]"
+                  >rocket_launch</span
+                >
+              </div>
+              <h1
+                class="text-xl sm:text-2xl font-extrabold tracking-tight text-white"
+              >
+                Wonder<span class="text-secondary">Kid</span>
+              </h1>
+            </div>
+            <!-- Navigation Links (Desktop) -->
+            <nav class="hidden lg:flex items-center gap-8">
+              <a
+                class="text-white/90 font-bold hover:text-secondary transition-colors text-sm"
+                href="#"
+                >Shop by Age</a
+              >
+              <a
+                class="text-white/90 font-bold hover:text-secondary transition-colors text-sm"
+                href="#"
+                >Shop by Interest</a
+              >
+              <a
+                class="text-white/90 font-bold hover:text-secondary transition-colors text-sm"
+                href="#"
+                >Shop All</a
+              >
+            </nav>
+            <!-- Search and Actions -->
+            <div
+              class="flex items-center gap-3 sm:gap-6 flex-1 lg:flex-none justify-end"
+            >
+              <!-- Search Bar -->
+              <div class="hidden sm:flex relative w-full max-w-[240px]">
+                <input
+                  class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl py-2.5 pl-10 pr-4 text-sm font-medium focus:ring-2 focus:ring-primary/50 text-slate-800 dark:text-slate-100 placeholder:text-slate-400"
+                  placeholder="Search toys..."
+                  type="text"
+                />
+                <span
+                  class="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-[20px]"
+                  >search</span
+                >
+              </div>
+              <!-- Icons -->
+              <div class="flex items-center gap-2">
+                <button
+                  class="size-10 flex items-center justify-center rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors relative group"
+                >
+                  <span class="material-symbols-outlined text-white"
+                    >shopping_cart</span
+                  >
+                  <span
+                    class="absolute top-2 right-2 size-2 bg-secondary rounded-full ring-2 ring-primary"
+                  ></span>
+                </button>
+                <button
+                  class="size-10 flex items-center justify-center rounded-xl hover:bg-primary-dark transition-colors"
+                >
+                  <span class="material-symbols-outlined text-white"
+                    >person</span
+                  >
+                </button>
+                <button
+                  class="lg:hidden size-10 flex items-center justify-center rounded-xl hover:bg-primary-dark transition-colors"
+                >
+                  <span class="material-symbols-outlined text-white">menu</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- Hero Section -->
+      <section class="relative pt-6 pb-12 lg:pt-10 lg:pb-16 px-4">
+        <div class="max-w-[1200px] mx-auto">
+          <div
+            class="relative rounded-2xl sm:rounded-3xl overflow-hidden min-h-[500px] lg:min-h-[600px] flex items-center bg-slate-900 group"
+          >
+            <!-- Background Image -->
+            <div class="absolute inset-0 z-0">
+              <img
+                alt="Child playing with colorful educational toys on floor"
+                class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBkv8t1sDHCWSNIIGigXSk1GdAPbKreJTguBVCgCPHo68LYMa9bga83HWlUOVJUs3jdTdLTe-fbK79e5hSc4D225K4pzha6vxoj7y5YZuM2CFXJizgmn9Yr7KNnUJiryMkTloX0aenAGNlYY7NKW-1CdnGgk1nsOzoZJ3sFZXy8RaCIjA06L_VB9alZo5ei3y80BCaMml6g2A9BStLO-j0FWwGBerX4DyZqyLnVf5iXH55L8l3Xq11ZLKgn4Vgpexvlt5NQbZqp_ah"
+              />
+              <div
+                class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"
+              ></div>
+            </div>
+            <!-- Content -->
+            <div
+              class="relative z-10 w-full max-w-2xl px-6 sm:px-12 lg:px-16 flex flex-col items-start gap-6"
+            >
+              <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/10 text-white text-xs font-bold uppercase tracking-wider"
+              >
+                <span
+                  class="w-2 h-2 rounded-full bg-accent-green animate-pulse"
+                ></span>
+                New Collection
+              </div>
+              <h2
+                class="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white leading-[1.1] tracking-tight"
+              >
+                Spark Curiosity with <br />
+                <span
+                  class="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-accent-green"
+                  >AR-Powered</span
+                >
+                Play
+              </h2>
+              <p
+                class="text-lg text-slate-200 max-w-md font-medium leading-relaxed"
+              >
+                Engaging educational toys that blend physical play with digital
+                learning for ages 2-12.
+              </p>
+              <div class="flex gap-4 pt-2">
+                <button
+                  class="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-primary/30 transition-all hover:-translate-y-1 flex items-center gap-2"
+                >
+                  Shop Now
+                  <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+                <button
+                  class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-8 py-4 rounded-xl font-bold text-lg border border-white/20 transition-all flex items-center gap-2"
+                >
+                  <span class="material-symbols-outlined">play_circle</span>
+                  Watch Demo
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Shop by Age Section -->
+      <section class="py-12 bg-white dark:bg-surface-dark/50">
+        <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-end justify-between mb-8">
+            <div>
+              <h3
+                class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white"
+              >
+                Shop by Age
+              </h3>
+              <p class="text-slate-500 dark:text-slate-400 mt-2 font-medium">
+                Curated collections for every developmental stage
+              </p>
+            </div>
+            <a
+              class="hidden sm:flex items-center text-primary font-bold hover:underline gap-1"
+              href="#"
+            >
+              View Guide
+              <span class="material-symbols-outlined text-sm"
+                >arrow_forward</span
+              >
+            </a>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <!-- Age Card 1 -->
+            <a
+              class="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-orange-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-soft hover:shadow-xl transition-all hover:-translate-y-1"
+              href="#"
+            >
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"
+              ></div>
+              <img
+                alt="Toddler girl playing with blocks"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAIyYdXNaB0zeXx2KE8dNrF2XkQ_aQo5wmi2wz39ODkxjcYYOMktu6RD8NleFGjYQlESPu71wEjBEWQ5Ky846LpiS2oOC9QOjMRNXkJwPcEUdZWpHo35wFGI5TFVFRo4DvenI5kTrlWcHmCJg_yMw26vxiiwyraHf9L1eyvTKczJOXJKaorytvQ9fGYefJ3PbqhDIkPRvbckzRoF6m0sVvfSQQMQrGdB3fcKL7D01OpO1uB68-2ZKdVYxzcnQ451tC0gmxfNN35pMq"
+              />
+              <div class="absolute bottom-0 left-0 p-4 sm:p-6 z-20">
+                <div
+                  class="bg-primary text-white text-xs font-bold px-2 py-1 rounded-md w-fit mb-2"
+                >
+                  Preschool
+                </div>
+                <h4 class="text-xl sm:text-2xl font-bold text-white">
+                  4-6 Years
+                </h4>
+              </div>
+            </a>
+            <!-- Age Card 2 -->
+            <a
+              class="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-blue-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-soft hover:shadow-xl transition-all hover:-translate-y-1"
+              href="#"
+            >
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"
+              ></div>
+              <img
+                alt="Young boy drawing with colors"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQOvk61vc86uAaU5SOb9M1tWe_axmZdSgpUD_lSCP-MPfYQwlmtb-2F6mYo1uxhzH1MI4FOfec8gBSw_17sqg38ojYIMdb3NUdoE7FYrUxGsvzf1Btd1z1zfUu8jtHHxQxHX4gmuCkMBUujc1qiVDS25lpI4ZrumZCrLgz3Q771EGFsz1Bu0ZIdQOvXJnDRbDsnWam8JB7fBOzhPEbTG0qTtG6SAulIxrmg0aS0GiFuW9s4okw_s-7Ra4n36QcIYiRViL-h1OYE-4p"
+              />
+              <div class="absolute bottom-0 left-0 p-4 sm:p-6 z-20">
+                <div
+                  class="bg-primary-dark text-white text-xs font-bold px-2 py-1 rounded-md w-fit mb-2"
+                >
+                  Early Grade
+                </div>
+                <h4 class="text-xl sm:text-2xl font-bold text-white">
+                  6-8 Years
+                </h4>
+              </div>
+            </a>
+            <!-- Age Card 3 -->
+            <a
+              class="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-purple-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-soft hover:shadow-xl transition-all hover:-translate-y-1"
+              href="#"
+            >
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"
+              ></div>
+              <img
+                alt="Girl building a robot toy"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhcbgDMPZLgAPvAuxx243FG2BiV3Pm6FPmyqhGgEEf0Hoz0wNG9rVsT2BwZ5T1beIsSs4R58iTuTrpHhZuj0hbi56nnHzCax4tBTfw7Qfg3NqiLJZiKDCSrPVbeAYWn10DHZjraq29Mlo_0Dd-c0tK4viZVYOo0UadWBRoAsAEoDA2Is8Z8YhpiCKH3yLHlsEaSK0L0hw_CYh5TT_jPnW8ShQN13wAt-hRZN5nzdMdixqpgIp8Xhh5h3ZFr0uv_7uI-xI5j65zMZdA"
+              />
+              <div class="absolute bottom-0 left-0 p-4 sm:p-6 z-20">
+                <div
+                  class="bg-accent-purple text-white text-xs font-bold px-2 py-1 rounded-md w-fit mb-2"
+                >
+                  Middle Grade
+                </div>
+                <h4 class="text-xl sm:text-2xl font-bold text-white">
+                  8-10 Years
+                </h4>
+              </div>
+            </a>
+            <!-- Age Card 4 -->
+            <a
+              class="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-green-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-soft hover:shadow-xl transition-all hover:-translate-y-1"
+              href="#"
+            >
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"
+              ></div>
+              <img
+                alt="Older kids working on science project"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSxv5KursZsl3tmdVfK6FKO6DiyaSZJ4TmbkiHaZ5u7HnaW8PQ9jm_63KAyB24riB5VVRXMY8Kwubh9k2PzFgeTwbNwOtpVUp4V2DWV927FIhtEZ2QmYKY_pWxc_Q-dnZ-8e6OM_w3nAbuZaa2kugHA6WmoY4hmfWxYjyW7GtvsV7BqL1YxOM7_m8Y1V-NeEr0FU0AV2HbuKGNBK1ByLrAPvZRpsU84qFWCzddGRjmKmXvkwpmBmgNDUguQhoNhG4dGayQYoEXBI26"
+              />
+              <div class="absolute bottom-0 left-0 p-4 sm:p-6 z-20">
+                <div
+                  class="bg-accent-green text-white text-xs font-bold px-2 py-1 rounded-md w-fit mb-2"
+                >
+                  Pre-Teen
+                </div>
+                <h4 class="text-xl sm:text-2xl font-bold text-white">
+                  10+ Years
+                </h4>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+      <!-- Product Carousel Section -->
+      <section class="py-16">
+        <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between mb-8">
+            <h3
+              class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white"
+            >
+              Trending Now
+            </h3>
+            <div class="flex gap-2">
+              <button
+                class="size-10 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <span class="material-symbols-outlined">arrow_back</span>
+              </button>
+              <button
+                class="size-10 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center hover:opacity-90 transition-opacity"
+              >
+                <span class="material-symbols-outlined">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+          <div
+            class="flex gap-6 overflow-x-auto hide-scrollbar pb-8 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth"
+          >
+            <!-- Product Card 1 -->
+                   
+          <!-- <div class="sku-card rounded-lg bg-[#F4F4F4] flex flex-col gap-4 w-full" style="cursor: pointer;">
+            <div class="card-image w-full relative rounded-lg cursor-pointer overflow-hidden group">
+                <div class="relative overflow-hidden ">
+                    <div class="transition-transform duration-500 ease-in-out translate-x-0">
+                        <img 
+                            alt="Travel Toys Bundle" loading="lazy" width="600" height="600" sizes="(max-width: 768px) 50vw, 33vw" 
+                            src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&q=80&w=600&h=600"
+
+                             style="color: transparent; width: 100%; height: auto;">
+                    </div>
+                </div>
+                <div class="absolute top-0 left-0">
+                    <div class="flag-tag px-4 py-1 rounded-br-md text-[#FFFFFF] text-[12px] md:text-[16px] font-semibold bg-[#FF2952]">SuperSaver</div>
+                </div>
+                <div class="hidden absolute bottom-4 w-full justify-center items-center gap-4 opacity-0 group-hover:opacity-100 md:flex transition-opacity">
+                    <div class="relative group/icon bg-white p-1 rounded-full border custom-box-shadow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye !w-[20px] md:!w-[26px]">
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-max px-2 py-1 text-sm text-white bg-black rounded opacity-0 group-hover/icon:opacity-100 transition-opacity pointer-events-none">Quick View                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body flex flex-col gap-2 md:gap-3  pb-[1rem] md:pb-[0.75rem]">
+                <div class="sku-title text-[12px] md:text-[14px] font-semibold text-left px-2">
+                    <h1 class="line-clamp-2  h-fit md:h-fit">Travel Toys Bundle | Learning Toy Bundle For Travels | Ages 4+</h1>
+                </div>
+                <div class="ratings flex items-center gap-2 md:gap-4 text-[#090909] px-2">
+                    <a href="#review_parent_section" class="flex items-center justify-center px-2 rounded-md bg-[#6739A2] text-white gap-1">
+                        <img alt="*" loading="lazy" width="13" height="12" decoding="async" data-nimg="1" class="h-3 w-3 md:h-4 md:w-4 " src="/_next/static/media/star.a871de54.svg" style="color: transparent;">
+                        <div class=" py-[2px] text-[12px] md:text-[14px] font-bold">4.6</div>
+                    </a>
+                    <div class=" items-center ratings__count flex gap-2 text-[10px] md:text-[12px]">
+                        <p class="">50 reviews</p>
+                    </div>
+                </div>
+                <div>
+                <div class="flex gap-2 md:gap-4 items-center px-2">
+                    <div class="text-[#FF2952] text-[18px] md:text-[26px]">-20%</div>
+                    <div class="flex gap-1 md:gap-2 items-center">
+                        <div class="text-[#090909]  text-[16px] md:text-[20px] font-semibold">₹5118</div>
+                        <div class="line-through text-[#C1C1C1] text-[10px] md:text-[16px]">₹6397</div>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="bg-[#FFDE17] px-4 py-2 flex items-center gap-3 w-full max-w-lg">
+                        <div class="flex-shrink-0 hidden md:block">
+                        <img alt="Free Gift" loading="lazy" width="52" height="52" decoding="async" data-nimg="1" src="/_next/static/media/FreeGiftLogo.8fa188fc.svg" style="color: transparent;"></div>
+                        <div class="flex-1 leading-tight md:leading-4"><span class="text-[#6739A2] font-extrabold italic text-[12px] md:text-[12px] mr-1">FREE GIFT</span>
+                            <span class="text-gray-900 text-[12px] md:text-[12px] font-medium">worth up to ₹1000 with every order.</span>
+                        </div></div>
+                        <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 mt-[0.5rem] md:mt-[0rem] mx-2 uppercase bg-[#FFFFFD] border-[1px] border-[#6739A2] text-[#6739A2] hover:bg-[#6739A2] hover:text-[#FFFFFD]">
+                            Add To Cart</button>
+                    </div></div> -->
+<!-- 2. -->
+          
+          <div class="sku-card rounded-lg bg-[#F4F4F4] flex flex-col gap-4 w-full" style="cursor: pointer;">
+            <div class="card-image w-full relative rounded-lg cursor-pointer overflow-hidden group">
+                <div class="relative overflow-hidden ">
+                     <div class="transition-transform duration-500 ease-in-out translate-x-0">
+                        <img 
+                            alt="Travel Toys Bundle" loading="lazy" width="600" height="600" sizes="(max-width: 768px) 50vw, 33vw" 
+                            src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&q=80&w=600&h=600"
+
+                             style="color: transparent; width: 100%; height: auto;">
+                    </div>
+                </div>
+                <div class="absolute top-0 left-0">
+                    <div class="flag-tag px-4 py-1 rounded-br-md text-[#FFFFFF] text-[12px] md:text-[16px] font-semibold bg-[#FF2952]">SuperSaver</div>
+                </div>
+                <div class="hidden absolute bottom-4 w-full justify-center items-center gap-4 opacity-0 group-hover:opacity-100 md:flex transition-opacity">
+                    <div class="relative group/icon bg-white p-1 rounded-full border custom-box-shadow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye !w-[20px] md:!w-[26px]">
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-max px-2 py-1 text-sm text-white bg-black rounded opacity-0 group-hover/icon:opacity-100 transition-opacity pointer-events-none">Quick View                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body flex flex-col gap-2 md:gap-3  pb-[1rem] md:pb-[0.75rem]">
+                <div class="sku-title text-[12px] md:text-[14px] font-semibold text-left px-2">
+                    <h1 class="line-clamp-2  h-fit md:h-fit">Travel Toys Bundle | Learning Toy Bundle For Travels | Ages 4+</h1>
+                </div>
+                <div class="ratings flex items-center gap-2 md:gap-4 text-[#090909] px-2">
+                    <a href="#review_parent_section" class="flex items-center justify-center px-2 rounded-md bg-[#6739A2] text-white gap-1">
+                        <img alt="*" loading="lazy" width="13" height="12" decoding="async" data-nimg="1" class="h-3 w-3 md:h-4 md:w-4 " src="/_next/static/media/star.a871de54.svg" style="color: transparent;">
+                        <div class=" py-[2px] text-[12px] md:text-[14px] font-bold">4.6</div>
+                    </a>
+                    <div class=" items-center ratings__count flex gap-2 text-[10px] md:text-[12px]">
+                        <p class="">50 reviews</p>
+                    </div>
+                </div>
+                <div>
+                <div class="flex gap-2 md:gap-4 items-center px-2">
+                    <div class="text-[#FF2952] text-[18px] md:text-[26px]">-20%</div>
+                    <div class="flex gap-1 md:gap-2 items-center">
+                        <div class="text-[#090909]  text-[16px] md:text-[20px] font-semibold">₹5118</div>
+                        <div class="line-through text-[#C1C1C1] text-[10px] md:text-[16px]">₹6397</div>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="bg-[#FFDE17] px-4 py-2 flex items-center gap-3 w-full max-w-lg">
+                        <div class="flex-shrink-0 hidden md:block">
+                        <img alt="Free Gift" loading="lazy" width="52" height="52" decoding="async" data-nimg="1" src="/_next/static/media/FreeGiftLogo.8fa188fc.svg" style="color: transparent;"></div>
+                        <div class="flex-1 leading-tight md:leading-4"><span class="text-[#6739A2] font-extrabold italic text-[12px] md:text-[12px] mr-1">FREE GIFT</span>
+                            <span class="text-gray-900 text-[12px] md:text-[12px] font-medium">worth up to ₹1000 with every order.</span>
+                        </div></div>
+                        <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 mt-[0.5rem] md:mt-[0rem] mx-2 uppercase bg-[#FFFFFD] border-[1px] border-[#6739A2] text-[#6739A2] hover:bg-[#6739A2] hover:text-[#FFFFFD]">
+                            Add To Cart</button>
+                    </div></div>
+<!-- 3. -->
+          
+          <div class="sku-card rounded-lg bg-[#F4F4F4] flex flex-col gap-4 w-full" style="cursor: pointer;">
+            <div class="card-image w-full relative rounded-lg cursor-pointer overflow-hidden group">
+                <div class="relative overflow-hidden ">
+                    <div class="transition-transform duration-500 ease-in-out translate-x-0">
+                        <img 
+                            alt="Travel Toys Bundle" loading="lazy" width="600" height="600" sizes="(max-width: 768px) 50vw, 33vw" 
+                            src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&q=80&w=600&h=600"
+
+                             style="color: transparent; width: 100%; height: auto;">
+                    </div>
+                </div>
+                <div class="absolute top-0 left-0">
+                    <div class="flag-tag px-4 py-1 rounded-br-md text-[#FFFFFF] text-[12px] md:text-[16px] font-semibold bg-[#FF2952]">SuperSaver</div>
+                </div>
+                <div class="hidden absolute bottom-4 w-full justify-center items-center gap-4 opacity-0 group-hover:opacity-100 md:flex transition-opacity">
+                    <div class="relative group/icon bg-white p-1 rounded-full border custom-box-shadow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye !w-[20px] md:!w-[26px]">
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-max px-2 py-1 text-sm text-white bg-black rounded opacity-0 group-hover/icon:opacity-100 transition-opacity pointer-events-none">Quick View                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body flex flex-col gap-2 md:gap-3  pb-[1rem] md:pb-[0.75rem]">
+                <div class="sku-title text-[12px] md:text-[14px] font-semibold text-left px-2">
+                    <h1 class="line-clamp-2  h-fit md:h-fit">Travel Toys Bundle | Learning Toy Bundle For Travels | Ages 4+</h1>
+                </div>
+                <div class="ratings flex items-center gap-2 md:gap-4 text-[#090909] px-2">
+                    <a href="#review_parent_section" class="flex items-center justify-center px-2 rounded-md bg-[#6739A2] text-white gap-1">
+                        <img alt="*" loading="lazy" width="13" height="12" decoding="async" data-nimg="1" class="h-3 w-3 md:h-4 md:w-4 " src="/_next/static/media/star.a871de54.svg" style="color: transparent;">
+                        <div class=" py-[2px] text-[12px] md:text-[14px] font-bold">4.6</div>
+                    </a>
+                    <div class=" items-center ratings__count flex gap-2 text-[10px] md:text-[12px]">
+                        <p class="">50 reviews</p>
+                    </div>
+                </div>
+                <div>
+                <div class="flex gap-2 md:gap-4 items-center px-2">
+                    <div class="text-[#FF2952] text-[18px] md:text-[26px]">-20%</div>
+                    <div class="flex gap-1 md:gap-2 items-center">
+                        <div class="text-[#090909]  text-[16px] md:text-[20px] font-semibold">₹5118</div>
+                        <div class="line-through text-[#C1C1C1] text-[10px] md:text-[16px]">₹6397</div>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="bg-[#FFDE17] px-4 py-2 flex items-center gap-3 w-full max-w-lg">
+                        <div class="flex-shrink-0 hidden md:block">
+                        <img alt="Free Gift" loading="lazy" width="52" height="52" decoding="async" data-nimg="1" src="/_next/static/media/FreeGiftLogo.8fa188fc.svg" style="color: transparent;"></div>
+                        <div class="flex-1 leading-tight md:leading-4"><span class="text-[#6739A2] font-extrabold italic text-[12px] md:text-[12px] mr-1">FREE GIFT</span>
+                            <span class="text-gray-900 text-[12px] md:text-[12px] font-medium">worth up to ₹1000 with every order.</span>
+                        </div></div>
+                        <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 mt-[0.5rem] md:mt-[0rem] mx-2 uppercase bg-[#FFFFFD] border-[1px] border-[#6739A2] text-[#6739A2] hover:bg-[#6739A2] hover:text-[#FFFFFD]">
+                            Add To Cart</button>
+                    </div></div>
+<!-- 4. -->
+          
+          <div class="sku-card rounded-lg bg-[#F4F4F4] flex flex-col gap-4 w-full" style="cursor: pointer;">
+            <div class="card-image w-full relative rounded-lg cursor-pointer overflow-hidden group">
+                 <div class="transition-transform duration-500 ease-in-out translate-x-0">
+                        <img 
+                            alt="Travel Toys Bundle" loading="lazy" width="600" height="600" sizes="(max-width: 768px) 50vw, 33vw" 
+                            src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&q=80&w=600&h=600"
+
+                             style="color: transparent; width: 100%; height: auto;">
+                    </div>
+                <div class="absolute top-0 left-0">
+                    <div class="flag-tag px-4 py-1 rounded-br-md text-[#FFFFFF] text-[12px] md:text-[16px] font-semibold bg-[#FF2952]">SuperSaver</div>
+                </div>
+                <div class="hidden absolute bottom-4 w-full justify-center items-center gap-4 opacity-0 group-hover:opacity-100 md:flex transition-opacity">
+                    <div class="relative group/icon bg-white p-1 rounded-full border custom-box-shadow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye !w-[20px] md:!w-[26px]">
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-max px-2 py-1 text-sm text-white bg-black rounded opacity-0 group-hover/icon:opacity-100 transition-opacity pointer-events-none">Quick View                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body flex flex-col gap-2 md:gap-3  pb-[1rem] md:pb-[0.75rem]">
+                <div class="sku-title text-[12px] md:text-[14px] font-semibold text-left px-2">
+                    <h1 class="line-clamp-2  h-fit md:h-fit">Travel Toys Bundle | Learning Toy Bundle For Travels | Ages 4+</h1>
+                </div>
+                <div class="ratings flex items-center gap-2 md:gap-4 text-[#090909] px-2">
+                    <a href="#review_parent_section" class="flex items-center justify-center px-2 rounded-md bg-[#6739A2] text-white gap-1">
+                        <img alt="*" loading="lazy" width="13" height="12" decoding="async" data-nimg="1" class="h-3 w-3 md:h-4 md:w-4 " src="/_next/static/media/star.a871de54.svg" style="color: transparent;">
+                        <div class=" py-[2px] text-[12px] md:text-[14px] font-bold">4.6</div>
+                    </a>
+                    <div class=" items-center ratings__count flex gap-2 text-[10px] md:text-[12px]">
+                        <p class="">50 reviews</p>
+                    </div>
+                </div>
+                <div>
+                <div class="flex gap-2 md:gap-4 items-center px-2">
+                    <div class="text-[#FF2952] text-[18px] md:text-[26px]">-20%</div>
+                    <div class="flex gap-1 md:gap-2 items-center">
+                        <div class="text-[#090909]  text-[16px] md:text-[20px] font-semibold">₹5118</div>
+                        <div class="line-through text-[#C1C1C1] text-[10px] md:text-[16px]">₹6397</div>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="bg-[#FFDE17] px-4 py-2 flex items-center gap-3 w-full max-w-lg">
+                        <div class="flex-shrink-0 hidden md:block">
+                        <img alt="Free Gift" loading="lazy" width="52" height="52" decoding="async" data-nimg="1" src="/_next/static/media/FreeGiftLogo.8fa188fc.svg" style="color: transparent;"></div>
+                        <div class="flex-1 leading-tight md:leading-4"><span class="text-[#6739A2] font-extrabold italic text-[12px] md:text-[12px] mr-1">FREE GIFT</span>
+                            <span class="text-gray-900 text-[12px] md:text-[12px] font-medium">worth up to ₹1000 with every order.</span>
+                        </div></div>
+                        <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 mt-[0.5rem] md:mt-[0rem] mx-2 uppercase bg-[#FFFFFD] border-[1px] border-[#6739A2] text-[#6739A2] hover:bg-[#6739A2] hover:text-[#FFFFFD]">
+                            Add To Cart</button>
+                    </div></div>
+
+
+
+
+        </div>
+      </section>
+      <!-- Features Section -->
+      <section class="py-16 bg-red-50 dark:bg-surface-dark/30">
+        <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12">
+            <h2
+              class="text-3xl font-extrabold text-slate-900 dark:text-white mb-4"
+            >
+              Why Parents Trust Us
+            </h2>
+            <p class="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+              We combine cutting-edge technology with fundamental learning
+              principles to create toys that matter.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div
+              class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4"
+            >
+              <div
+                class="size-12 rounded-full bg-red-100 dark:bg-red-900/30 text-primary flex items-center justify-center shrink-0"
+              >
+                <span class="material-symbols-outlined">view_in_ar</span>
+              </div>
+              <div>
+                <h4
+                  class="font-bold text-lg text-slate-900 dark:text-white mb-2"
+                >
+                  AR + Phygital
+                </h4>
+                <p
+                  class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed"
+                >
+                  Bridging the gap between physical toys and digital
+                  interactivity for immersive play.
+                </p>
+              </div>
+            </div>
+            <!-- Feature 2 -->
+            <div
+              class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4"
+            >
+              <div
+                class="size-12 rounded-full bg-green-100 dark:bg-green-900/30 text-accent-green flex items-center justify-center shrink-0"
+              >
+                <span class="material-symbols-outlined">child_care</span>
+              </div>
+              <div>
+                <h4
+                  class="font-bold text-lg text-slate-900 dark:text-white mb-2"
+                >
+                  Early Years Development
+                </h4>
+                <p
+                  class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed"
+                >
+                  Focusing on cognitive, motor, and social skills crucial for
+                  early growth.
+                </p>
+              </div>
+            </div>
+            <!-- Feature 3 -->
+            <div
+              class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4"
+            >
+              <div
+                class="size-12 rounded-full bg-purple-100 dark:bg-purple-900/30 text-accent-purple flex items-center justify-center shrink-0"
+              >
+                <span class="material-symbols-outlined">psychology</span>
+              </div>
+              <div>
+                <h4
+                  class="font-bold text-lg text-slate-900 dark:text-white mb-2"
+                >
+                  Designed by Experts
+                </h4>
+                <p
+                  class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed"
+                >
+                  Created in collaboration with child psychologists and
+                  educators.
+                </p>
+              </div>
+            </div>
+            <!-- Feature 4 -->
+            <div
+              class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4"
+            >
+              <div
+                class="size-12 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-secondary flex items-center justify-center shrink-0"
+              >
+                <span class="material-symbols-outlined">science</span>
+              </div>
+              <div>
+                <h4
+                  class="font-bold text-lg text-slate-900 dark:text-white mb-2"
+                >
+                  STEM Based
+                </h4>
+                <p
+                  class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed"
+                >
+                  Building foundations in Science, Technology, Engineering, and
+                  Math.
+                </p>
+              </div>
+            </div>
+            <!-- Feature 5 -->
+            <div
+              class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4"
+            >
+              <div
+                class="size-12 rounded-full bg-red-100 dark:bg-red-900/30 text-red-500 flex items-center justify-center shrink-0"
+              >
+                <span class="material-symbols-outlined">shield</span>
+              </div>
+              <div>
+                <h4
+                  class="font-bold text-lg text-slate-900 dark:text-white mb-2"
+                >
+                  Parental Support
+                </h4>
+                <p
+                  class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed"
+                >
+                  Tools for parents to guide, monitor, and participate in the
+                  learning journey.
+                </p>
+              </div>
+            </div>
+            <!-- Feature 6 -->
+            <div
+              class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4"
+            >
+              <div
+                class="size-12 rounded-full bg-teal-100 dark:bg-teal-900/30 text-teal-500 flex items-center justify-center shrink-0"
+              >
+                <span class="material-symbols-outlined">timer</span>
+              </div>
+              <div>
+                <h4
+                  class="font-bold text-lg text-slate-900 dark:text-white mb-2"
+                >
+                  Meaningful Screen Time
+                </h4>
+                <p
+                  class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed"
+                >
+                  Transforming passive consumption into active, educational
+                  engagement.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Shop by Interest -->
+      <section class="py-16">
+           <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-end justify-between mb-8">
+            <div>
+              <h3
+                class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white"
+              >
+                Shop by Interest
+              </h3>
+              <p class="text-slate-500 dark:text-slate-400 mt-2 font-medium">
+                Curated collections for every developmental stage
+              </p>
+            </div>
+            <a
+              class="hidden sm:flex items-center text-primary font-bold hover:underline gap-1"
+              href="#"
+            >
+              View Guide
+              <span class="material-symbols-outlined text-sm"
+                >arrow_forward</span
+              >
+            </a>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <!-- Age Card 1 -->
+            <a
+              class="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-green-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-soft hover:shadow-xl transition-all hover:-translate-y-1"
+              href="#"
+            >
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"
+              ></div>
+              <img
+                alt="Older kids working on science project"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSxv5KursZsl3tmdVfK6FKO6DiyaSZJ4TmbkiHaZ5u7HnaW8PQ9jm_63KAyB24riB5VVRXMY8Kwubh9k2PzFgeTwbNwOtpVUp4V2DWV927FIhtEZ2QmYKY_pWxc_Q-dnZ-8e6OM_w3nAbuZaa2kugHA6WmoY4hmfWxYjyW7GtvsV7BqL1YxOM7_m8Y1V-NeEr0FU0AV2HbuKGNBK1ByLrAPvZRpsU84qFWCzddGRjmKmXvkwpmBmgNDUguQhoNhG4dGayQYoEXBI26"
+              />
+           
+            </a>
+            <!-- Age Card 2 -->
+            <a
+              class="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-green-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-soft hover:shadow-xl transition-all hover:-translate-y-1"
+              href="#"
+            >
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"
+              ></div>
+              <img
+                alt="Older kids working on science project"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSxv5KursZsl3tmdVfK6FKO6DiyaSZJ4TmbkiHaZ5u7HnaW8PQ9jm_63KAyB24riB5VVRXMY8Kwubh9k2PzFgeTwbNwOtpVUp4V2DWV927FIhtEZ2QmYKY_pWxc_Q-dnZ-8e6OM_w3nAbuZaa2kugHA6WmoY4hmfWxYjyW7GtvsV7BqL1YxOM7_m8Y1V-NeEr0FU0AV2HbuKGNBK1ByLrAPvZRpsU84qFWCzddGRjmKmXvkwpmBmgNDUguQhoNhG4dGayQYoEXBI26"
+              />
+           
+            </a>
+            <!-- Age Card 3 -->
+      <a
+              class="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-green-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-soft hover:shadow-xl transition-all hover:-translate-y-1"
+              href="#"
+            >
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"
+              ></div>
+              <img
+                alt="Older kids working on science project"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSxv5KursZsl3tmdVfK6FKO6DiyaSZJ4TmbkiHaZ5u7HnaW8PQ9jm_63KAyB24riB5VVRXMY8Kwubh9k2PzFgeTwbNwOtpVUp4V2DWV927FIhtEZ2QmYKY_pWxc_Q-dnZ-8e6OM_w3nAbuZaa2kugHA6WmoY4hmfWxYjyW7GtvsV7BqL1YxOM7_m8Y1V-NeEr0FU0AV2HbuKGNBK1ByLrAPvZRpsU84qFWCzddGRjmKmXvkwpmBmgNDUguQhoNhG4dGayQYoEXBI26"
+              />
+           
+            </a>
+            <!-- Age Card 4 -->
+            <a
+              class="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-green-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-soft hover:shadow-xl transition-all hover:-translate-y-1"
+              href="#"
+            >
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"
+              ></div>
+              <img
+                alt="Older kids working on science project"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSxv5KursZsl3tmdVfK6FKO6DiyaSZJ4TmbkiHaZ5u7HnaW8PQ9jm_63KAyB24riB5VVRXMY8Kwubh9k2PzFgeTwbNwOtpVUp4V2DWV927FIhtEZ2QmYKY_pWxc_Q-dnZ-8e6OM_w3nAbuZaa2kugHA6WmoY4hmfWxYjyW7GtvsV7BqL1YxOM7_m8Y1V-NeEr0FU0AV2HbuKGNBK1ByLrAPvZRpsU84qFWCzddGRjmKmXvkwpmBmgNDUguQhoNhG4dGayQYoEXBI26"
+              />
+           
+            </a>
+          </div>
+        </div>
+
+      </section>
+      <!-- Testimonials -->
+      <section
+        class="py-16 bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 overflow-hidden"
+      >
+        <div
+          class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center"
+        >
+          <h3
+            class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white"
+          >
+            Happy Parents &amp; Kids
+          </h3>
+        </div>
+        <div class="relative w-full">
+          <!-- Auto-scrolling wrapper (Using simple CSS animation logic or just static layout for this task since no JS allowed) -->
+          <!-- We will display a static grid here for simplicity in pure HTML, but styled to look like a slider -->
+          <div
+            class="flex gap-6 overflow-x-auto hide-scrollbar px-4 sm:px-0 justify-start sm:justify-center"
+          >
+            <!-- Review 1 -->
+            <div
+              class="min-w-[300px] max-w-[300px] bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm"
+            >
+              <div class="flex items-center gap-1 text-yellow-400 mb-3">
+                <span class="material-symbols-outlined text-sm fill-current"
+                  >star</span
+                >
+                <span class="material-symbols-outlined text-sm fill-current"
+                  >star</span
+                >
+                <span class="material-symbols-outlined text-sm fill-current"
+                  >star</span
+                >
+                <span class="material-symbols-outlined text-sm fill-current"
+                  >star</span
+                >
+                <span class="material-symbols-outlined text-sm fill-current"
+                  >star</span
+                >
+              </div>
+              <p class="text-slate-600 dark:text-slate-300 text-sm mb-4 italic">
+                "My son loves the globe! He's learned so many countries and
+                animals. It's screen time I actually feel good about."
+              </p>
+              <div class="flex items-center gap-3">
+                <div class="size-10 rounded-full bg-slate-200 overflow-hidden">
+                  <img
+                    alt="Sarah T. avatar"
+                    class="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuB12HTWKXVzaPhDGjT0IuclGVPmP8dXYiSisVnoUvQJDND1WZRyvH83H2dLGLRcDSudtMHGzJGhs88raKJUickAvgso4bpldKYMEiv9z3uYi3PvU0CseZBM2faS92AD0q_o-2O2tWKB8n_QkJ6OllKr8hFrbu4IV2jvd9UeVbzVC3RTbPGTb5DrADlVevJSvvTgUkyMlaWdGonslCB7QlqYoBSgknVu_X6m2Dn-iY5Fb14_qvIIZpu7a1qnLLEfOhKhs3DR93A0vES1"
+                  />
+                </div>
+                <div>
+                  <h5 class="font-bold text-sm text-slate-900 dark:text-white">
+                    Sarah T.
+                  </h5>
+                  <p class="text-xs text-slate-400">Mom of 6yo</p>
+                </div>
+              </div>
+            </div>
+            <!-- Review 2 -->
+            <div
+              class="min-w-[300px] max-w-[300px] bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm"
+            >
+              <div class="flex items-center gap-1 text-yellow-400 mb-3">
+                <span class="material-symbols-outlined text-sm fill-current"
+                  >star</span
+                >
+                <span class="material-symbols-outlined text-sm fill-current"
+                  >star</span
+                >
+                <span class="material-symbols-outlined text-sm fill-current"
+                  >star</span
+                >
+                <span class="material-symbols-outlined text-sm fill-current"
+                  >star</span
+                >
+                <span class="material-symbols-outlined text-sm fill-current"
+                  >star</span
+                >
+              </div>
+              <p class="text-slate-600 dark:text-slate-300 text-sm mb-4 italic">
+                "The coding kit is fantastic. It breaks down complex concepts
+                into really fun games. Highly recommend!"
+              </p>
+              <div class="flex items-center gap-3">
+                <div class="size-10 rounded-full bg-slate-200 overflow-hidden">
+                  <img
+                    alt="Mike R. avatar"
+                    class="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuApkger0LSL7CHABXdIfS3NCnlNKTC5RiaehFJyC5t-r9wd9UeczfW_CwpQOQT8N1vrlST0GXpjHZcxOxEXCkTVETfX1niYLZKaeXnMnY13fB3QjrrjokVXG8PPJh__n1oHbP5AWq7HUky50EqJeShW-DewkfmSSmB4VTAnWPySvDqF3H4GQS0YTt6LOkb9zFOk3wV_jo4xAoBssqVCCLJ59_umIhgPloryUjZ0BiNNP2fQjIlY7RDla-3hvFs_D6NgZp_zmd3fulHo"
+                  />
+                </div>
+                <div>
+                  <h5 class="font-bold text-sm text-slate-900 dark:text-white">
+                    Mike R.
+                  </h5>
+                  <p class="text-xs text-slate-400">Dad of 9yo</p>
+                </div>
+              </div>
+            </div>
+            <!-- Review 3 -->
+            <div
+              class="min-w-[300px] max-w-[300px] bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm"
+            >
+              <div class="flex items-center gap-1 text-yellow-400 mb-3">
+                <span class="material-symbols-outlined text-sm fill-current"
+                  >star</span
+                >
+                <span class="material-symbols-outlined text-sm fill-current"
+                  >star</span
+                >
+                <span class="material-symbols-outlined text-sm fill-current"
+                  >star</span
+                >
+                <span class="material-symbols-outlined text-sm fill-current"
+                  >star</span
+                >
+                <span class="material-symbols-outlined text-sm fill-current"
+                  >star_half</span
+                >
+              </div>
+              <p class="text-slate-600 dark:text-slate-300 text-sm mb-4 italic">
+                "Finally, toys that keep them engaged for more than 10 minutes.
+                The AR integration works flawlessly."
+              </p>
+              <div class="flex items-center gap-3">
+                <div class="size-10 rounded-full bg-slate-200 overflow-hidden">
+                  <img
+                    alt="Emily K. avatar"
+                    class="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcfx6Lhut-3ktN23lqAkFL4DT03nKXCvqMo6f1LERL5qVIQd34wkW36Du3fYcMGJUtf6uvr4XdVvFJAoZebaQOchQa5cL8bmg3zz3DvnKirB0ulxcrbJ9w24jdj_JqsNc0oXO4YxYl1QjbhoKiRg3rrU1mZnZbcP66k12UX1uwgKQxQ9FMkBCFnFlekPecdJ_dj9PFq2ywXvPMK8rPkQSoA2EFPoW93V9zGLzZrj-EvIyvDk46-_RVHUg_aIml7awLr7l8CNcNpEUd"
+                  />
+                </div>
+                <div>
+                  <h5 class="font-bold text-sm text-slate-900 dark:text-white">
+                    Emily K.
+                  </h5>
+                  <p class="text-xs text-slate-400">Mom of 4yo &amp; 7yo</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Community Section -->
+      <section class="py-16">
+        <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div
+            class="bg-gradient-to-br from-primary to-primary-dark rounded-3xl p-8 sm:p-12 text-center text-white relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full translate-x-1/2 -translate-y-1/2"
+            ></div>
+            <div
+              class="absolute bottom-0 left-0 w-48 h-48 bg-black opacity-5 rounded-full -translate-x-1/2 translate-y-1/2"
+            ></div>
+            <div class="relative z-10 max-w-2xl mx-auto">
+              <div
+                class="inline-flex items-center justify-center p-3 bg-white/20 backdrop-blur-md rounded-2xl mb-6"
+              >
+                <span class="material-symbols-outlined text-4xl">chat</span>
+              </div>
+              <h2 class="text-3xl sm:text-4xl font-extrabold mb-4">
+                Join our Parent Community
+              </h2>
+              <p class="text-red-50 text-lg mb-8 font-medium">
+                Get exclusive parenting tips, early access to new launches, and
+                connect with 50,000+ parents.
+              </p>
+              <button
+                class="bg-white text-primary px-8 py-3 rounded-xl font-bold text-lg hover:bg-red-50 transition-colors inline-flex items-center gap-2 shadow-lg"
+              >
+                <span class="material-symbols-outlined">groups</span>
+                Join on WhatsApp
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Footer -->
+      <footer
+        class="bg-primary dark:bg-surface-dark border-t border-slate-100 dark:border-slate-800 pt-16 pb-8 mt-auto"
+      >
+        <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12"
+          >
+            <div class="lg:col-span-2">
+              <div class="flex items-center gap-2 mb-6">
+                <div
+                  class="size-8 bg-primary rounded-lg flex items-center justify-center text-white"
+                >
+                  <span class="material-symbols-outlined text-lg"
+                    >rocket_launch</span
+                  >
+                </div>
+                <h2
+                  class="text-xl font-extrabold text-slate-900 dark:text-white"
+                >
+                  WonderKid
+                </h2>
+              </div>
+              <p
+                class="text-white text-sm leading-relaxed mb-6 max-w-sm"
+              >
+                We are on a mission to make screen time meaningful and playtime
+                educational. Our toys blend the best of physical and digital
+                worlds.
+              </p>
+              <div class="flex gap-4">
+                <a
+                  class="size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-white hover:bg-primary hover:text-white transition-colors"
+                  href="#"
+                >
+                  <span class="material-symbols-outlined text-lg"
+                    >photo_camera</span
+                  >
+                </a>
+                <a
+                  class="size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-white hover:bg-primary hover:text-white transition-colors"
+                  href="#"
+                >
+                  <span class="material-symbols-outlined text-lg">public</span>
+                </a>
+                <a
+                  class="size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-white dark:text-slate-300 hover:bg-primary hover:text-white transition-colors"
+                  href="#"
+                >
+                  <span class="material-symbols-outlined text-lg"
+                    >play_arrow</span
+                  >
+                </a>
+              </div>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900 dark:text-white mb-6">
+                Shop
+              </h4>
+              <ul class="space-y-4 text-sm text-white dark:text-slate-400">
+                <li>
+                  <a class="hover:text-primary transition-colors" href="#"
+                    >Shop by Age</a
+                  >
+                </li>
+                <li>
+                  <a class="hover:text-primary transition-colors" href="#"
+                    >Shop by Interest</a
+                  >
+                </li>
+                <li>
+                  <a class="hover:text-primary transition-colors" href="#"
+                    >New Arrivals</a
+                  >
+                </li>
+                <li>
+                  <a class="hover:text-primary transition-colors" href="#"
+                    >Best Sellers</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900 dark:text-white mb-6">
+                Support
+              </h4>
+              <ul class="space-y-4 text-sm text-white dark:text-slate-400">
+                <li>
+                  <a class="hover:text-primary transition-colors" href="#"
+                    >Track Order</a
+                  >
+                </li>
+                <li>
+                  <a class="hover:text-primary transition-colors" href="#"
+                    >Shipping Policy</a
+                  >
+                </li>
+                <li>
+                  <a class="hover:text-primary transition-colors" href="#"
+                    >Returns &amp; Refunds</a
+                  >
+                </li>
+                <li>
+                  <a class="hover:text-primary transition-colors" href="#"
+                    >Contact Us</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900 dark:text-white mb-6">
+                Company
+              </h4>
+              <ul class="space-y-4 text-sm text-white dark:text-slate-400">
+                <li>
+                  <a class="hover:text-primary transition-colors" href="#"
+                    >About Us</a
+                  >
+                </li>
+                <li>
+                  <a class="hover:text-primary transition-colors" href="#"
+                    >Blog</a
+                  >
+                </li>
+                <li>
+                  <a class="hover:text-primary transition-colors" href="#"
+                    >For Schools</a
+                  >
+                </li>
+                <li>
+                  <a class="hover:text-primary transition-colors" href="#"
+                    >Careers</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4"
+          >
+            <p class="text-sm text-slate-400">
+              © 2023 WonderKid Inc. All rights reserved.
+            </p>
+            <div class="flex gap-6">
+              <img
+                alt="Stripe payment logo"
+                class="h-6 opacity-50 grayscale hover:grayscale-0 transition-all"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuASXBarvE9xFkx4bohDQmlBj1SE7R4HXMtfjOh-IW8W5C7stbfBjjVjaMaLKChRJRim-TUwKkDjJUzYHoN3v_ew7WvotOFXaW0jn0Eb55mKmX7ZYz6oVmSHejmtr3JxcuTSpSCr7B6gSGQpDn2A1AkSsxmMx7bJyr1AsUu8h9o0YA6vniTDDU035KVknDRzUw4svqY3TepTnQum9yYkaByemm463lin_GSOr8LxQHjzWYhea8BPNxgA8XnxiOBdhJt227d5BT8inVSH"
+              />
+              <img
+                alt="Paypal payment logo"
+                class="h-6 opacity-50 grayscale hover:grayscale-0 transition-all"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLd2VuSrGVn4FWKscL5iphppKOEFNpVGJCOKcvVrnx25Unu-Mp-9dpTmizPgeu-9bWE26VRQkpZYJicgGs6TAWfRbH0M2kbPCxBfmOmKK17-nEcEMAx92AX6Hiy5_SWyqBGGXmv4FvzEG_6AxFhUrtp-DLH6yy4GeQdZY5YxeJP7_T6CiaMWtdE7ghtyaD-Yj4gLQjQjn3m9K0sH_ocAUv3jhBoP-WxvW_9NwreD2VIYiEZxJ8e9SIdTvQ2a1TSQFhMmWGmT5VKbun"
+              />
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
