@@ -4,7 +4,7 @@ import {useDataContext} from "../context/DataContext";
 
 const StickyCart = () => {
   const currency =  "$";
-  const { toggleCartDrawer } = useDataContext();
+  const { toggleCartDrawer, cartState } = useDataContext();
  
 
   return (
@@ -15,14 +15,12 @@ const StickyCart = () => {
             <IoBagHandleOutline />
           </span>
           <span className="px-2 text-sm font-serif font-medium">
-            {/* {totalItems} Items */}
-            0 items
+            {cartState.totalItems} Items
           </span>
         </div>
         <div className="flex flex-col items-center justify-center bg-primary p-2 text-white text-base font-serif font-medium rounded-bl-lg mx-auto">
           {currency}
-          {/* {cartTotal.toFixed(2)} */}
-          00
+          {cartState.cartTotal.toFixed(2)}
         </div>
       </div>
     </button>

@@ -1,6 +1,11 @@
 import { FaShoppingCart, FaUserCircle, FaBars, FaRocket } from "react-icons/fa";
+import { useDataContext } from "../context/DataContext";
 
 const Header = () => {
+
+  const {toggleCartDrawer} = useDataContext();
+
+  
   return (
     <header className="sticky top-0 z-40 bg-primary dark:bg-primary-dark backdrop-blur-md border-b border-primary-dark dark:border-primary">
       <div className="layout-container max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,7 +48,10 @@ const Header = () => {
 
             {/* Icons */}
             <div className="flex items-center gap-2 text-white">
-              <button className="relative size-10 flex items-center justify-center rounded-xl hover:bg-primary-dark transition-colors">
+              <button
+               className="relative size-10 flex items-center justify-center rounded-xl hover:bg-primary-dark transition-colors"
+               onClick={toggleCartDrawer}
+              >
                 <FaShoppingCart size={22} />
                 <span className="absolute top-2 right-2 size-2 bg-secondary rounded-full ring-2 ring-primary"></span>
               </button>

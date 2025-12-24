@@ -1,20 +1,16 @@
 // src/components/Cart.jsx
-import React, { useState } from "react";
+import React from "react";
 import { IoBagCheckOutline, IoClose, IoBagHandle } from "react-icons/io5";
 import CartItem from "./CartItem";
+import { useDataContext } from "../context/DataContext";
 import { dummyCartItems } from "../../config/constants";
-import {useDataContext} from "../context/DataContext";
 
 
 const Cart = () => {
-  const [items, setItems] = useState(dummyCartItems);
-  const {toggleCartDrawer} = useDataContext();
+  const { cartState, dispatch, toggleCartDrawer } = useDataContext();
+  const { items, cartTotal } = cartState;
   const isEmpty = items.length === 0;
 
-  const cartTotal = items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
 
   const closeCartDrawer = () => {
     toggleCartDrawer();
@@ -30,23 +26,23 @@ const Cart = () => {
   };
 
   const updateQuantity = (id, qty) => {
-    if (qty <= 0) return;
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: qty } : item
-      )
-    );
+    dispatch({ type: "UPDATE_QUANTITY", payload: { id, quantity: qty } });
   };
 
   const removeItem = (id) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
+    dispatch({ type: "REMOVE_ITEM", payload: id });
   };
 
+  const addSampleItem = () => {
+      // Add first item from dummy list or a random one
+      const sample = dummyCartItems[0];
+      dispatch({ type: "ADD_ITEM", payload: { ...sample, id: sample.id + Math.random() } }); // Random ID to allow multiple unique adds for testing if needed, or keep same ID to test quantity increment
+      // For proper quantity testing, let's just add the item as is. If it exists, reducer increases qty.
+      // dispatch({ type: "ADD_ITEM", payload: dummyCartItems[0] });
+  }
+
   return (
-    <div className="flex flex-col w-full h-full bg-white rounded z-50
-      "
-      
-    >
+    <div className="flex flex-col w-full h-full bg-white rounded z-50">
       {/* Header */}
       <div className="w-full flex justify-between items-center px-5 py-4 border-b border-gray-200 bg-indigo-50">
         <h2 className="font-semibold text-lg flex items-center gap-2">
@@ -73,6 +69,12 @@ const Cart = () => {
             <p className="text-sm text-gray-500 pt-2 text-center px-10">
               No items added in your cart.
             </p>
+              <button 
+                  onClick={addSampleItem}
+                  className="mt-5 px-4 py-2 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors"
+              >
+                  Add Sample Item
+              </button>
           </div>
         )}
 

@@ -15,3 +15,13 @@ export const dummyCartItems = [
     image: "https://via.placeholder.com/40",
   },
 ];
+
+
+export const endPoints = {
+
+  CART :{
+    GET :"/cart",
+    POST :"/cart",
+    DELETE :"/cart",
+  },
+}
