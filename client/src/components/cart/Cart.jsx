@@ -2,12 +2,12 @@
 import React from "react";
 import { IoBagCheckOutline, IoClose, IoBagHandle } from "react-icons/io5";
 import CartItem from "./CartItem";
-import { useDataContext } from "../context/DataContext";
+import { useCartContext } from "../context/CartContext";
 import { dummyCartItems } from "../../config/constants";
 
 
 const Cart = () => {
-  const { cartState, dispatch, toggleCartDrawer } = useDataContext();
+  const { cartState, toggleCartDrawer, removeItem, updateQuantity, addItem } = useCartContext();
   const { items, cartTotal } = cartState;
   const isEmpty = items.length === 0;
 
@@ -25,20 +25,12 @@ const Cart = () => {
     }
   };
 
-  const updateQuantity = (id, qty) => {
-    dispatch({ type: "UPDATE_QUANTITY", payload: { id, quantity: qty } });
-  };
-
-  const removeItem = (id) => {
-    dispatch({ type: "REMOVE_ITEM", payload: id });
-  };
 
   const addSampleItem = () => {
       // Add first item from dummy list or a random one
       const sample = dummyCartItems[0];
-      dispatch({ type: "ADD_ITEM", payload: { ...sample, id: sample.id + Math.random() } }); // Random ID to allow multiple unique adds for testing if needed, or keep same ID to test quantity increment
-      // For proper quantity testing, let's just add the item as is. If it exists, reducer increases qty.
-      // dispatch({ type: "ADD_ITEM", payload: dummyCartItems[0] });
+      // Random ID to allow multiple unique adds for testing if needed
+      addItem({ ...sample, id: sample.id + Math.floor(Math.random() * 1000) });
   }
 
   return (
@@ -60,7 +52,7 @@ const Cart = () => {
       <div className="flex-grow overflow-y-auto">
         {isEmpty && (
           <div className="flex flex-col h-full justify-center items-center py-10">
-            <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-yellow-100 flex items-center justify-center">
               <IoBagHandle className="text-primary text-4xl" />
             </div>
             <h3 className="font-semibold text-gray-700 text-lg pt-5">
@@ -71,7 +63,7 @@ const Cart = () => {
             </p>
               <button 
                   onClick={addSampleItem}
-                  className="mt-5 px-4 py-2 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors"
+                  className="mt-5 px-4 py-2 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors"
               >
                   Add Sample Item
               </button>

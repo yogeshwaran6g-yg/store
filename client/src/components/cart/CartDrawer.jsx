@@ -1,9 +1,9 @@
 import React from "react";
-import { useDataContext } from "../context/DataContext";
+import { useCartContext } from "../context/CartContext";
 import Cart from "./Cart";
 
 const CartDrawer = () => {
-  const { isCartDrawerOpen, toggleCartDrawer } = useDataContext();
+  const { isCartDrawerOpen, toggleCartDrawer } = useCartContext();
 
   return (
     <>

@@ -1,10 +1,10 @@
 
 import { IoBagHandleOutline } from "react-icons/io5";
-import {useDataContext} from "../context/DataContext";
+import {useCartContext} from "../context/CartContext";
 
 const StickyCart = () => {
   const currency =  "$";
-  const { toggleCartDrawer, cartState } = useDataContext();
+  const { toggleCartDrawer, cartState } = useCartContext();
  
 
   return (
