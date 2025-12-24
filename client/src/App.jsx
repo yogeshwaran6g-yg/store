@@ -1,22 +1,35 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import {DataProvider} from "./components/context/DataContext";
-import StickyCart from "./components/cart/StickyCart"
-import CartDrawer from "./components/cart/CartDrawer";
+import {CartProvider} from "./components/context/CartContext";
+import { ShippingProvider } from "./components/context/ShippingContext";
+import {routes} from "./components/Routes";
+import Layout from "./components/Layout";
+import CartDrawer from "./components/cart/CartDrawer"
+
 function App() {
   return (
     <BrowserRouter>
-      <DataProvider>
-      <StickyCart />
-      <CartDrawer />
-      <Routes>
-        <Route path="/" element={<Home />} />
+      <CartProvider>
+      <ShippingProvider>        
+      <CartDrawer/>
+        <Routes>
+           {routes.map(({ path, element: Page, layout }) => (
+              <Route
+                key={path}
+                path={path}
+                element={
+                  <Layout
+                    header={layout.header}
+                    footer={layout.footer}
+                  >
+                    <Page />
+                  </Layout>
+                }
+              />
+            ))}
+        </Routes>
         
-
-        {/* 404 */}
-        <Route path="*" element={<h1>not found</h1>} />
-      </Routes>
-      </DataProvider>
+      </ShippingProvider>
+      </CartProvider>
     </BrowserRouter>
   );
 }

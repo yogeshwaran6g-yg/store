@@ -1,9 +1,9 @@
 import { FaShoppingCart, FaUserCircle, FaBars, FaRocket } from "react-icons/fa";
-import { useDataContext } from "../context/DataContext";
+import { useCartContext } from "../context/CartContext";
 
 const Header = () => {
 
-  const {toggleCartDrawer} = useDataContext();
+  const {toggleCartDrawer} = useCartContext();
 
   
   return (

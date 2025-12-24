@@ -1,7 +1,9 @@
 const ProductCard = () => {
   return (
+    <div className="w-[260px] sm:w-[280px] md:w-[300px] shrink-0">
+
     <div
-      className="sku-card rounded-lg bg-[#F4F4F4] flex flex-col gap-4 w-full"
+      className="sku-card rounded-lg bg-[#F4F4F4] flex flex-col gap-4 max-w-[300px] "
       style={{ cursor: "pointer" }}
     >
       {/* IMAGE */}
@@ -11,9 +13,8 @@ const ProductCard = () => {
             <img
               alt="Travel Toys Bundle"
               loading="lazy"
-              width="600"
-              height="600"
-              sizes="(max-width: 768px) 50vw, 33vw"
+              width="260"
+              height="260"
               src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&q=80&w=600&h=600"
               style={{
                 color: "transparent",
@@ -136,7 +137,9 @@ const ProductCard = () => {
         </button>
       </div>
     </div>
+    </div>
   );
 };
 
 export default ProductCard;
+
