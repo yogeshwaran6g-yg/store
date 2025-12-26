@@ -4,42 +4,34 @@ const categorySchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Category name is required"],
+      required: true,
       trim: true,
       unique: true,
-      minlength: 2,
-      maxlength: 60,
+      maxlength: 100,
     },
+
     slug: {
       type: String,
-      unique: true,
+      required: true,
       lowercase: true,
+      unique: true,
       index: true,
     },
+
     description: {
       type: String,
-      default: "",
-      maxlength: 200,
-    },
-    icon: {
-      type: String, // URL or file path
-      default: "",
       trim: true,
     },
+
     isActive: {
       type: Boolean,
       default: true,
+      index: true,
     },
   },
-  { timestamps: true }
-);
-
-// Slug creation
-categorySchema.pre("save", function (next) {
-  if (this.isModified("name")) {
-    this.slug = this.name.toLowerCase().replace(/\s+/g, "-");
+  {
+    timestamps: true,
   }
-  next();
-});
+);
 
 module.exports = mongoose.model("Category", categorySchema);
