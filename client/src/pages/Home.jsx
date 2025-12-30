@@ -1,6 +1,6 @@
 import HeroSection from "../components/home/Hero";
 import ShopByAge from "../components/home/ShopByAge";
-import TrendingProducts from "../components/home/Product";
+import TrendingProducts from "../components/home/FeaturedProducts";
 import FeaturesSection from "../components/home/Feature";
 import ShopByInterest from "../components/home/ShopByInterest";
 import Testimonials from "../components/home/Testimonial";

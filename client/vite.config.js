@@ -22,11 +22,11 @@ export default defineConfig(({ mode }) => {
         "@": path.resolve(__dirname, "src"),
         "@components": path.resolve(__dirname, "src/components"),
         "@pages": path.resolve(__dirname, "src/pages"),
-        "@context": path.resolve(__dirname, "src/context"),
+        "@context": path.resolve(__dirname, "src/components/context"),
         // "@assets": path.resolve(__dirname, "src/assets"),
-        // "@hooks": path.resolve(__dirname, "src/hooks"),
-        // "@utils": path.resolve(__dirname, "src/utils"),
-        // "@services": path.resolve(__dirname, "src/services"),
+        "@hooks": path.resolve(__dirname, "src/hooks"),
+        "@utils": path.resolve(__dirname, "src/utils"),
+        "@services": path.resolve(__dirname, "src/services"),
         // "@store": path.resolve(__dirname, "src/store"),
       },
     },
@@ -53,7 +53,7 @@ export default defineConfig(({ mode }) => {
     // Preview (Production Test)
     // -----------------------------
     preview: {
-      port: 4173,
+      port: 3000,
       strictPort: true,
     },
 

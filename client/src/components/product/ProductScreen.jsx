@@ -1,35 +1,60 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { FiChevronRight, FiMinus, FiPlus } from "react-icons/fi";
-import { productDummy } from "../../config/constants";
+import { useProductContext } from "../context/ProductContext";
 import ShippingCard from "./ShippingCard";
 import { useCartContext } from "../context/CartContext";
 import FAQ from "../faq/Faq";
 import {faqData} from "../../config/constants";
-import ProductFeature from "../home/Product";
+import ProductFeature from "../home/FeaturedProducts";
 
 const ProductScreen = () => { 
   const { slug } = useParams();
+  const { currentProduct, loading, hasFetchedProduct, fetchProductBySlug } = useProductContext();
 
-  const [product, setProduct] = useState(null);
   const [qty, setQty] = useState(1);
-  const [img, setImg] = useState("");
+  const [img, setImg] = useState("https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600");
   const [isReadMore, setIsReadMore] = useState(true);
-  const {addItem}=useCartContext();
+  const { addItem } = useCartContext();
+  
+  // Use a ref to prevent double fetching in React Strict Mode (dev)
+  const isMounted = useRef(false);
 
-  // simulate API fetch
   useEffect(() => {
-    if (slug === productDummy.slug) {
-      setProduct(productDummy);
-      setImg(productDummy.image[0]);
+    if (slug) {
+      if (!isMounted.current || currentProduct?.slug !== slug) {
+        fetchProductBySlug(slug);
+        isMounted.current = true;
+      }
     }
-  }, [slug]);
+  }, [slug, fetchProductBySlug, currentProduct?.slug]);
 
-  if (!product) return <p>Loading...</p>;
+  // Sync image when product loads
+  useEffect(() => {
+    if (currentProduct?.images?.length > 0) {
+      setImg(currentProduct.images[0]);
+    } else if (currentProduct?.image) {
+      setImg(Array.isArray(currentProduct.image) ? currentProduct.image[0] : currentProduct.image);
+    }
+  }, [currentProduct?._id]);
+
+  if (loading || !currentProduct) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        {hasFetchedProduct && !currentProduct ? (
+          <p className="text-xl font-semibold text-red-500">Product not found.</p>
+        ) : (
+          <p className="text-xl font-semibold">Loading Product...</p>
+        )}
+      </div>
+    );
+  }
+
+
 
   const discount = Math.round(
-    ((product.prices.originalPrice - product.prices.price) / 
-      product.prices.originalPrice) *
+    ((currentProduct.prices.originalPrice - currentProduct.prices.price) / 
+      currentProduct.prices.originalPrice) *
       100
   );
 
@@ -41,7 +66,7 @@ const ProductScreen = () => {
           Home
         </Link>
         <FiChevronRight className="mx-2" />
-        <span className="text-gray-500">{product.title}</span>
+        <span className="text-gray-500">{currentProduct.title}</span>
       </div>
 
       <div className="bg-white rounded-lg p-6">
@@ -56,19 +81,19 @@ const ProductScreen = () => {
 
               <img
                 src={img}
-                alt={product.title}
+                alt={currentProduct.title}
                 className="w-full rounded-lg"
               />
             </div>
 
             <div className="flex gap-3 mt-4">
-              {product.image.map((i, idx) => (
+              {(currentProduct.images || currentProduct.image || []).map((i, idx) => (
                 <img
                   key={idx}
                   src={i}
                   alt="thumb"
                   onClick={() => setImg(i)}
-                  className="w-20 h-20 object-cover rounded cursor-pointer border"
+                  className={`w-20 h-20 object-cover rounded cursor-pointer border ${img === i ? 'border-emerald-500 ring-2 ring-emerald-500/20' : 'border-gray-200'}`}
                 />
               ))}
             </div>
@@ -77,28 +102,28 @@ const ProductScreen = () => {
           {/* DETAILS */}
           <div className="md:col-span-7 md:px-4 md:py-4 xl:col-span-5 xl:px-3 xl:py-3">
             <h1 className="text-2xl font-semibold mb-1">
-              {product.title}
+              {currentProduct.title}
             </h1>
 
             <p className="text-sm text-gray-500 mb-2">
-              SKU: <span className="font-medium">{product.sku}</span>
+              SKU: <span className="font-medium">{currentProduct.sku}</span>
             </p>
 
             <div className="mb-4">
               <span className="text-xl font-bold tracking-tight">
-                ₹{product.prices.price}
+                ₹{currentProduct.prices.price}
               </span>
               <span className="line-through text-gray-400 ml-3">
-                ₹{product.prices.originalPrice}
+                ₹{currentProduct.prices.originalPrice}
               </span>
             </div>
 
             {/* DESCRIPTION */}
             <p className="text-gray-500 text-sm mb-3 leading-6 md:leading-7">
               {isReadMore
-                ? product.description.slice(0, 150)
-                : product.description}
-              {product.description.length > 150 && (
+                ? currentProduct.description.slice(0, 150)
+                : currentProduct.description}
+              {currentProduct.description.length > 150 && (
                 <span
                   onClick={() => setIsReadMore(!isReadMore)}
                   className="text-blue-600 cursor-pointer ml-1"
@@ -130,7 +155,7 @@ const ProductScreen = () => {
               </div>
 
               <button
-                onClick={() => addItem(product, qty)}
+                onClick={() => addItem(currentProduct, qty)}
                 className="bg-gray-800 text-white px-6 py-3 rounded-[5px]   hover:bg-gray-900 w-full"
               >
                 Add To Cart
@@ -156,7 +181,9 @@ const ProductScreen = () => {
           <div className="min-h-screen  py-12">
             <FAQ items={faqData} title="Frequently Asked Questions" />
         </div>
-        <ProductFeature/>
+        <ProductFeature
+          title="Featured Products"
+        />
       </div>
     </div>
   );

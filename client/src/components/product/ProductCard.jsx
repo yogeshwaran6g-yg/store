@@ -1,5 +1,6 @@
 import React from "react";
-
+import { useCartContext } from "../context/CartContext";
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -9,6 +10,8 @@ import React from "react";
 
 
 const ProductCard = ({
+  id,
+  slug,
   image,
   title,
   price,
@@ -17,19 +20,34 @@ const ProductCard = ({
   rating,
   reviewCount,
   badgeText,
-  showFreeGift = true,
+  showFreeGift = false,
   freeGiftText = "worth up to ₹1000 with every order.",
   onAddToCart,
 }) => {
+
+    const navigate = useNavigate();
+    const { addItem } = useCartContext();
+
+    function addToCart (){
+        console.log("add to  cart");
+        const payload = {
+            id: id,
+            title: title,
+            price: price,
+            image: Array.isArray(image) ? image[0] : image,
+            quantity: 1
+        };
+        addItem(payload);
+    }
   return (
-    <div className="w-[260px] sm:w-[280px] md:w-[300px] shrink-0">zx
+    <div className="w-[260px] sm:w-[280px] md:w-[300px] shrink-0">
       <div
         className="sku-card rounded-lg bg-[#F4F4F4] flex flex-col gap-4 max-w-[300px]"
-        style={{ cursor: "pointer" }}
+        style={{ cursor: "pointer" }}        
       >
         {/* IMAGE */}
-        <div className="card-image w-full relative rounded-lg overflow-hidden group">
-
+        <div className="card-image w-full relative rounded-lg overflow-hidden group"
+        >
             <img
                 className="group-hover:scale-105"
               alt={title}
@@ -43,6 +61,7 @@ const ProductCard = ({
                 height: "300px",
                 objectFit: "cover",
               }}
+        
             />
           {/* FLAG */}
           {badgeText && (
@@ -108,7 +127,7 @@ const ProductCard = ({
 
           {/* BUTTON */}
           <button
-            onClick={onAddToCart}
+            onClick={() => addToCart()}
             className="mx-2 mt-2 h-10 rounded-md border border-[#6739A2] text-[#6739A2] uppercase text-sm font-medium hover:bg-[#6739A2] hover:text-white transition"
           >
             Add To Cart

@@ -1,9 +1,9 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useMemo } from "react";
 
 const ShippingContext = createContext(null);
 
 export const ShippingProvider = ({ children }) => {
-  const shippingData = [
+  const shippingData = useMemo(() => [
     {
       id: 1,
       icon: "truck",
@@ -39,10 +39,12 @@ export const ShippingProvider = ({ children }) => {
       icon: "map",
       text: "Delivery available in most locations",
     },
-  ];
+  ], []);
+
+  const value = useMemo(() => ({ shippingData }), [shippingData]);
 
   return (
-    <ShippingContext.Provider value={{ shippingData }}>
+    <ShippingContext.Provider value={value}>
       {children}
     </ShippingContext.Provider>
   );

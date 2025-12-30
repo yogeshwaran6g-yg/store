@@ -86,6 +86,99 @@ const buildProducts = (categoryMap) => {
   ];
 };
 
+const buildOrders = (userMap, productMap) => {
+  if (!userMap || Object.keys(userMap).length === 0) {
+    throw new Error("User map is empty. Seed users first.");
+  }
+
+  if (!productMap || Object.keys(productMap).length === 0) {
+    throw new Error("Product map is empty. Seed products first.");
+  }
+
+  // SAFELY pick first available user (no hardcoding)
+  const userId = Object.values(userMap)[0];
+
+  if (!userId) {
+    throw new Error("No valid user found for orders");
+  }
+
+  return [
+    {
+      user: userId,
+
+      user_info: {
+        name: "Test User",
+        email: "user@example.com",
+        contact: "9876543210",
+        address: "123 Test Street",
+        city: "Test City",
+        country: "India",
+        zipCode: "123456",
+      },
+
+      cart: [
+        {
+          product: productMap["BOOK-ABC-001"],
+          title: "Alphabet Learning Book",
+          quantity: 2,
+          price: 199,
+          image: "alphabet-book.jpg",
+        },
+        {
+          product: productMap["CARD-ANI-003"],
+          title: "Animal Flash Cards",
+          quantity: 1,
+          price: 149,
+          image: "animal-flash-cards.jpg",
+        },
+      ],
+
+      subTotal: 547,
+      shippingCost: 50,
+      discount: 0,
+      total: 597,
+      paymentMethod: "Cashfree",
+      status: "Pending",
+      paymentStatus: "UNPAID",
+    },
+
+    {
+      user: userId,
+
+      user_info: {
+        name: "Test User",
+        email: "user@example.com",
+        contact: "9876543210",
+        address: "123 Test Street",
+        city: "Test City",
+        country: "India",
+        zipCode: "123456",
+      },
+
+      cart: [
+        {
+          product: productMap["COLOR-ANI-005"],
+          title: "Animal Coloring Book",
+          quantity: 1,
+          price: 129,
+          image: "animal-coloring.jpg",
+        },
+      ],
+
+      subTotal: 129,
+      shippingCost: 50,
+      discount: 10,
+      total: 169,
+      paymentMethod: "Cashfree",
+      status: "Processing",
+      paymentStatus: "PAID",
+    },
+  ];
+};
+
+module.exports = { buildOrders };
+
+
 const Categories = [
   {
     name: "Books",
@@ -106,5 +199,6 @@ const Categories = [
 
 module.exports = {
   buildProducts,
+  buildOrders,
   Categories,
 };

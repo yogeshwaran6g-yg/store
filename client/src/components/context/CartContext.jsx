@@ -5,7 +5,12 @@ import React, {
   useReducer,
   useEffect,
   useState,
+  useCallback,
+  useMemo,
+  useRef,
 } from "react";
+import { useAuth } from "./AuthContext";
+import CartService from "@/services/CartService";
 
 const CartContext = createContext(null);
 
@@ -75,6 +80,7 @@ const cartReducer = (state, action) => {
       };
       
     case "CLEAR_CART":
+      console.log("clear cart happens")
         return initialState;
 
     default:
@@ -83,7 +89,9 @@ const cartReducer = (state, action) => {
 };
 
 export const CartProvider = ({ children }) => {
+  const { isAuthenticated, user, loading } = useAuth();
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
+  const prevAuth = useRef(isAuthenticated);
 
   const scrollBarHide = React.useCallback(() => {
     if (isCartDrawerOpen) {
@@ -117,66 +125,181 @@ export const CartProvider = ({ children }) => {
     }
   });
 
-  function toggleCartDrawer() {
-    setIsCartDrawerOpen(!isCartDrawerOpen);
-  }
+  // Sync with DB when user logs in
+  useEffect(() => {
+    // If loading auth, do nothing yet
+    if (loading) return;
 
-  const addItem = (product, quantity = 1) => {
+    if (isAuthenticated) {
+        const syncAndFetch = async () => {
+             try {
+                 // Strategy:
+                 // 1. Fetch Cart from DB first (Source of Truth)
+                 const dbCart = await CartService.getCart();
+                 let currentDbItems = [];
+
+                 if (dbCart && dbCart.items) {
+                     currentDbItems = dbCart.items;
+                 }
+
+                 // 2. Identify Local items that are NOT in DB
+                 const localData = localStorage.getItem(CART_STORAGE_KEY);
+                 const localItems = localData ? JSON.parse(localData) : [];
+                 
+                 const itemsToSync = localItems.filter(localItem => {
+                     // Check if this product ID exists in DB cart
+                     // DB item product is an object (populated) or ID?
+                     // getCart populates 'product', so it's an object. 
+                     // We need to compare IDs.
+                     return !currentDbItems.some(dbItem => {
+                         const dbProductId = dbItem.product._id || dbItem.product; // Handle populated or raw
+                         return dbProductId === (localItem.id || localItem._id);
+                     });
+                 });
+
+                 // 3. Add only missing items to DB
+                 if (itemsToSync.length > 0) {
+                     await Promise.all(itemsToSync.map(item => 
+                         CartService.addToCart({ 
+                             productId: item.id || item._id, 
+                             quantity: item.quantity 
+                         }).catch(err => console.error("Merge error", err))
+                     ));
+                     
+                     // 4. Re-fetch DB cart to get final state (including newly added items)
+                     const updatedDbCart = await CartService.getCart();
+                     if (updatedDbCart && updatedDbCart.items) {
+                         currentDbItems = updatedDbCart.items;
+                     }
+                 }
+
+                 // 5. Update Local State with Final DB State
+                 if (currentDbItems) {
+                     const mappedItems = currentDbItems.map(i => ({
+                          id: i.product._id,
+                          title: i.product.title,
+                          // Access nested prices object as populated in controller
+                          price: i.product.prices ? i.product.prices.price : i.product.price, 
+                          image: (i.product.images && i.product.images.length > 0) ? i.product.images[0] : null,
+                          quantity: i.quantity,
+                          slug: i.product.slug
+                     }));
+                     
+                     dispatch({ type: "INIT_CART", payload: mappedItems });
+                 }
+             } catch (error) {
+                 console.error("Failed to sync cart", error);
+             }
+        };
+        
+        syncAndFetch();
+    } else {
+        // When logging out, clear the cart state
+        // Only clear if we were previously authenticated (explicit logout)
+        if (prevAuth.current) {
+            dispatch({ type: "CLEAR_CART" });
+        }
+    }
+    
+    prevAuth.current = isAuthenticated;
+  }, [isAuthenticated, loading]);
+
+
+  // Persist to LocalStorage (Always)
+  useEffect(() => {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartState.items));
+  }, [cartState.items]);
+
+  const toggleCartDrawer = useCallback(() => {
+    setIsCartDrawerOpen(prev => !prev);
+  }, []);
+
+  const addItem = useCallback(async (product, quantity = 1) => {
+    // Optimistic Update
     dispatch({
         type: "ADD_ITEM",
         payload: {
             id: product._id || product.id,
             title: product.title,
             price: product.prices ? product.prices.price : product.price,
-            image: Array.isArray(product.image) ? product.image[0] : product.image,
+            image: Array.isArray(product.images) ? product.images[0] : (product.image || (Array.isArray(product.image) ? product.image[0] : product.image)),
             quantity
         }
     });
+
+    if (isAuthenticated) {
+        try {
+            await CartService.addToCart({ 
+                productId: product._id || product.id, 
+                quantity 
+            });
+        } catch (error) {
+            console.error("Add to cart API failed", error);
+        }
+    }
+
     if (!isCartDrawerOpen) {
         setIsCartDrawerOpen(true);
     }
-  };
+  }, [isCartDrawerOpen, isAuthenticated]);
 
-  const removeItem = (id) => {
+  const removeItem = useCallback(async (id) => {
       dispatch({ type: "REMOVE_ITEM", payload: id });
-  };
+      
+      if (isAuthenticated) {
+          try {
+              await CartService.removeFromCart(id);
+          } catch (error) {
+              console.error("Remove item API failed", error);
+          }
+      }
+  }, [isAuthenticated]);
 
-  const updateQuantity = (id, quantity) => {
+  const updateQuantity = useCallback(async (id, quantity) => {
       dispatch({ type: "UPDATE_QUANTITY", payload: { id, quantity } });
-  };
+      
+      if (isAuthenticated) {
+          try {
+              await CartService.updateQuantity({ productId: id, quantity });
+          } catch (error) {
+               console.error("Update quantity API failed", error);
+          }
+      }
+  }, [isAuthenticated]);
+  
+  const clearCart = useCallback(async () => {
+      dispatch({ type: "CLEAR_CART" });
+      if (isAuthenticated) {
+          try {
+             "clear cart api called"
+              await CartService.clearCart();
+          } catch (error) {
+             console.error("Clear cart API failed", error);
+          }
+      }
+  }, [isAuthenticated]);
 
-  // Sync to local storage and placeholder API
-  useEffect(() => {
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartState.items));
-
-    // Placeholder API Sync
-    const syncCartWithDB = async () => {
-        // Here we would use the api util to sync with backend
-        // const response = await api.post(endPoints.CART.POST, { items: cartState.items });
-        console.log("Creating/Syncing cart with DB (Placeholder)...", cartState.items);
-    };
-
-    // Debounce or just call it
-    const timeoutId = setTimeout(() => {
-        syncCartWithDB();
-    }, 500);
-
-    return () => clearTimeout(timeoutId);
-
-  }, [cartState.items]);
+  const value = useMemo(() => ({
+    isCartDrawerOpen,
+    toggleCartDrawer,
+    cartState,
+    dispatch,
+    addItem,
+    removeItem,
+    updateQuantity,
+    clearCart
+  }), [
+    isCartDrawerOpen,
+    toggleCartDrawer,
+    cartState,
+    addItem,
+    removeItem,
+    updateQuantity,
+    clearCart
+  ]);
 
   return (
-    <CartContext.Provider
-      value={{
-        isCartDrawerOpen,
-        toggleCartDrawer,
-        cartState,
-        dispatch,
-        addItem,
-        removeItem,
-        updateQuantity
-      }}
-    >
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   );
