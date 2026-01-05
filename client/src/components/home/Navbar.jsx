@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCartContext } from "../context/CartContext";
-
+import CartIcon from "@components/cart/CartIcon";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -36,7 +36,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [lastScrollY, isCartOpen]);
 
-  // 🔴 Completely hide navbar when cart is open
   if (isCartOpen) return null;
 
   return (
@@ -78,10 +77,13 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
+        <div className= "flex items-center gap-5">
+          <CartIcon        
+          />
 
-        {/* CTA */}
-        <button
-          className="
+          {/* CTA */}
+          <button
+            className="
             hidden md:block
             bg-yellow-400 text-black font-bold
             px-5 py-2 text-sm md:px-7 md:py-3 md:text-base
@@ -90,10 +92,11 @@ export default function Navbar() {
             hover:translate-y-[1px]
             hover:shadow-[0_4px_0_#c9a200]
             transition-all
-          "
-        >
-          Enroll Now
-        </button>
+            "
+          >
+            Enroll Now
+          </button>
+        </div>
       </nav>
     </header>
   );
