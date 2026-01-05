@@ -78,3 +78,10 @@ export const endPoints = {
     DELETE :"/cart",
   },
 }
+
+export const  countries  = {
+  "countries": [
+    { "name": "India" },
+  ]
+  
+}

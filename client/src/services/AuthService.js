@@ -9,7 +9,7 @@ const AuthService = {
 
     localStorage.setItem("accessToken", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
-
+    window.location.href = "/";
     return data;
   },
 
@@ -33,17 +33,17 @@ const AuthService = {
   },
 
   updateProfile: async (userData) => {
-    const { data } = await api.put(`${authApiBAseUrl}/update-user`, userData);
+    const { data } = await api.put(`${authApiBAseUrl}/updateUser`, userData);
     return data;
   },
 
   changePassword: async ({ currentPassword, newPassword }) => {
-    const { data } = await api.put(`${authApiBAseUrl}/change-password`, { currentPassword, newPassword });
+    const { data } = await api.put(`${authApiBAseUrl}/changePassword`, { currentPassword, newPassword });
     return data;
   },
 
   addShippingAddress: async (addressData) => {
-      const { data } = await api.post(`${authApiBAseUrl}/add-shipping-address`, addressData);
+      const { data } = await api.post(`${authApiBAseUrl}/addShippingAddress`, addressData);
       return data;
   },
 

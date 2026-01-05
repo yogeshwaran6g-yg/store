@@ -1,6 +1,6 @@
 import React from 'react';
 
-const InputPayment = ({ register, Icon, name, value, setShowCard }) => {
+const InputPayment = ({ register, Icon, name, value, setShowCard, ...props }) => {
   return (
     <div className="px-3 py-4 card border border-gray-200 bg-white rounded-md">
       <label className="cursor-pointer label">
@@ -22,6 +22,7 @@ const InputPayment = ({ register, Icon, name, value, setShowCard }) => {
             value={value}
             name="paymentMethod"
             className="form-radio outline-none focus:ring-0 text-emerald-500"
+            {...props}
           />
         </div>
       </label>

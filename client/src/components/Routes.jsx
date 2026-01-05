@@ -10,9 +10,18 @@ import MyAccount from "@/components/user/my-account";
 import UpdateProfile from "@/components/user/update-profile";
 import ChangePassword from "@/components/user/change-password";
 import AddShippingAddress from "@/components/user/add-shipping-address";
-import CashfreeCheckout  from "@pages/CashfreeCheckout"
+import CashfreeCheckout from "@pages/CashfreeCheckout";
+import Checkout from "@/components/Checkout/Checkout";
 
 export const routes = [
+  {
+    path: "/checkout",
+    element: Checkout,
+    layout: { 
+      header: true, 
+      footer: true 
+    },
+  },
   {
     path: "/",
     element: Home,
@@ -60,11 +69,11 @@ export const routes = [
     element: MyAccount,
     layout: { header: true, footer: true },
   },
-  {
-    path: "/user/update-profile",
-    element: UpdateProfile,
-    layout: { header: true, footer: true },
-  },
+  // {
+  //   path: "/user/update-profile",
+  //   element: UpdateProfile,
+  //   layout: { header: true, footer: true },
+  // },
   {
     path: "/user/change-password",
     element: ChangePassword,
@@ -75,7 +84,7 @@ export const routes = [
     element: AddShippingAddress,
     layout: { header: true, footer: true },
   },
-   {
+  {
     path: "/createSession/:orderId",
     element: CashfreeCheckout,
     layout: { header: true, footer: true },

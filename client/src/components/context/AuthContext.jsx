@@ -5,6 +5,7 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [ hasShippingAddress, setHasShippingAddress ] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -61,8 +62,9 @@ export const AuthProvider = ({ children }) => {
     signup,
     logout,
     forgetPassword,
-    resetPassword
-  }), [user, loading, login, signup, logout, forgetPassword, resetPassword]);
+    resetPassword,
+    hasShippingAddress
+  }), [user, loading, login, signup, logout, forgetPassword, resetPassword, hasShippingAddress]);
 
   return (
     <AuthContext.Provider value={value}>

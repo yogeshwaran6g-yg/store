@@ -66,7 +66,7 @@ const orderSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      required: true,
+      required: false,
     },
     cardInfo: {
       type: Object,
@@ -75,6 +75,7 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ["Pending", "Processing", "Delivered", "Cancel"],
+      default: "Pending",
     },
 
     paymentStatus: {
@@ -93,11 +94,10 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
-const Order = mongoose.model(
-  "Order",
-  orderSchema.plugin(AutoIncrement, {
-    inc_field: "invoice",
-    start_seq: 10000,
-  })
-);
+const Order = mongoose.model("Order", orderSchema);
+
+orderSchema.plugin(AutoIncrement, {
+  inc_field: "invoice",
+  start_seq: 10000,
+});
 module.exports = Order;

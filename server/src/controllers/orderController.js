@@ -1,5 +1,6 @@
 const Order = require("../model/orderModel");
 const { rtnRes, log } = require("../utils/helper");
+const Cart = require("../model/cartModel");
 
 const getAllOrders = async (req, res) => {
   const {
@@ -118,6 +119,95 @@ const getAllOrders = async (req, res) => {
     rtnRes(res, 500, err.message);
   }
 };
+
+
+const createOrderFromCart = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { shippingOption, user_info } = req.body;
+    let paymentMethod = "Cashfree";
+    /* 1️⃣ Load cart */
+    const cart = await Cart.findOne({ userId }).populate("items.product");
+
+    if (!cart || cart.items.length === 0) {
+      return rtnRes(res, 400, "Cart is empty");
+    }
+
+    let subTotal = 0;
+    const orderCart = [];
+
+    /* 2️⃣ Validate & calculate */
+    for (const item of cart.items) {
+      const product = item.product;
+
+      if (!product) {
+        return rtnRes(res, 404, "Product not found");
+      }
+
+      if (product.status !== "ACTIVE") {
+        return rtnRes(res, 400, `${product.title} is unavailable`);
+      }
+
+      if (product.stock < item.quantity) {
+        return rtnRes(
+          res,
+          400,
+          `Insufficient stock for ${product.title}`
+        );
+      }
+
+      const price = product.prices.price;
+      const itemTotal = price * item.quantity;
+
+      subTotal += itemTotal;
+
+      orderCart.push({
+        product: product._id,
+        sku: product.sku,
+        title: product.title,
+        price,                       // 🔒 snapshot
+        quantity: item.quantity,
+        image: product.images?.[0],
+        subtotal: itemTotal,
+      });
+    }
+
+    /* 3️⃣ Shipping & totals */
+    const shippingCost = shippingOption === "EXPRESS" ? 100 : 50;
+    const discount = 0;
+    const total = subTotal + shippingCost - discount;
+
+    /* 4️⃣ Create order */
+    const order = await Order.create({
+      user: userId,
+      cart: orderCart,
+      user_info,
+      subTotal,
+      shippingCost,
+      discount,
+      total,
+      shippingOption,
+      paymentMethod,
+    });
+
+    /* 5️⃣ Clear cart */
+    await Cart.updateOne(
+      { userId },
+      { $set: { items: [] } }
+    );
+
+    return rtnRes(res, 200, "Order created", {
+      orderId: order._id,
+      invoice: order.invoice,
+      total: order.total,
+    });
+
+  } catch (err) {
+    console.error("CreateOrderFromCart Error:", err);
+    return rtnRes(res, 500, "Server Error");
+  }
+};
+
 
 const getOrderCustomer = async (req, res) => {
   try {
@@ -681,6 +771,7 @@ const getUserDashboardStats = async (req, res) => {
 };
 
 module.exports = {
+  createOrderFromCart,
   getAllOrders,
   getOrderById,
   getOrderCustomer,

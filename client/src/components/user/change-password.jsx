@@ -6,7 +6,7 @@ import Error from "@components/form/Error";
 import Dashboard from "./dashboard";
 import InputArea from "@components/form/InputArea";
 import AuthService from "@services/AuthService";
-import { notifyError, notifySuccess } from "@utils/toast";
+import {toast} from "react-toastify";
 import { useAuth } from "@context/AuthContext";
 
 const ChangePassword = () => {
@@ -28,11 +28,14 @@ const ChangePassword = () => {
         currentPassword,
         newPassword,
       });
-      notifySuccess(res.message);
+      toast.success(res.message || "Password changed successfully");
       setLoading(false);
+      localStorage.setItem("accessToken", res.token);
+      localStorage.setItem("user", JSON.stringify(res.user));
     } catch (error) {
       setLoading(false);
-      notifyError(error ? error.response.data.message : error.message);
+      console.log(error);
+      toast.error(error.message);
     }
   };
 

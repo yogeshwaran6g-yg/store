@@ -1,4 +1,4 @@
-import axios from "axios";
+import {api} from "../util/axios";
 
 
 
@@ -8,7 +8,7 @@ const verifyCashfreePayment = async (cfOrderId) => {
   }
 
   try {
-    const response = await axios.get(`/api/v1/payment/verify/${cfOrderId}`,
+    const response = await api.get(`/api/v1/payment/verify/${cfOrderId}`,
       {
         withCredentials: true, // if you use cookies / auth
       }
@@ -22,6 +22,11 @@ const verifyCashfreePayment = async (cfOrderId) => {
   }
 };
 
+const createPaymentSession = async (data) => {
+  return await api.post("/api/v1/payment/create", data);
+};
+
 export default {
   verifyCashfreePayment,
+  createPaymentSession,
 };

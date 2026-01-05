@@ -264,7 +264,12 @@ exports.addShippingAddress = async (req, res) => {
     try {
         const user = await User.findById(req.user._id);
         if (!user) return rtnRes(res, 404, "User not found");
-        
+
+        // Check if the user has reached the maximum number of addresses
+        // if (user.addresses.length >= 4) {
+        //     return rtnRes(res, 400, "You can only have a maximum of 4 shipping addresses.");
+        // }
+
         user.addresses.push(req.body);
         await user.save();
         

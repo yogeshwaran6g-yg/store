@@ -4,9 +4,9 @@ import { api } from "../util/axios";
 
 const OrderServices = {
   addOrder: (body) => {
-    return api.post("/api/v1/order/add", body);
+    return api.post("/api/v1/order/create", body);
   },
-  
+
   createPaymentIntent: (body) => {
     return api.post("/api/v1/order/create-payment-intent", body); // Adjust endpoint if needed
   },

@@ -16,12 +16,12 @@ const MyAccount = () => {
           {/* User Info Card */}
           <div className="flex h-full relative">
             <div className="flex items-center border border-gray-200 w-full rounded-lg p-4 relative">
-              <Link
+              {/* <Link
                 to="/user/update-profile"
                 className="absolute top-2 right-2 bg-cyan-600 text-white px-3 py-1 rounded hover:bg-cyan-700"
               >
                 Edit
-              </Link>
+              </Link> */}
               <div className="flex items-center justify-center rounded-full text-xl text-center mr-4 bg-gray-200">
                 {user?.image ? (
                   <img

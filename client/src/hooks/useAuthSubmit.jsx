@@ -26,6 +26,8 @@ const useAuthSubmit = () => {
 
     try {
       // SIGN UP
+      console.log({"path" : path, "location.pathname": location.pathname});
+
       if (path === "signup" || location.pathname === "/auth/signup") {
         const res = await signup({
           name,

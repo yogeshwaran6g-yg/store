@@ -4,23 +4,40 @@ import { IoBagCheckOutline, IoClose, IoBagHandle } from "react-icons/io5";
 import CartItem from "./CartItem";
 import { useCartContext } from "../context/CartContext";
 import { dummyCartItems } from "../../config/constants";
+import useCheckout from "../../hooks/useCheckout";
 
 
 const Cart = () => {
   const { cartState, toggleCartDrawer, removeItem, updateQuantity, addItem } = useCartContext();
   const { items, cartTotal } = cartState;
   const isEmpty = items.length === 0;
+  const { handleCheckout } = useCheckout();
 
 
   const closeCartDrawer = () => {
     toggleCartDrawer();
   };
 
-  const handleCheckout = () => {
+
+  const handleProcedToCheckout = () => {
     if (isEmpty) {
       closeCartDrawer();
     } else {
-      alert("Proceeding to checkout (dummy)");
+      handleCheckout({
+        user_info :{
+
+        }
+        
+//  user_info: {
+//         name: "Test User",
+//         email: "user@example.com",
+//         contact: "9876543210",
+//         address: "123 Test Street",
+//         city: "Test City",
+//         country: "India",
+//         zipCode: "123456",
+//       },
+      });
       closeCartDrawer();
     }
   };
@@ -83,7 +100,7 @@ const Cart = () => {
       {/* Footer */}
       <div className="mx-5 my-3">
         <button
-          onClick={handleCheckout}
+          onClick={handleProcedToCheckout}
           className="w-full py-3 rounded-lg bg-primary hover:bg-primary flex justify-between items-center text-white font-medium px-3"
         >
           <span>Proceed To Checkout</span>

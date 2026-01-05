@@ -27,7 +27,7 @@ export default defineConfig(({ mode }) => {
         "@hooks": path.resolve(__dirname, "src/hooks"),
         "@utils": path.resolve(__dirname, "src/utils"),
         "@services": path.resolve(__dirname, "src/services"),
-        // "@store": path.resolve(__dirname, "src/store"),
+        "@config": path.resolve(__dirname, "src/config"),
       },
     },
 
@@ -39,7 +39,7 @@ export default defineConfig(({ mode }) => {
       port: 3000,
       strictPort: true,
       open: false,
-
+      hmr:true,
       proxy: {
         "/api": {
           target: env.VITE_API_BASE_URL,

@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 //internal imports
 import Dashboard from "./dashboard";
 import Error from "@components/form/Error";
-import { countries } from "@utils/countries";
+import { countries } from "@config/constants";
 import InputArea from "@components/form/InputArea";
 import SelectOption from "@components/form/SelectOption";
 import useShippingAddressSubmit from "@hooks/useShippingAddressSubmit";
@@ -52,7 +52,7 @@ const AddShippingAddress = () => {
                     <div className="grid grid-cols-6 gap-6">
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea
-                          register={register}
+                          register={register("name", { required: "Full Name is required" })}
                           label="Full Name"
                           name="name"
                           type="text"
@@ -64,7 +64,13 @@ const AddShippingAddress = () => {
 
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea
-                          register={register}
+                          register={register("address", {
+                            required: "Full Address is required",
+                            minLength: {
+                              value: 15,
+                              message: "Address must be at least 15 characters long",
+                            },
+                          })}
                           label="Full Address"
                           name="address"
                           type="text"
@@ -76,7 +82,7 @@ const AddShippingAddress = () => {
 
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea
-                          register={register}
+                          register={register("contact", { required: "Phone number is required" })}
                           label="Phone"
                           name="contact"
                           type="tel"
@@ -87,7 +93,7 @@ const AddShippingAddress = () => {
                       </div>
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea
-                          register={register}
+                          register={register("email")}
                           label="Email"
                           name="email"
                           type="tel"
@@ -99,52 +105,51 @@ const AddShippingAddress = () => {
                       </div>
 
                       <div className="col-span-6 sm:col-span-3">
-                        <SelectOption
-                          name="country"
+                        <InputArea
+                          register={register("country")}
                           label="Country"
-                          //   register={register}
-                          //   required={true}
-                          //   setValue={setValue}
-                          options={countries?.map((country) => country?.name)}
-                          onChange={handleInputChange}
-                          value={selectedValue?.country}
+                          name="country"
+                          type="text"
+                          placeholder="Country"
+                          value="India"
+                          readOnly={true}
                         />
                         <Error errorName={errors.country} />
                       </div>
                       <div className="col-span-6 sm:col-span-3">
-                        <SelectOption
-                          name="city"
+                        <InputArea
+                          register={register("city", { required: "City is required" })}
                           label="City"
-                          //   register={register}
-                          //   required={true}
-                          //   setValue={setValue}
-                          options={cities?.map((city) => city?.name)}
-                          onChange={handleInputChange}
-                          value={selectedValue?.city}
+                          name="city"
+                          type="text"
+                          placeholder="Enter your city"
                         />
                         <Error errorName={errors.city} />
                       </div>
                       <div className="col-span-6 sm:col-span-3">
-                        <SelectOption
-                          name="area"
+                        <InputArea
+                          register={register("area", { required: "Area is required" })}
                           label="Area"
-                          options={areas?.map((area) => area)}
-                          //   register={register}
-                          //   required={true}
-                          //   setValue={setValue}
-                          onChange={handleInputChange}
-                          value={selectedValue?.area}
+                          name="area"
+                          type="text"
+                          placeholder="Enter your area"
                         />
                         <Error errorName={errors.area} />
                       </div>
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea
-                          register={register}
+                          register={register("zipCode", {
+                            required: "Zip Code is required",
+                            pattern: {
+                              value: /^[0-9]+$/,
+                              message: "Zip Code must be a number",
+                            },
+                          })}
+                          maxLength={6}
                           label="Zip Code"
                           name="zipCode"
                           type="text"
                           placeholder="Zip Code"
-                          required={false}
                         />
 
                         <Error errorName={errors.zipCode} />

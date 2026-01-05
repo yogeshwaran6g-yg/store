@@ -67,7 +67,7 @@ const createPaymentSession = async (req, res) => {
       gatewayOrderId: cfResponse.data.order_id,
       paymentSessionId: cfResponse.data.payment_session_id,
       status: "PENDING",
-      rawResponse: cfResponse.data,
+      createResponse: cfResponse.data,
     });
 
     // 4. Return session ID to frontend
@@ -161,6 +161,14 @@ const verifyCashfreePayment = async (req, res) => {
   }
 };
 
+
+
+module.exports = {
+  createPaymentSession,
+  verifyCashfreePayment,
+  cashfreeWebhook
+};
+
 // Webhook handler
 async function cashfreeWebhook(req, res) {
   try {
@@ -194,19 +202,35 @@ async function cashfreeWebhook(req, res) {
       return rtnRes(res, 404, "Payment not found");
     }
 
-    const order = payment.order;
+    const order = payment.order;    
+
+    if (!order) {
+      console.error("Order reference missing for payment:", payment._id);
+      return rtnRes(res, 409, "Order not linked with payment");
+    }
+
+    if (payment.status === "SUCCESS") {
+      return rtnRes(res, 200, "Already processed");
+    }
+    
     console.log(type)
     if (type === "PAYMENT_SUCCESS_WEBHOOK") {
       payment.status = "SUCCESS";
       order.paymentStatus = "PAID";
+      payment.webhookResponse = payload;
       payment.verifiedAt = new Date();
-
+      order.paymentMethod = payload.data.payment.payment_group;
       order.paidAt = new Date();
+      await Cart.deleteOne({ user: order.user });
+      await Cart.save();
+
     }
 
     if (type === "PAYMENT_FAILED_WEBHOOK") {
       payment.status = "FAILED";
       order.paymentStatus = "FAILED";
+      payment.webhookResponse = payload;
+
     }
 
     
@@ -214,6 +238,8 @@ async function cashfreeWebhook(req, res) {
       // optional: track abandoned payments
       order.paymentStatus = "UNPAID";
       payment.status = "ABANDONED"
+      payment.webhookResponse = payload;
+
     }
 
     await payment.save();
@@ -226,12 +252,4 @@ async function cashfreeWebhook(req, res) {
   }
 }
 
-
-
-
-module.exports = {
-  createPaymentSession,
-  verifyCashfreePayment,
-  cashfreeWebhook
-};
 

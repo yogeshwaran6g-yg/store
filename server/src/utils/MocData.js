@@ -171,7 +171,7 @@ const buildOrders = (userMap, productMap) => {
       total: 169,
       paymentMethod: "Cashfree",
       status: "Processing",
-      paymentStatus: "PAID",
+      paymentStatus: "UNPAID",
     },
   ];
 };

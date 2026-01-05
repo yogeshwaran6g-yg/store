@@ -44,8 +44,14 @@ const paymentSchema = new mongoose.Schema(
       default: "CREATED",
     },
 
-    rawResponse: {
-      type: Object, // store Cashfree response safely
+    createResponse: {
+      type: Object,
+      default: null,
+    },
+    
+    webhookResponse: {
+      type: Object,
+      default: null,
     },
 
 

@@ -14,6 +14,7 @@ const InputArea = ({
   required = true,
   pattern, // Added pattern as a prop
   patternMessage = "Invalid input", // Optional: Custom error message for pattern validation
+  maxLength,
 }) => {
   return (
     <>
@@ -27,21 +28,14 @@ const InputArea = ({
           </div>
         )}
         <input
-          {...register(`${name}`, {
-            required: required ? `${label} is required!` : false,
-            pattern: pattern
-              ? {
-                  value: pattern,
-                  message: patternMessage, // Show a custom error message for pattern mismatch
-                }
-              : undefined,
-          })}
+          {...register}
           type={type}
           name={name}
           readOnly={readOnly}
           defaultValue={defaultValue}
           placeholder={placeholder}
           autoComplete={autocomplete}
+          maxLength={maxLength} 
           className={`${
             Icon ? "py-2 pl-10" : "py-2 px-4 md:px-5"
           } w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12 ${

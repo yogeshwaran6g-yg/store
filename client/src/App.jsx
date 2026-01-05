@@ -10,7 +10,8 @@ import CartDrawer from "./components/cart/CartDrawer"
 import { SidebarProvider } from "./components/context/SidebarContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CashfreeCheckout from "././pages/CashfreeCheckout";
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { OrderProvider } from "./components/context/OrderContext";
 
@@ -20,6 +21,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
     <BrowserRouter>
+    <ToastContainer />
       <AuthProvider>
         <ProductProvider>
           <CartProvider>

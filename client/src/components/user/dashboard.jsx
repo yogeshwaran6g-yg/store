@@ -74,11 +74,11 @@ const Dashboard = ({ title, description, children }) => {
       icon: FiUser,
     },
 
-    {
-      title: "Update Profile",
-      href: "/user/update-profile",
-      icon: FiSettings,
-    },
+    // {
+    //   title: "Update Profile",
+    //   href: "/user/update-profile",
+    //   icon: FiSettings,
+    // },
     {
       title: "Change Password",
       href: "/user/change-password",
