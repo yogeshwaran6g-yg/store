@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./components/context/AuthContext";
-import {CartProvider} from "./components/context/CartContext";
+import { CartProvider } from "./components/context/CartContext";
 import { ShippingProvider } from "./components/context/ShippingContext";
 import { ProductProvider } from "./components/context/ProductContext";
-import {routes} from "./components/Routes";
+import { routes } from "./components/Routes";
 import Layout from "./components/Layout";
 import CartDrawer from "./components/cart/CartDrawer"
 import { SidebarProvider } from "./components/context/SidebarContext";
@@ -54,18 +54,18 @@ function App() {
   element={
     <ProtectedRoute>
 
-        <CashfreeCheckout />    </ProtectedRoute>
-  }
-/>
+                            <CashfreeCheckout />    </ProtectedRoute>
+                        }
+                      />
 
-              </Routes>
-              </SidebarProvider>
-            </OrderProvider>
-            </ShippingProvider>
-          </CartProvider>
-        </ProductProvider>
-      </AuthProvider>
-    </BrowserRouter>
+                    </Routes>
+                  </SidebarProvider>
+                </OrderProvider>
+              </ShippingProvider>
+            </CartProvider>
+          </ProductProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 }

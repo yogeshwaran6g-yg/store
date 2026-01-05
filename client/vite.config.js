@@ -30,7 +30,9 @@ export default defineConfig(({ mode }) => {
         "@config": path.resolve(__dirname, "src/config"),
       },
     },
+    
 
+    
     // -----------------------------
     // Dev Server
     // -----------------------------

@@ -1,13 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCartContext } from "../context/CartContext";
-import { useNavigate } from 'react-router-dom';
-
-
-
-
-
-
-
+import { useNavigate } from "react-router-dom";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 const ProductCard = ({
   id,
@@ -22,116 +16,156 @@ const ProductCard = ({
   badgeText,
   showFreeGift = false,
   freeGiftText = "worth up to ₹1000 with every order.",
-  onAddToCart,
 }) => {
+  const navigate = useNavigate();
+  const { addItem } = useCartContext();
 
-    const navigate = useNavigate();
-    const { addItem } = useCartContext();
+  const [loading, setLoading] = useState(false);
+  const [wishlisted, setWishlisted] = useState(false);
 
-    function addToCart (){
-        console.log("add to  cart");
-        const payload = {
-            id: id,
-            title: title,
-            price: price,
-            image: Array.isArray(image) ? image[0] : image,
-            quantity: 1
-        };
-        addItem(payload);
-    }
+  const addToCart = () => {
+    setLoading(true);
+
+    setTimeout(() => {
+      addItem({
+        id,
+        title,
+        price,
+        image: Array.isArray(image) ? image[0] : image,
+        quantity: 1,
+      });
+      setLoading(false);
+    }, 600);
+  };
+
   return (
     <div className="w-[260px] sm:w-[280px] md:w-[300px] shrink-0">
       <div
-        className="sku-card rounded-lg bg-[#F4F4F4] flex flex-col gap-4 max-w-[300px]"
-        style={{ cursor: "pointer" }}        
+        className="
+          group relative
+          rounded-2xl bg-white
+          border border-gray-200
+          shadow-sm hover:shadow-lg
+          transition
+          overflow-hidden
+        "
       >
         {/* IMAGE */}
-        <div className="card-image w-full relative rounded-lg overflow-hidden group"
+        <div
+          className="relative h-[260px] cursor-pointer"
+          onClick={() => navigate(`/product/${slug}`)}
         >
-            <img
-                className="group-hover:scale-105"
-              alt={title}
-              loading="lazy"
-              width="260"
-              height="300"
-              src={image}
-              style={{
-                color: "transparent",
-                width: "100%",
-                height: "300px",
-                objectFit: "cover",
-              }}
-        
-            />
-          {/* FLAG */}
+          <img
+            src={image}
+            alt={title}
+            loading="lazy"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+
+          {/* BADGE */}
           {badgeText && (
-            <div className="absolute top-0 left-0">
-              <div className="px-4 py-1 rounded-br-md text-white text-[12px] md:text-[16px] font-semibold bg-[#FF2952]">
-                {badgeText}
-              </div>
-            </div>
+            <span className="absolute top-3 left-3 bg-[#FF2952] text-white text-xs font-bold px-3 py-1 rounded-full">
+              {badgeText}
+            </span>
           )}
 
-        
+          {/* WISHLIST */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setWishlisted(!wishlisted);
+            }}
+            className="
+              absolute top-3 right-3
+              h-10 w-10
+              flex items-center justify-center
+              rounded-full
+              bg-white
+              shadow
+              text-[#FF2952]
+              hover:scale-110
+              transition
+            "
+          >
+            {wishlisted ? <FaHeart /> : <FaRegHeart />}
+          </button>
+
+          {/* ADD TO CART (HOVER / MOBILE) */}
+       <div className="absolute inset-x-0 bottom-2 flex justify-center">
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      addToCart();
+    }}
+    disabled={loading}
+    className="
+      w-[70%]
+      bg-yellow-400 text-black
+      font-bold
+      px-4 py-1.5
+      text-xs
+      rounded-full
+      shadow-[0_6px_0_#d9a400]
+      hover:translate-y-0.5
+      hover:shadow-[0_3px_0_#d9a400]
+      transition-all
+      disabled:opacity-70
+    "
+  >
+    {loading ? "Adding..." : "Add to Cart"}
+  </button>
+</div>
+
         </div>
 
         {/* BODY */}
-        <div className="flex flex-col gap-3 pb-3">
-          {/* TITLE */}
-          <div className="px-2 text-[12px] md:text-[14px] font-semibold">
-            <h3 className="line-clamp-2">{title}</h3>
-          </div>
+        <div className="p-4 flex flex-col gap-2">
 
-          {/* RATINGS */}
+          {/* TITLE */}
+          <h3 className="text-sm md:text-base font-semibold text-gray-900 line-clamp-2">
+            {title}
+          </h3>
+
+          {/* RATING */}
           {rating && (
-            <div className="flex items-center gap-2 px-2 text-sm">
-              <div className="bg-[#6739A2] text-white px-2 rounded flex items-center gap-1">
+            <div className="flex items-center gap-2 text-xs">
+              <span className="bg-[#FFD84D] text-black px-2 py-0.5 rounded-full font-bold">
                 ⭐ {rating}
-              </div>
-              <span className="text-gray-600 text-xs">
-                {reviewCount} reviews
+              </span>
+              <span className="text-gray-500">
+                ({reviewCount})
               </span>
             </div>
           )}
 
           {/* PRICE */}
-          <div className="px-2 flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {discountPercent && (
-              <span className="text-[#FF2952] text-lg font-semibold">
+              <span className="text-[#FF2952] font-bold text-sm">
                 -{discountPercent}%
               </span>
             )}
-
-            <div className="flex items-center gap-2">
-              <span className="text-lg font-semibold text-black">
-                ₹{price}
+            <span className="text-lg font-extrabold text-gray-900">
+              ₹{price}
+            </span>
+            {originalPrice && (
+              <span className="text-sm text-gray-400 line-through">
+                ₹{originalPrice}
               </span>
-
-              {originalPrice && (
-                <span className="line-through text-gray-400 text-sm">
-                  ₹{originalPrice}
-                </span>
-              )}
-            </div>
+            )}
           </div>
 
           {/* FREE GIFT */}
           {showFreeGift && (
-            <div className="bg-[#FFDE17] px-4 py-2 mx-2 text-xs">
-              <span className="text-[#6739A2] font-extrabold italic mr-1">
+            <div className="bg-[#FFF6C2] text-xs px-3 py-2 rounded-xl">
+              <span className="text-[#6739A2] font-extrabold mr-1">
                 FREE GIFT
               </span>
-              <span className="text-gray-900">{freeGiftText}</span>
+              <span className="text-gray-700">
+                {freeGiftText}
+              </span>
             </div>
           )}
-
-          {/* BUTTON */}
-          <button
-            onClick={() => addToCart()}
-            className="mx-2 mt-2 h-10 rounded-md border border-[#6739A2] text-[#6739A2] uppercase text-sm font-medium hover:bg-[#6739A2] hover:text-white transition"
-          >
-            Add To Cart
-          </button>
         </div>
       </div>
     </div>
