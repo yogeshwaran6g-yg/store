@@ -1,5 +1,26 @@
 @import "tailwindcss";
 
+
+
+
+
+
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -15,6 +36,10 @@
 
   --color-surface-light: #ffffff;
   --color-surface-dark: #1e2a30;
+
+  --animate-floatSlow: float 8s ease-in-out infinite;
+  --animate-floatMedium: float 6s ease-in-out infinite;
+  --animate-floatFast: float 4s ease-in-out infinite;
 }
 
 
@@ -25,4 +50,200 @@ html {
 
 .dark {
   all: unset;
+}
+
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: 'Fredoka', sans-serif;
+
+  /* PURE WHITE CLOUD-LIKE BACKGROUND */
+  background-color: #ffffff;
+}
+
+#root {
+  background: transparent;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 1.2s ease-out forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp 1.2s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #fff, #ffd700);
+  border-radius: 50%;
+  animation: sparkle 2.5s infinite ease-in-out;
+  opacity: 0.8;
+}
+
+@keyframes sparkle {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+}
+
+.ripple-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-btn::after {
+  content: "";
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  top: 50%;
+  left: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: translate(-50%, -50%) scale(0);
+  border-radius: 50%;
+  transition: transform 0.6s ease;
+}
+
+.ripple-btn:active::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+@media (max-width: 768px) {
+  .animate-float {
+    animation: none;
+  }
+
+  .sparkle {
+    display: none;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.9s ease-out forwards;
+}
+
+@media (max-width: 768px) {
+  .animate-slideUp {
+    animation: none;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.9s ease-out forwards;
+}
+
+
+
+/* FLOATING */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-18px); }
+  100% { transform: translateY(0); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-float-slow {
+  animation: float 9s ease-in-out infinite;
+}
+
+/* SPARKLES */
+@keyframes sparkle {
+  0% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0); }
+}
+
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #facc15;
+  border-radius: 9999px;
+  animation: sparkle 2s infinite;
 }

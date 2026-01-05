@@ -12,6 +12,7 @@ const http = axios.create({
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
+    "ngrok-skip-browser-warning": "true",
   },
 });
 
@@ -43,13 +44,13 @@ http.interceptors.response.use(
 
     // Unauthorized → force logout
     if (status === 401) {
-    //   localStorage.removeItem("access_token");
-    //   localStorage.removeItem("user");
+      //   localStorage.removeItem("access_token");
+      //   localStorage.removeItem("user");
 
       // Optional: redirect to login
-    //   if (window.location.pathname !== "/login") {
-    //     window.location.href = "/login";
-    //   }
+      //   if (window.location.pathname !== "/login") {
+      //     window.location.href = "/login";
+      //   }
     }
 
     // Normalize error
