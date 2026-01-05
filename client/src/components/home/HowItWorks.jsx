@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function NewHowItWorks() {
+export default function HowItWorks() {
   const steps = [
     {
       title: "Create Profile",

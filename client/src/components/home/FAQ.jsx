@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function NewFAQ() {
+export default function FAQ() {
   const faqs = [
     {
       q: "Is this platform safe for kids?",

@@ -1,4 +1,4 @@
-import Input from "./Input";
+import Input from "@components/form/HomeInput";
 
 export default function DeliveryDetailsForm({ onBack }) {
   return (

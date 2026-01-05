@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Input from "./Input";
+import Input from "@components/form/HomeInput";
 import DeliveryDetailsForm from "./DeliveryDetailsForm";
 
 export default function ParentDetailsForm() {

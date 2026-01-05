@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function NewCategories() {
+export default function Categories() {
   const categories = [
     {
       title: "Alphabet",

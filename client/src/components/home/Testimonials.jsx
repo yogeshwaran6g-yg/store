@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function NewTestimonials() {
+export default function Testimonials() {
   const testimonials = [
     {
       quote:
