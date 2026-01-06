@@ -3,20 +3,18 @@
 import TrendingProducts from "../components/home/FeaturedProducts";
 // import FeaturesSection from "../components/home/Feature";
 // import ShopByInterest from "../components/home/ShopByInterest";
-// import Testimonials from "../components/home/Testimonial";
-// import CommunitySection from "../components/home/Community";
 // import StickyCart from "../components/cart/StickyCart";
 
-import NewAbout from "../components/home/NewAbout";
-import NewCategories from "../components/home/NewCategories";
-import NewCourses from "../components/home/NewCourses";
-import NewFAQ from "../components/home/NewFAQ";
-import NewFeatures from "../components/home/NewFeatures";
-import NewFooter from "../components/home/NewFooter";
-import NewHero from "../components/home/newHero";
-import NewHowItWorks from "../components/home/NewHowItWorks";
-import NewNavbar from "../components/home/NewNavbar";
-import NewTestimonials from "../components/home/NewTestimonials";
+import About from "../components/home/About";
+import Categories from "../components/home/Categories";
+import Courses from "../components/home/Courses";
+import FAQ from "../components/home/FAQ";
+import Features from "../components/home/Features";
+import Footer from "../components/home/OldFooter";
+import Hero from "../components/home/Hero";
+import HowItWorks from "../components/home/HowItWorks";
+import Navbar from "../components/home/Navbar";
+import Testimonials from "../components/home/Testimonials";
 import ParentDetailsForm from "../components/home/ParentDetailsForm";
 import DeliveryDetailsForm from "../components/home/DeliveryDetailsForm";
 
@@ -41,20 +39,24 @@ const Home = () => {
         <FeaturesSection />
         <ShopByInterest />
         <Testimonials />
-        <CommunitySection /> */}
-       <NewNavbar/>
-       <NewHero/>
-        <TrendingProducts />
-       <NewFeatures/>
-       <NewCategories/>
-       <NewAbout/>
-       <NewCourses/>
-       <NewHowItWorks/>
-       <NewTestimonials/>
-       <NewFAQ/>
+      */}
+
+       <Navbar/>
+       <Hero/>
+       <TrendingProducts />
+       <Features/>
+
+       <Categories/>
+       <About/>
+       <Courses/>
+       <HowItWorks/>
+
+       <Testimonials/>
+       <FAQ/>
        <ParentDetailsForm/>
        <DeliveryDetailsForm/>
-       <NewFooter/>
+
+       <Footer/>
       </main>
 
     </div>

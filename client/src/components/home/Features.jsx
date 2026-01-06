@@ -1,4 +1,4 @@
-export default function NewFeatures() {
+export default function Features() {
   const features = [
     {
       title: "Interactive Learning",

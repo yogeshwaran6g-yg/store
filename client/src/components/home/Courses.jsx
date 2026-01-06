@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function NewCourses() {
+export default function Courses() {
   const courses = [
     {
       title: "Alphabet Kit",

@@ -1,10 +1,16 @@
-import React from 'react';
+import React from "react";
+import Label from "./Label";
 
-const InputPayment = ({ register, Icon, name, value, setShowCard, ...props }) => {
+
+const InputPayment = ({ register, Icon, name, value, setShowCard }) => {
+  const field = register("paymentMethod", {
+    required: "Payment Method is required!",
+  });
+
   return (
     <div className="px-3 py-4 card border border-gray-200 bg-white rounded-md">
-      <label className="cursor-pointer label">
-        <div className="flex item-center justify-between">
+      <label className="cursor-pointer">
+        <div className="flex items-center justify-between">
           <div className="flex items-center">
             <span className="text-xl mr-3 text-gray-400">
               <Icon />
@@ -13,16 +19,16 @@ const InputPayment = ({ register, Icon, name, value, setShowCard, ...props }) =>
               {name}
             </h6>
           </div>
+
           <input
-            onClick={() => setShowCard(value === 'Card' ? true : false)}
-            {...register('paymentMethod', {
-              required: 'Payment Method is required!',
-            })}
             type="radio"
+            {...field}
             value={value}
-            name="paymentMethod"
+            onChange={(e) => {
+              field.onChange(e);        // ✅ updates userInfo.paymentMethod
+              setShowCard(value !== "Cash");
+            }}
             className="form-radio outline-none focus:ring-0 text-emerald-500"
-            {...props}
           />
         </div>
       </label>

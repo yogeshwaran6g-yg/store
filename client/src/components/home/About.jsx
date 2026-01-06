@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function NewAbout() {
+export default function About() {
   return (
     <section className="py-28 bg-gradient-to-b from-white via-purple-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-center">
