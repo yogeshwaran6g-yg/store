@@ -393,11 +393,14 @@ const Checkout = () => {
                         storeCustomizationSetting?.checkout?.payment_method
                       )}
                     </h2>
-                    {showCard && (
-                      <div className="mb-3">
-                        <p className="text-red-400 text-sm mt-1">{error}</p>
-                      </div>
-                    )}
+                  {showCard && checkoutError && (
+  <div className="mb-3">
+    <p className="text-red-400 text-sm mt-1">
+      {checkoutError}
+    </p>
+  </div>
+)}
+
                     <div className="grid sm:grid-cols-3 grid-cols-1 gap-4">
                       {storeSetting?.cod_status && (
                         <div className="pointer-events-none opacity-50"> 
