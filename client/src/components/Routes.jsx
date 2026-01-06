@@ -21,7 +21,9 @@ export const routes = [
       header: true, 
       footer: true 
     },
+    protected: true,
   },
+  
   {
     path: "/",
     element: Home,
@@ -29,6 +31,7 @@ export const routes = [
       header: true,
       footer: true,
     },
+    protected: false,
   },
   {
     path: "/product/:slug",
@@ -37,6 +40,7 @@ export const routes = [
       header: true,
       footer: true,
     },
+    protected: false,
   },
   {
     path: "/auth/:path",
@@ -45,6 +49,7 @@ export const routes = [
       header: false,
       footer: false,
     },
+    protected: false,
   },
   {
     path: "/auth/:path/:token",
@@ -53,36 +58,43 @@ export const routes = [
       header: false,
       footer: false,
     },
+    protected: false,
   },
   {
     path: "/user/dashboard",
     element: Dashboard,
     layout: { header: true, footer: true },
+    protected: true,
   },
   {
     path: "/user/my-orders",
     element: MyOrders,
     layout: { header: true, footer: true },
+    protected: true,
   },
   {
     path: "/user/my-account",
     element: MyAccount,
     layout: { header: true, footer: true },
+    protected: true,
   },
   // {
   //   path: "/user/update-profile",
   //   element: UpdateProfile,
   //   layout: { header: true, footer: true },
+  //   protected: true,
   // },
   {
     path: "/user/change-password",
     element: ChangePassword,
     layout: { header: true, footer: true },
+    protected: true,
   },
   {
     path: "/user/add-shipping-address",
     element: AddShippingAddress,
     layout: { header: true, footer: true },
+    protected: true,
   },
   {
     path: "/createSession/:orderId",

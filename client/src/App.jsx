@@ -17,42 +17,44 @@ import { OrderProvider } from "./components/context/OrderContext";
 
 const queryClient = new QueryClient();
 
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-    <ToastContainer />
-      <AuthProvider>
-        <ProductProvider>
-          <CartProvider>
-            <ShippingProvider>
-            <OrderProvider>        
-            <CartDrawer/>
-            <SidebarProvider>
-              <Routes>
-                 {routes.map(({ path, element: Page, layout }) => (
-                    <Route
-                      key={path}
-                      path={path}
-                      element={
-                        path.startsWith("/user/") ? (
+      <BrowserRouter>
+        <ToastContainer />
+        <AuthProvider>
+          <ProductProvider>
+            <CartProvider>
+              <ShippingProvider>
+                <OrderProvider>
+                  <CartDrawer />
+                  <SidebarProvider>
+                    <Routes>
+                      {routes.map(({ path, element: Page, layout, protected: isProtected }) => (
+                        <Route
+                          key={path}
+                          path={path}
+                          element={
+                            isProtected ? (
+                              <ProtectedRoute>
+                                <Layout header={layout.header} footer={layout.footer}>
+                                  <Page />
+                                </Layout>
+                              </ProtectedRoute>
+                            ) : (
+                              <Layout header={layout.header} footer={layout.footer}>
+                                <Page />
+                              </Layout>
+                            )
+                          }
+                        />
+                      ))}
+
+                      <Route
+                        path="/createSession/:orderId"
+                        element={
                           <ProtectedRoute>
-                            <Layout header={layout.header} footer={layout.footer}>
-                              <Page />
-                            </Layout>
-                          </ProtectedRoute>
-                        ) : (
-                          <Layout header={layout.header} footer={layout.footer}>
-                            <Page />
-                          </Layout>
-                        )
-                      }
-                    />
-                  ))}
-                 <Route
-  path="/createSession/:orderId"
-  element={
-    <ProtectedRoute>
 
                             <CashfreeCheckout />    </ProtectedRoute>
                         }
