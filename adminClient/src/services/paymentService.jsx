@@ -11,12 +11,10 @@ export const usePaymentsList = ({
   return useQuery({
     queryKey: ["payments", page, limit],
     queryFn: async () => {
-      const res = await axios.get(endPoints.payment.list, {
-        params: {
+      const res = await axios.get(endPoints.payment.list, {        
           page,
           limit,
-        },
-      });
+        });
 
       return res.data; // { payments, pagination }
     },
