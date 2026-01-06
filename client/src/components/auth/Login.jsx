@@ -229,8 +229,21 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 rounded-full shadow-lg hover:scale-105 transition"
-          >
+             className="
+    w-full
+    bg-yellow-400 text-black font-bold
+    py-3
+    rounded-full
+    shadow-[0_6px_0_#c9a200]
+    hover:translate-y-[1px]
+    hover:shadow-[0_4px_0_#c9a200]
+    active:translate-y-[2px]
+    active:shadow-[0_2px_0_#c9a200]
+    transition-all
+    disabled:opacity-60
+    disabled:cursor-not-allowed
+  "
+>
             {loading ? "Processing..." : "Login"}
           </button>
         </form>
