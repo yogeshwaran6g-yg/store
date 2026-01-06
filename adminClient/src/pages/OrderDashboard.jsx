@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { orderColumns } from "@config/constants";
+import { orderColumns } from "@columns/OrderColumns";
 import DataTable from "@/components/DataTable";
 import { useOrdersList } from "@services/orderService";
 import { Search } from "lucide-react";

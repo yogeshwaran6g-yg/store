@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { paymentColumns } from "@config/Constants";
+import { paymentColumns } from "@columns/PaymentColumns";
 import DataTable from "@/components/DataTable";
 import { usePaymentsList } from "@services/paymentService";
 
 export default function Payments() {
   const [page, setPage] = useState(1);
-  const limit = 10;
+  const limit = 4;
 
   const { data, isLoading } = usePaymentsList({
     page,
