@@ -40,3 +40,11 @@ exports.protect = async (req, res, next) => {
     rtnRes(res, 500, "Authentication failed.");
   }
 };
+
+exports.admin = (req, res, next) => {
+  if (req.user && (req.user.role === "admin" || req.user.role === "super_admin")) {
+    next();
+  } else {
+    return rtnRes(res, 403, "Not authorized as an admin.");
+  }
+};
