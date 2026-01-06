@@ -6,7 +6,7 @@ const {protect}= require("../middleware/authMiddleware")
 router.post("/create", protect,orderController.createOrderFromCart);
 
 // get all orders
-router.get("/", orderController.getAllOrders);
+router.get("/getAllOrders", orderController.getAllOrders);
 
 // get order by id
 router.get("/:id", orderController.getOrderById);

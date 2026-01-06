@@ -163,10 +163,42 @@ const verifyCashfreePayment = async (req, res) => {
 
 
 
+const getAllPayments = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+
+    const pageNumber = Number(page);
+    const pageSize = Number(limit);
+    const skip = (pageNumber - 1) * pageSize;
+
+    const [payments, total] = await Promise.all([
+      Payment.find({})
+        .sort({ createdAt: -1 })
+        .populate("order", "invoice user_info")
+        .skip(skip)
+        .limit(pageSize),
+      Payment.countDocuments({}),
+    ]);
+
+    rtnRes(res, 200, "Payments fetched successfully", {
+      payments,
+      pagination: {
+        total,
+        page: pageNumber,
+        limit: pageSize,
+        totalPages: Math.ceil(total / pageSize),
+      },
+    });
+  } catch (err) {
+    rtnRes(res, 500, err.message);
+  }
+};
+
 module.exports = {
   createPaymentSession,
   verifyCashfreePayment,
-  cashfreeWebhook
+  cashfreeWebhook,
+  getAllPayments
 };
 
 // Webhook handler
