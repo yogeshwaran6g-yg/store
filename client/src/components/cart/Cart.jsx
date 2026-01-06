@@ -5,6 +5,8 @@ import CartItem from "./CartItem";
 import { useCartContext } from "../context/CartContext";
 import { dummyCartItems } from "../../config/constants";
 import useCheckout from "../../hooks/useCheckout";
+import { useNavigate } from "react-router-dom";
+
 
 
 const Cart = () => {
@@ -12,7 +14,7 @@ const Cart = () => {
   const { items, cartTotal } = cartState;
   const isEmpty = items.length === 0;
   const { handleCheckout } = useCheckout();
-
+  const navigate=useNavigate();
 
   const closeCartDrawer = () => {
     toggleCartDrawer();
@@ -23,32 +25,18 @@ const Cart = () => {
     if (isEmpty) {
       closeCartDrawer();
     } else {
-      handleCheckout({
-        user_info :{
-
-        }
-        
-//  user_info: {
-//         name: "Test User",
-//         email: "user@example.com",
-//         contact: "9876543210",
-//         address: "123 Test Street",
-//         city: "Test City",
-//         country: "India",
-//         zipCode: "123456",
-//       },
-      });
+      navigate("/checkout");
       closeCartDrawer();
     }
   };
 
 
-  const addSampleItem = () => {
-      // Add first item from dummy list or a random one
-      const sample = dummyCartItems[0];
-      // Random ID to allow multiple unique adds for testing if needed
-      addItem({ ...sample, id: sample.id + Math.floor(Math.random() * 1000) });
-  }
+  // const addSampleItem = () => {
+  //     // Add first item from dummy list or a random one
+  //     const sample = dummyCartItems[0];
+  //     // Random ID to allow multiple unique adds for testing if needed
+  //     addItem({ ...sample, id: sample.id + Math.floor(Math.random() * 1000) });
+  // }
 
   return (
     <div className="flex flex-col w-full h-full bg-white rounded z-50">
@@ -78,12 +66,7 @@ const Cart = () => {
             <p className="text-sm text-gray-500 pt-2 text-center px-10">
               No items added in your cart.
             </p>
-              <button 
-                  onClick={addSampleItem}
-                  className="mt-5 px-4 py-2 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors"
-              >
-                  Add Sample Item
-              </button>
+        
           </div>
         )}
 

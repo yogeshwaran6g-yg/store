@@ -15,11 +15,11 @@ const CartIcon = ({ onClick }) => {
         bg-yellow-400
         text-black
         font-bold
-        w-14 h-14
-        rounded-3xl
-        shadow-[0_10px_0_#d9a400]
+        w-12 h-12
+        rounded-2xl
+        shadow-[0_5px_0_#d9a400]
         flex items-center justify-center
-        m-3
+        m-2
       "
       whileHover={{
         y: 4,

@@ -1,3 +1,4 @@
+import Label from "./lLbel";
 const InputArea = ({
   name,
   label,

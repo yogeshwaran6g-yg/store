@@ -1,4 +1,6 @@
 import React from "react";
+import Label from "./Label";
+
 
 const InputPayment = ({ register, Icon, name, value, setShowCard }) => {
   const field = register("paymentMethod", {
