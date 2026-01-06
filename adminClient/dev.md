@@ -6,7 +6,7 @@
     
 2. product
     display products
-
+    when click order id go to orders 
 
 3. user
     display users

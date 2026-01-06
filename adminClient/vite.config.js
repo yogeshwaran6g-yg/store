@@ -28,6 +28,9 @@ export default defineConfig(({ mode }) => {
         "@utils": path.resolve(__dirname, "src/utils"),
         "@services": path.resolve(__dirname, "src/services"),
         "@config": path.resolve(__dirname, "src/config"),
+        "@columns": path.resolve(__dirname, "src/components/columns"),
+        "@modal": path.resolve(__dirname, "src/components/modal"),
+
       },
     },
     
