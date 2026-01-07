@@ -35,7 +35,7 @@ export default function Features() {
         <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-4 text-gray-900">
           Why Choose{" "}
           <span className="text-yellow-400">
-            AR Book
+             Scholarreality
           </span>
         </h2>
 

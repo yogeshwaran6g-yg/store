@@ -73,7 +73,7 @@ export default function Navbar() {
         className={`
           flex items-center justify-between
           px-4 py-2 md:px-8 md:py-4
-          bg-yellow-200
+         bg-gradient-to-r from-yellow-400 to-yellow-300
           transition-all duration-500
           ${scrolled
             ? "rounded-2xl md:rounded-full shadow-[0_10px_25px_rgba(0,0,0,0.25)] md:shadow-[0_20px_40px_rgba(0,0,0,0.6)]"
@@ -86,9 +86,9 @@ export default function Navbar() {
           onClick={() => handleScroll("home")}
           className="text-xl md:text-2xl font-extrabold tracking-wide cursor-pointer"
         >
-          <span className="text-purple-600">AR</span>
-          <span className="bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent">
-            Book
+          <span className="text-purple-600">Scholar</span>
+          <span className="bg-gradient-to-r from-yellow-400 to-yellow-300 text-white bg-clip-text ">
+            reality
           </span>
         </div>
 

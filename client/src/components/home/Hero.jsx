@@ -44,12 +44,12 @@ export default function Hero() {
             Discover the Magic of
             <br />
             <span className="bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(255,215,0,0.45)]">
-              Learning at AR Book
+              Learning at  Scholarreality
             </span>
           </h1>
 
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/90 font-medium">
-            Welcome to AR Book where each day brings new opportunities for
+            Welcome to  Scholarreality where each day brings new opportunities for
             <span className="text-yellow-300 font-semibold">
               {" "}discovery and growth
             </span>{" "}
