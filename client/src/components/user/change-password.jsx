@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
-//internal import
+// internal imports
 import Error from "@components/form/Error";
 import Dashboard from "./dashboard";
 import InputArea from "@components/form/InputArea";
 import AuthService from "@services/AuthService";
-import {toast} from "react-toastify";
 import { useAuth } from "@context/AuthContext";
 
 const ChangePassword = () => {
@@ -16,26 +16,25 @@ const ChangePassword = () => {
     setValue,
     formState: { errors },
   } = useForm();
+
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
 
-  const onSubmit = async ({ email, currentPassword, newPassword }) => {
-    // return notifySuccess("This Feature is disabled for demo!");
-
+  const onSubmit = async ({ currentPassword, newPassword }) => {
     setLoading(true);
     try {
       const res = await AuthService.changePassword({
         currentPassword,
         newPassword,
       });
+
       toast.success(res.message || "Password changed successfully");
-      setLoading(false);
       localStorage.setItem("accessToken", res.token);
       localStorage.setItem("user", JSON.stringify(res.user));
     } catch (error) {
+      toast.error(error.message || "Something went wrong");
+    } finally {
       setLoading(false);
-      console.log(error);
-      toast.error(error.message);
     }
   };
 
@@ -44,91 +43,102 @@ const ChangePassword = () => {
   }, [user, setValue]);
 
   return (
-    <Dashboard
-      title="Change Password"
-      description="This is change-password page"
-    >
-      <h2 className="text-xl font-serif font-semibold mb-5">
-        Change Password
-      </h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="md:grid-cols-6 md:gap-6">
-          <div className="md:mt-0 md:col-span-2">
-            <div className="lg:mt-6 bg-white">
-              <div className="grid grid-cols-6 gap-6">
-                <div className="col-span-6 sm:col-span-6">
-                  <InputArea
-                    register={register}
-                    label="Email Address"
-                    name="email"
-                    type="email"
-                    autocomplete="username"
-                    placeholder="Email Address"
-                    readOnly={true}
-                  />
-                  <Error errorName={errors.email} />
-                </div>
-                <div className="col-span-6 sm:col-span-6">
-                  <InputArea
-                    register={register}
-                    label="Current Password"
-                    name="currentPassword"
-                    type="password"
-                    autocomplete="current-password"
-                    placeholder="Current Password"
-                  />
-                  <Error errorName={errors.currentPassword} />
-                </div>
-                <div className="col-span-6 sm:col-span-6">
-                  <InputArea
-                    register={register}
-                    label="New Password"
-                    name="newPassword"
-                    type="password"
-                    autocomplete="new-password"
-                    placeholder="New Password"
-                    pattern={
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/
-                    }
-                    patternMessage={[
-                      "1. Password must be at least 8 characters long.",
-                      "2. Password must contain at least one uppercase letter.",
-                      "3. Password must contain at least one lowercase letter.",
-                      "4. Password must contain at least one number.",
-                      "5. Password must contain at least one special character.",
-                    ]}
-                  />
-                  <Error errorName={errors.newPassword} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="mt-5 text-right">
-          {loading ? (
-            <button
-              disabled={loading}
-              type="submit"
-              className="md:text-sm leading-5 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-medium text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-emerald-500 text-white px-5 md:px-6 lg:px-8 py-2 md:py-3 lg:py-3 hover:text-white hover:bg-emerald-600 h-12 mt-1 text-sm lg:text-sm w-full sm:w-auto"
-            >
-              <img
-                src="/loader/spinner.gif"
-                alt="Loading"
-                width={20}
-                height={10}
+    <Dashboard title="Change Password" description="Update account password">
+      <div className="pt-4 max-w-2xl">
+
+        {/* Header */}
+        <h2 className="text-2xl font-serif font-semibold text-purple-700 mb-6">
+          🔐 Change Password
+        </h2>
+
+        {/* Card */}
+        <div className="rounded-2xl bg-white/70 backdrop-blur-xl border border-purple-200 shadow-xl p-6 sm:p-8">
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+
+            {/* Email */}
+            <div>
+              <InputArea
+                register={register}
+                label="Email Address"
+                name="email"
+                type="email"
+                placeholder="Email Address"
+                readOnly
               />
-              <span className="font-serif ml-2 font-light">Processing</span>
-            </button>
-          ) : (
-            <button
-              type="submit"
-              className="md:text-sm leading-5 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-medium text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-emerald-500 text-white px-5 md:px-6 lg:px-8 py-2 md:py-3 lg:py-3 hover:text-white hover:bg-emerald-600 h-12 mt-1 text-sm lg:text-sm w-full sm:w-auto"
-            >
-              Change Password
-            </button>
-          )}
+              <Error errorName={errors.email} />
+            </div>
+
+            {/* Current Password */}
+            <div>
+              <InputArea
+                register={register}
+                label="Current Password"
+                name="currentPassword"
+                type="password"
+                placeholder="Current Password"
+              />
+              <Error errorName={errors.currentPassword} />
+            </div>
+
+            {/* New Password */}
+            <div>
+              <InputArea
+                register={register}
+                label="New Password"
+                name="newPassword"
+                type="password"
+                placeholder="New Password"
+                pattern={
+                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/
+                }
+                patternMessage={[
+                  "Minimum 8 characters",
+                  "At least one uppercase letter",
+                  "At least one lowercase letter",
+                  "At least one number",
+                  "At least one special character",
+                ]}
+              />
+              <Error errorName={errors.newPassword} />
+            </div>
+
+            {/* Action */}
+            <div className="pt-4 flex justify-end">
+              <button
+                type="submit"
+                disabled={loading}
+                className="
+                  flex items-center gap-2
+                  px-8 py-3 rounded-full
+                  font-semibold text-sm
+                  text-white
+                  bg-gradient-to-r from-purple-600 to-purple-500
+                  shadow-[0_6px_0_#4c1d95]
+                  hover:translate-y-[1px]
+                  hover:shadow-[0_4px_0_#4c1d95]
+                  transition-all
+                  disabled:opacity-70
+                "
+              >
+                {loading ? (
+                  <>
+                    <img
+                      src="/loader/spinner.gif"
+                      alt="Loading"
+                      width={18}
+                      height={18}
+                    />
+                    Processing
+                  </>
+                ) : (
+                  "Update Password"
+                )}
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </Dashboard>
   );
 };

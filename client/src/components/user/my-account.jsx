@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
-import { FiPlus } from "react-icons/fi";
+import { FiPlus, FiUser, FiMapPin } from "react-icons/fi";
 
-//internal imports
 import Dashboard from "./dashboard";
 import { useAuth } from "@context/AuthContext";
 
@@ -10,75 +9,82 @@ const MyAccount = () => {
   const { user } = useAuth();
 
   return (
-    <Dashboard title="my-account" description="This is my account page">
-      <div className="overflow-hidden">
-        <div className="grid gap-4 mb-8 sm:grid-cols-2 grid-cols-1">
-          {/* User Info Card */}
-          <div className="flex h-full relative">
-            <div className="flex items-center border border-gray-200 w-full rounded-lg p-4 relative">
-              {/* <Link
-                to="/user/update-profile"
-                className="absolute top-2 right-2 bg-cyan-600 text-white px-3 py-1 rounded hover:bg-cyan-700"
-              >
-                Edit
-              </Link> */}
-              <div className="flex items-center justify-center rounded-full text-xl text-center mr-4 bg-gray-200">
-                {user?.image ? (
-                  <img
-                    src={user.image}
-                    width={64}
-                    height={64}
-                    className="h-16 w-16 rounded-full bg-gray-50"
-                    alt={user?.name?.[0]}
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-16 w-16 rounded-full bg-gray-200 text-xl font-bold text-center mr-4">
-                    {user?.name?.charAt(0) || user?.username?.charAt(0)}
-                  </div>
-                )}
-              </div>
-              <div>
-                <h5 className="leading-none mb-2 text-base font-medium text-gray-700">
-                  {user?.name || user?.username}
-                </h5>
-                <p className="text-sm text-gray-500">{user?.email}</p>
-                <p className="text-sm text-gray-500">{user?.phone}</p>
-              </div>
+    <Dashboard title="My Account" description="User profile and address details">
+      <div className="pt-4">
+
+        {/* Page Title */}
+        <h2 className="text-2xl font-serif font-semibold text-purple-700 mb-6">
+          ✨ My Account
+        </h2>
+
+        <div className="grid gap-6 lg:grid-cols-2">
+
+          {/* ================= USER INFO ================= */}
+          <div className="rounded-2xl bg-white/70 backdrop-blur-xl border border-purple-200 shadow-xl p-6 flex items-center gap-5">
+            <div className="h-16 w-16 rounded-full bg-gradient-to-br from-purple-500 to-purple-400 text-white flex items-center justify-center text-xl font-bold">
+              {user?.image ? (
+                <img
+                  src={user.image}
+                  alt={user?.name}
+                  className="h-16 w-16 rounded-full object-cover"
+                />
+              ) : (
+                user?.name?.charAt(0) || user?.username?.charAt(0)
+              )}
+            </div>
+
+            <div>
+              <h5 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                <FiUser className="text-purple-600" />
+                {user?.name || user?.username}
+              </h5>
+              <p className="text-sm text-gray-600">{user?.email}</p>
+              <p className="text-sm text-gray-600">{user?.phone}</p>
             </div>
           </div>
 
-          {/* Shipping Address Cards */}
+          {/* ================= ADDRESSES ================= */}
           {user?.addresses?.map((addr, index) => (
-            <div key={addr._id || index} className="flex h-full relative">
-              <div className="flex items-center border border-gray-200 w-full rounded-lg p-4 relative">
-                <div className="flex-grow">
-                  <h5 className="leading-none mb-2 text-base font-medium text-gray-700">
-                    {addr.fullName}{" "}
-                    {addr.isDefault && (
-                      <span className="text-xs text-gray-500">
-                        (Default)
-                      </span>
-                    )}
-                  </h5>
-                  <p className="text-sm text-gray-500">{addr.phone} </p>
-                  <p className="text-sm text-gray-500">
-                    {addr.addressLine1}, {addr.city}, {addr.state}, {addr.country} {addr.postalCode}
-                  </p>
-                </div>
-              </div>
+            <div
+              key={addr._id || index}
+              className="rounded-2xl bg-white/70 backdrop-blur-xl border border-purple-200 shadow-xl p-6"
+            >
+              <h5 className="text-base font-semibold text-gray-800 flex items-center gap-2 mb-2">
+                <FiMapPin className="text-purple-600" />
+                {addr.fullName}
+                {addr.isDefault && (
+                  <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 font-semibold">
+                    Default
+                  </span>
+                )}
+              </h5>
+
+              <p className="text-sm text-gray-600">{addr.phone}</p>
+              <p className="text-sm text-gray-600 mt-1">
+                {addr.addressLine1}, {addr.city}, {addr.state},{" "}
+                {addr.country} - {addr.postalCode}
+              </p>
             </div>
           ))}
 
-          {/* Add New Address Card */}
-          <div className="flex h-full relative">
-            <Link
-              to={`/user/add-shipping-address?id=${user?._id}`}
-              className="flex items-center bg-cyan-600 text-white hover:bg-cyan-700 w-full rounded-lg py-3 px-4 text-center relative"
-            >
-              <FiPlus className="text-xl font-bold text-center mr-4" /> Add
-              Shipping Address
-            </Link>
-          </div>
+          {/* ================= ADD NEW ADDRESS ================= */}
+          <Link
+            to={`/user/add-shipping-address?id=${user?._id}`}
+            className="
+              rounded-2xl
+              border-2 border-dashed border-purple-300
+              bg-purple-50/70
+              hover:bg-purple-100
+              transition-all
+              p-6
+              flex items-center justify-center gap-3
+              text-purple-700 font-semibold
+              shadow-sm
+            "
+          >
+            <FiPlus className="text-xl" />
+            Add Shipping Address
+          </Link>
         </div>
       </div>
     </Dashboard>

@@ -1,161 +1,143 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { IoBagHandle } from "react-icons/io5";
 import ReactPaginate from "react-paginate";
 import { useOrder } from "@components/context/OrderContext";
 
-//internal import
 import Dashboard from "./dashboard";
-import useGetSetting from "@hooks/useGetSetting";
 import Loading from "@components/preloader/Loading";
-import useUtilsFunction from "@hooks/useUtilsFunction";
 import OrderHistory from "@components/order/OrderHistory";
-import {useSideBar} from "../context/SidebarContext";
+import { useSideBar } from "../context/SidebarContext";
 import CMSkeletonTwo from "@components/preloader/CMSkeletonTwo";
 
 const MyOrders = () => {
   const { currentPage, handleChangePage, isLoading, setIsLoading } =
     useSideBar();
 
-  const { state: { orders, loading, error, totalDoc } } = useOrder();
-  
+  const {
+    state: { orders, loading, error, totalDoc },
+  } = useOrder();
+
   const data = {
-      orders: orders,
-      totalDoc: totalDoc || 0
+    orders,
+    totalDoc: totalDoc || 0,
   };
 
-  const pageCount = Math.ceil(data?.totalDoc / 10);
+  const pageCount = Math.ceil(data.totalDoc / 10);
 
   useEffect(() => {
     setIsLoading(false);
   }, []);
 
-  // console.log("data?.orders?.length", data?.totalDoc);
-  return (
-    <>
-      {isLoading ? (
-        <Loading loading={isLoading} />
-      ) : (
-        <Dashboard
-          title="My Orders"
-          description="This is user order history page"
-        >
-          <div className="overflow-hidden rounded-md font-serif">
-            <div className="flex flex-col">
-              <h2 className="text-xl font-serif font-semibold mb-5">
-                My Orders
-              </h2>
-              <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="align-middle inline-block border border-gray-100 rounded-md min-w-full pb-2 sm:px-6 lg:px-8">
-                  <div className="overflow-hidden border-b last:border-b-0 border-gray-100 rounded-md">
-                    {loading ? (
-                      <CMSkeletonTwo
-                        count={20}
-                        width={100}
-                        error={error}
-                        loading={loading}
-                      />
-                    ) : data?.orders?.length === 0 ? (
-                      <div className="text-center">
-                        <span className="flex justify-center my-30 pt-16 text-emerald-500 font-semibold text-6xl">
-                          <IoBagHandle />
-                        </span>
-                        <h2 className="font-medium text-md my-4 text-gray-600">
-                          You Have no order Yet!
-                        </h2>
-                      </div>
-                    ) : (
-                      <table className="table-auto min-w-full border border-gray-100 divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                          <tr className="bg-gray-100">
-                            <th
-                              scope="col"
-                              className="text-left text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
-                            >
-                              ID
-                            </th>
-                            <th
-                              scope="col"
-                              className="text-center text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
-                            >
-                              OrderTime
-                            </th>
+  if (isLoading) return <Loading loading={isLoading} />;
 
-                            <th
-                              scope="col"
-                              className="text-center text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
-                            >
-                              Method
-                            </th>
-                            <th
-                              scope="col"
-                              className="text-center text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
-                            >
-                              Status
-                            </th>
-                            <th
-                              scope="col"
-                              className="text-center text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
-                            >
-                              Total
-                            </th>
-                            <th
-                              scope="col"
-                              className="text-right text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
-                            >
-                              Action
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {data?.orders?.map((order) => (
-                            <tr key={order._id}>
-                              <OrderHistory order={order} />
-                              <td className="px-5 py-3 whitespace-nowrap text-right text-sm">
-                                <Link
-                                  className="px-3 py-1 bg-emerald-100 text-xs text-emerald-600 hover:bg-emerald-500 hover:text-white transition-all font-semibold rounded-full"
-                                  to={`/order/${order._id}`}
-                                >
-                                  Details
-                                </Link>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    )}
-                    {data?.totalDoc > 10 && (
-                      <div className="paginationOrder">
-                        <ReactPaginate
-                          breakLabel="..."
-                          nextLabel="Next"
-                          onPageChange={(e) => handleChangePage(e.selected + 1)}
-                          pageRangeDisplayed={3}
-                          pageCount={pageCount}
-                          previousLabel="Previous"
-                          renderOnZeroPageCount={null}
-                          pageClassName="page--item"
-                          pageLinkClassName="page--link"
-                          previousClassName="page-item"
-                          previousLinkClassName="page-previous-link"
-                          nextClassName="page-item"
-                          nextLinkClassName="page-next-link"
-                          breakClassName="page--item"
-                          breakLinkClassName="page--link"
-                          containerClassName="pagination"
-                          activeClassName="activePagination"
-                          forcePage={currentPage - 1} // Sync UI with currentPage
-                        />
-                      </div>
-                    )}
-                  </div>
+  return (
+    <Dashboard title="My Orders" description="User order history">
+      <div className="pt-4">
+
+        {/* Card */}
+        <div className="rounded-2xl bg-white/70 backdrop-blur-xl border border-purple-200 shadow-xl p-6">
+
+          {/* Header */}
+          <h2 className="text-2xl font-serif font-semibold mb-6 text-purple-700 flex items-center gap-2">
+            ✨ My Orders
+          </h2>
+
+          {/* Table Wrapper */}
+          <div className="overflow-x-auto">
+            <div className="min-w-full rounded-xl overflow-hidden border border-purple-100">
+
+              {loading ? (
+                <CMSkeletonTwo
+                  count={10}
+                  width={100}
+                  error={error}
+                  loading={loading}
+                />
+              ) : data.orders.length === 0 ? (
+                <div className="text-center py-20">
+                  <IoBagHandle className="mx-auto text-6xl text-purple-400 mb-4" />
+                  <p className="text-gray-600 font-medium">
+                    You have no orders yet
+                  </p>
                 </div>
-              </div>
+              ) : (
+                <table className="min-w-full divide-y divide-purple-100">
+                  {/* Table Head */}
+                  <thead className="bg-gradient-to-r from-purple-100 to-purple-50">
+                    <tr>
+                      {[
+                        "ID",
+                        "Order Time",
+                        "Method",
+                        "Status",
+                        "Total",
+                        "Action",
+                      ].map((head) => (
+                        <th
+                          key={head}
+                          className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-center"
+                        >
+                          {head}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+
+                  {/* Table Body */}
+                  <tbody className="bg-white divide-y divide-purple-50">
+                    {data.orders.map((order) => (
+                      <tr
+                        key={order._id}
+                        className="hover:bg-purple-50/60 transition-all"
+                      >
+                        <OrderHistory order={order} />
+
+                        <td className="px-5 py-3 text-right text-sm">
+                          <Link
+                            to={`/order/${order._id}`}
+                            className="
+                              inline-block px-4 py-1.5 rounded-full
+                              bg-gradient-to-r from-yellow-400 to-yellow-300
+                              text-purple-900 text-xs font-semibold
+                              hover:from-purple-600 hover:to-purple-500
+                              hover:text-white transition-all shadow-md
+                            "
+                          >
+                            Details
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
-        </Dashboard>
-      )}
-    </>
+
+          {/* Pagination */}
+          {data.totalDoc > 10 && (
+            <div className="flex justify-center mt-8">
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel="Next →"
+                previousLabel="← Prev"
+                onPageChange={(e) => handleChangePage(e.selected + 1)}
+                pageRangeDisplayed={3}
+                pageCount={pageCount}
+                forcePage={currentPage - 1}
+                containerClassName="flex items-center gap-2 text-sm"
+                pageClassName="px-3 py-1 rounded-md border border-purple-200 text-purple-700 hover:bg-purple-100"
+                activeClassName="bg-purple-600 text-white border-purple-600"
+                previousClassName="px-3 py-1 rounded-md border border-purple-200 text-purple-700 hover:bg-purple-100"
+                nextClassName="px-3 py-1 rounded-md border border-purple-200 text-purple-700 hover:bg-purple-100"
+                breakClassName="px-3 py-1 text-purple-400"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </Dashboard>
   );
 };
 

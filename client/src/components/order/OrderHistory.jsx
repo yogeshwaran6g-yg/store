@@ -1,22 +1,35 @@
-import React from 'react';
+import React from "react";
 
 const OrderHistory = ({ order }) => {
   return (
     <>
-      <td className="px-5 py-3 leading-6 whitespace-nowrap">
-        <span className="uppercase text-sm font-medium">{order._id.substring(0, 8)}</span>
+      {/* ID */}
+      <td className="px-6 py-3 text-sm text-left whitespace-nowrap">
+        <span className="uppercase font-medium">
+          {order?._id?.substring(0, 8)}
+        </span>
       </td>
-      <td className="px-5 py-3 leading-6 whitespace-nowrap">
-        <span className="text-sm">{new Date(order.createdAt).toLocaleDateString()}</span>
+
+      {/* Order Time */}
+      <td className="px-6 py-3 text-sm text-center whitespace-nowrap">
+        {new Date(order.createdAt).toLocaleDateString()}
       </td>
-      <td className="px-5 py-3 leading-6 whitespace-nowrap">
-        <span className="text-sm">{order.paymentMethod}</span>
+
+      {/* Payment Method */}
+      <td className="px-6 py-3 text-sm text-center whitespace-nowrap">
+        {order.paymentMethod}
       </td>
-      <td className="px-5 py-3 leading-6 whitespace-nowrap">
-        <span className="text-sm">{order.status}</span>
+
+      {/* Status */}
+      <td className="px-6 py-3 text-sm text-center whitespace-nowrap">
+        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
+          {order.status}
+        </span>
       </td>
-      <td className="px-5 py-3 leading-6 whitespace-nowrap">
-        <span className="text-sm font-bold">${order.total}</span>
+
+      {/* Total */}
+      <td className="px-6 py-3 text-sm text-right font-bold whitespace-nowrap">
+        ${order.total}
       </td>
     </>
   );

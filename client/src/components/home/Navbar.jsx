@@ -2,14 +2,23 @@ import { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartContext } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 import CartIcon from "@components/cart/CartIcon";
 
-/* MENU ITEMS */
+/* PUBLIC MENU */
 const MENU_ITEMS = [
   { name: "Home", id: "home" },
   { name: "Programs", id: "programs" },
   { name: "About", id: "about" },
   { name: "Contact", id: "contact" },
+];
+
+/* USER MENU (AFTER LOGIN) */
+const USER_MENU = [
+  { name: "Dashboard", path: "/user/dashboard" },
+  { name: "My Orders", path: "/user/my-orders" },
+  { name: "My Account", path: "/user/my-account" },
+  { name: "Change Password", path: "/user/change-password" },
 ];
 
 export default function Navbar() {
@@ -20,13 +29,16 @@ export default function Navbar() {
   const [active, setActive] = useState("home");
 
   const { cartState } = useCartContext();
+  const { user, logout } = useAuth();
   const isCartOpen = cartState.isCartOpen;
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  /* ACTIVE MENU */
+  /* ACTIVE MENU (PUBLIC ONLY) */
   useEffect(() => {
+    if (user) return;
+
     const observer = new IntersectionObserver(
       (entries) =>
         entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
@@ -39,7 +51,7 @@ export default function Navbar() {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [user]);
 
   /* SCROLL SHOW / HIDE */
   useEffect(() => {
@@ -64,7 +76,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [lastScrollY, isCartOpen]);
 
-  /* SCROLL HANDLER */
+  /* SCROLL HANDLER (PUBLIC) */
   const handleScroll = useCallback(
     (id) => {
       setOpen(false);
@@ -77,11 +89,19 @@ export default function Navbar() {
       } else {
         id === "home"
           ? window.scrollTo({ top: 0, behavior: "smooth" })
-          : document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+          : document
+              .getElementById(id)
+              ?.scrollIntoView({ behavior: "smooth" });
       }
     },
     [location.pathname, navigate]
   );
+
+  const handleLogout = () => {
+    logout();
+    setOpen(false);
+    navigate("/");
+  };
 
   if (isCartOpen) return null;
 
@@ -122,63 +142,93 @@ export default function Navbar() {
         >
           {/* LOGO */}
           <div
-            onClick={() => handleScroll("home")}
+            onClick={() => navigate("/")}
             className="cursor-pointer font-extrabold text-xl md:text-2xl"
           >
             <span className="text-purple-700">Scholar</span>
-            <span className="text-black">reality</span>
+            <span>reality</span>
           </div>
 
-          {/* DESKTOP MENU (UNCHANGED) */}
-          <ul className="hidden md:flex gap-10 font-bold">
-            {MENU_ITEMS.map((item) => (
-              <li key={item.id}>
-                <button
-                  onClick={() => handleScroll(item.id)}
-                  className={`relative transition ${
-                    active === item.id ? "text-purple-700" : ""
-                  }`}
-                >
-                  {item.name}
-                  {active === item.id && (
-                    <motion.span
-                      layoutId="activeLine"
-                      className="absolute -bottom-2 left-0 right-0 h-1 bg-purple-600 rounded-full"
-                    />
-                  )}
-                </button>
-              </li>
-            ))}
-          </ul>
+          {/* DESKTOP MENU */}
+          {!user ? (
+            <ul className="hidden md:flex gap-10 font-bold">
+              {MENU_ITEMS.map((item) => (
+                <li key={item.id}>
+                  <button
+                    onClick={() => handleScroll(item.id)}
+                    className={`relative ${
+                      active === item.id ? "text-purple-700" : ""
+                    }`}
+                  >
+                    {item.name}
+                    {active === item.id && (
+                      <motion.span
+                        layoutId="activeLine"
+                        className="absolute -bottom-2 left-0 right-0 h-1 bg-purple-600 rounded-full"
+                      />
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <ul className="hidden md:flex gap-8 font-bold">
+              {USER_MENU.map((item) => (
+                <li key={item.path}>
+                  <Link
+                    to={item.path}
+                    className="hover:text-purple-700 transition"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
 
-          {/* RIGHT SIDE */}
-          <div className="flex items-center gap-3 md:gap-4">
+          {/* RIGHT SIDE (LOGIN ↔ LOGOUT SAME PLACE) */}
+          <div className="flex items-center gap-4">
             <CartIcon />
 
-            {/* LOGIN */}
-            <Link
-              to="/auth/login"
-              className="hidden md:block bg-white text-black font-bold px-6 py-2 rounded-full"
-            >
-              Login
-            </Link>
+            {!user ? (
+              <>
+                <Link
+                  to="/auth/login"
+                  className="hidden md:block bg-white px-6 py-2 rounded-full font-bold"
+                >
+                  Login
+                </Link>
 
-            {/* ENROLL */}
-            <button
-              className="
-                hidden md:block
-                bg-gradient-to-r from-purple-600 to-purple-500
-                text-white font-bold
-                px-6 py-2
-                rounded-full
-                shadow-[0_6px_0_#4c1d95]
-                hover:translate-y-[1px]
-                hover:shadow-[0_4px_0_#4c1d95]
-                transition-all
-              "
-            >
-              Enroll Now
-            </button>
+                <Link
+                  to="/programs"
+                  className="
+                    hidden md:block
+                    bg-gradient-to-r from-purple-600 to-purple-500
+                    text-white font-bold
+                    px-6 py-2 rounded-full
+                    shadow-[0_6px_0_#4c1d95]
+                  "
+                >
+                  Enroll Now
+                </Link>
+              </>
+            ) : (
+              <button
+                onClick={handleLogout}
+                className="
+                  hidden md:block
+                  bg-white
+                  text-red-600
+                  font-bold
+                  px-6 py-2
+                  rounded-full
+                  hover:bg-red-50
+                  transition-all
+                "
+              >
+                Logout
+              </button>
+            )}
 
             {/* HAMBURGER */}
             <button
@@ -192,59 +242,45 @@ export default function Navbar() {
           </div>
         </nav>
 
-        {/* ✅ MOBILE MENU (NEW – DESKTOP UNAFFECTED) */}
+        {/* MOBILE MENU */}
         <AnimatePresence>
           {open && (
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.25 }}
-              className="
-                md:hidden
-                absolute top-full left-1/2 -translate-x-1/2
-                mt-3 w-[92%]
-                bg-white rounded-2xl
-                shadow-xl
-                overflow-hidden
-              "
+              className="md:hidden bg-white rounded-2xl shadow-xl mt-3 p-4"
             >
-              <ul className="flex flex-col divide-y font-bold text-gray-800">
-                {MENU_ITEMS.map((item) => (
-                  <li key={item.id}>
-                    <button
-                      onClick={() => handleScroll(item.id)}
-                      className="w-full text-left px-6 py-4 hover:bg-purple-50"
+              {!user ? (
+                MENU_ITEMS.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleScroll(item.id)}
+                    className="block w-full text-left py-3 font-bold"
+                  >
+                    {item.name}
+                  </button>
+                ))
+              ) : (
+                <>
+                  {USER_MENU.map((item) => (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      onClick={() => setOpen(false)}
+                      className="block py-3 font-bold"
                     >
                       {item.name}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="p-4 flex flex-col gap-3">
-                <Link
-                  to="/auth/login"
-                  onClick={() => setOpen(false)}
-                  className="text-center bg-gray-100 py-3 rounded-full font-bold"
-                >
-                  Login
-                </Link>
-
-                <button
-                  className="
-                    bg-gradient-to-r from-purple-600 to-purple-500
-                    text-white font-bold
-                    py-3 rounded-full
-                    shadow-[0_6px_0_#4c1d95]
-                    active:translate-y-[1px]
-                    active:shadow-[0_4px_0_#4c1d95]
-                    transition-all
-                  "
-                >
-                  Enroll Now
-                </button>
-              </div>
+                    </Link>
+                  ))}
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left py-3 font-bold text-red-600"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
