@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@utils/axios";
-import { endPoints } from "@config/constants";
+import { endPoints } from "@config/Constants";
 
 export const useCategories = () => {
   return useQuery({

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@utils/axios";
-import { endPoints } from "@config/constants";
+import { endPoints } from "@config/Constants";
 
 export const useProducts = ({ page = 1, limit = 10, search, category }) => {
   return useQuery({
