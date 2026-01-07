@@ -93,7 +93,7 @@ export default function Courses() {
               <button
                 className="
                   relative z-10 mt-6 w-full
-                  bg-gradient-to-r from-yellow-400 to-yellow-500
+                  bg-gradient-to-r from-yellow-400 to-yellow-300
                   text-black font-bold py-3 rounded-full
                   shadow-[0_6px_0_#d9a400]
                   hover:translate-y-1

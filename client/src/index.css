@@ -247,3 +247,162 @@ body {
   border-radius: 9999px;
   animation: sparkle 2s infinite;
 }
+
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+.animate-twinkle {
+  animation: twinkle 3s infinite ease-in-out;
+}
+
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: rgba(255,215,0,0.9);
+  border-radius: 9999px;
+  filter: blur(0.6px);
+  animation: sparkle 2.5s infinite ease-in-out;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-float-slow {
+  animation: float 10s ease-in-out infinite;
+}
+
+
+/* 🌟 STARS */
+.star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: white;
+  border-radius: 9999px;
+  box-shadow: 0 0 10px rgba(255,255,255,0.9);
+  animation: twinkle 3s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+  0%,100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+
+/* 🌠 SHOOTING STAR */
+.shooting-star {
+  position: absolute;
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, white, transparent);
+  animation: shoot 3s linear infinite;
+}
+
+@keyframes shoot {
+  0% { transform: translateX(0) translateY(0); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateX(-600px) translateY(300px); opacity: 0; }
+}
+
+/* 🌙 FLOAT */
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* 🛰 ORBIT */
+@keyframes orbit {
+  0% { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+}
+.animate-orbit {
+  animation: orbit 20s linear infinite;
+}
+/* 🌟 STARS */
+.star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: white;
+  border-radius: 9999px;
+  box-shadow: 0 0 10px rgba(255,255,255,0.9);
+  animation: twinkle 3s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+  0%,100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+
+/* 🌠 SHOOTING STAR */
+.shooting-star {
+  position: absolute;
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, white, transparent);
+  animation: shoot linear infinite;
+}
+
+@keyframes shoot {
+  0% { transform: translateX(0) translateY(0); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateX(-600px) translateY(300px); opacity: 0; }
+}
+
+/* 🌙 FLOAT */
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* 🛰 ORBIT */
+@keyframes orbit {
+  0% { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+}
+.animate-orbit {
+  animation: orbit 20s linear infinite;
+}
+
+/* 🎥 AR GLOW */
+@keyframes pulseSlow {
+  0%,100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.08); }
+}
+.animate-pulse-slow {
+  animation: pulseSlow 6s ease-in-out infinite;
+}
+
+/* ⚡ PERFORMANCE */
+.star,
+.shooting-star,
+.animate-float,
+.animate-orbit {
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star,
+  .shooting-star,
+  .animate-float,
+  .animate-orbit {
+    animation: none !important;
+  }
+}

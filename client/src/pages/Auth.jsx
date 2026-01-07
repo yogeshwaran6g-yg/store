@@ -4,26 +4,19 @@ import SignUp from "../components/auth/signup";
 import ForgetPassword from "../components/auth/forget-password";
 import ResetPassword from "../components/auth/ResetPassword";
 
-const Auth = ()=>{
-    let path = useParams();
+const Auth = () => {
+  const { path, token } = useParams();
 
-    let pathMap= {
-        "forget-password":<ForgetPassword />,
-        "login":<Login />,
-        "signup":<SignUp />,
-        "reset-password": <ResetPassword />,
-    }
+  console.log("Auth path:", path);
 
-    function pathHandler(path){
-        console.log("path",path.path)
-        return pathMap[path.path];
-    }
-    return (
-        <>
-            {pathHandler(path)}
-        </>
-    )
+  const pathMap = {
+    login: <Login />,
+    signup: <SignUp />,
+    "forget-password": <ForgetPassword />,
+    "reset-password": <ResetPassword token={token} />,
+  };
 
-}
+  return pathMap[path] || <Login />;
+};
 
 export default Auth;

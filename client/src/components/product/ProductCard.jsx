@@ -91,16 +91,16 @@ const ProductCard = ({
           </button>
 
           {/* ADD TO CART (HOVER / MOBILE) */}
-       <div className="absolute inset-x-0 bottom-2 flex justify-center">
-  <button
-    onClick={(e) => {
-      e.stopPropagation();
-      addToCart();
-    }}
-    disabled={loading}
-    className="
+          <div className="absolute inset-x-0 bottom-2 flex justify-center">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                addToCart();
+              }}
+              disabled={loading}
+              className="
       w-[70%]
-      bg-yellow-400 text-black
+      bg-gradient-to-r from-yellow-400 to-yellow-300 text-black
       font-bold
       px-4 py-1.5
       text-xs
@@ -111,10 +111,10 @@ const ProductCard = ({
       transition-all
       disabled:opacity-70
     "
-  >
-    {loading ? "Adding..." : "Add to Cart"}
-  </button>
-</div>
+            >
+              {loading ? "Adding..." : "Add to Cart"}
+            </button>
+          </div>
 
         </div>
 
