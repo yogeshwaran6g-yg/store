@@ -1,5 +1,6 @@
 import { endPoints } from "@config/Constants";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 import { api } from "@utils/axios";
 
 const axios = api;
@@ -20,4 +21,21 @@ export const usePaymentsList = ({
     },
     keepPreviousData: true,
   });
+};
+
+export const useUpdatePayment = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ id, status }) => {
+            const res = await axios.put(endPoints.payment.update(id), { status });
+            return res.data;
+        },
+         onSuccess: () => {
+             toast.success("Payment updated successfully");
+            queryClient.invalidateQueries(["payments"]);
+        },
+        onError: (error) => {
+             toast.error(error.response?.data?.message || "Update failed");
+        }
+    });
 };

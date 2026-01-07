@@ -9,7 +9,22 @@ const { rtnRes, log } = require("../utils/helper");
 -------------------------------- */
 const addProduct = async (req, res) => {
   try {
-    const product = new Product(req.body);
+    const images = (req.files || []).map(
+      file => `/uploads/${file.filename}`
+    );
+
+    const prices =
+      typeof req.body.prices === "string"
+        ? JSON.parse(req.body.prices)
+        : req.body.prices;
+
+    const product = new Product({
+      ...req.body,
+      stock: Number(req.body.stock),
+      prices,
+      images,
+    });
+
     await product.save();
 
     log("Product created", "info", product._id);
@@ -19,6 +34,7 @@ const addProduct = async (req, res) => {
     return rtnRes(res, 500, err.message);
   }
 };
+
 
 /* --------------------------------
    ADD MULTIPLE PRODUCTS
@@ -131,21 +147,88 @@ const getProductById = async (req, res) => {
   }
 };
 
+const fs = require("fs").promises;
+const path = require("path");
+
+const deleteFiles = async (imagePaths) => {
+  if (!imagePaths || imagePaths.length === 0) return;
+  
+  for (const imgPath of imagePaths) {
+    try {
+      // imgPath is like "/uploads/filename.jpg"
+      // We need absolute path. The uploads dir is in server/uploads
+      // Assuming this file is in server/src/controllers
+      const absolutePath = path.join(__dirname, "../..", imgPath);
+      await fs.unlink(absolutePath);
+      log(`Deleted file: ${absolutePath}`, "info");
+    } catch (err) {
+      log(`Failed to delete file: ${imgPath}`, "warn", err.message);
+    }
+  }
+};
+
 /* --------------------------------
    UPDATE PRODUCT
 -------------------------------- */
 const updateProduct = async (req, res) => {
   try {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return rtnRes(res, 400, "Invalid product ID");
     }
 
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(id);
     if (!product) {
       return rtnRes(res, 404, "Product not found");
     }
 
-    Object.assign(product, req.body);
+    // 1. Parse existing images from body
+    let existingImages = [];
+    if (req.body.existingImages) {
+      existingImages = JSON.parse(req.body.existingImages);
+    }
+
+    // Identify images to delete (those in product.images but not in existingImages)
+    const imagesToDelete = product.images.filter(img => !existingImages.includes(img));
+    await deleteFiles(imagesToDelete);
+
+    // 2. New uploaded images
+    const newImages = (req.files || []).map(
+      file => `/uploads/${file.filename}`
+    );
+
+    // 3. Merge images
+    req.body.images = [...existingImages, ...newImages];
+
+    // 4. Parse prices
+    if (typeof req.body.prices === "string") {
+      req.body.prices = JSON.parse(req.body.prices);
+    }
+
+    // 5. Normalize numbers
+    if (req.body.stock) {
+      req.body.stock = Number(req.body.stock);
+    }
+
+    // 6. Assign allowed fields only (security)
+    const allowedFields = [
+      "title",
+      "slug",
+      "categoryId",
+      "description",
+      "status",
+      "stock",
+      "prices",
+      "images",
+    ];
+
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) {
+        product[field] = req.body[field];
+      }
+    });
+
     await product.save();
 
     log("Product updated", "info", product._id);
@@ -155,6 +238,7 @@ const updateProduct = async (req, res) => {
     return rtnRes(res, 500, err.message);
   }
 };
+
 
 /* --------------------------------
    UPDATE PRODUCT STATUS
@@ -181,7 +265,11 @@ const updateStatus = async (req, res) => {
 -------------------------------- */
 const deleteProduct = async (req, res) => {
   try {
-    await Product.deleteOne({ _id: req.params.id });
+    const product = await Product.findById(req.params.id);
+    if (product) {
+        await deleteFiles(product.images);
+        await Product.deleteOne({ _id: req.params.id });
+    }
 
     log("Product deleted", "info", req.params.id);
     return rtnRes(res, 200, "Product deleted successfully");
@@ -196,6 +284,10 @@ const deleteProduct = async (req, res) => {
 -------------------------------- */
 const deleteManyProducts = async (req, res) => {
   try {
+    const products = await Product.find({ _id: { $in: req.body.ids } });
+    for (const prod of products) {
+        await deleteFiles(prod.images);
+    }
     await Product.deleteMany({ _id: { $in: req.body.ids } });
 
     log("Multiple products deleted", "info", req.body.ids);

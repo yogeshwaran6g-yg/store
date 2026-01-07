@@ -1,4 +1,4 @@
-const Category = require("../models/category");
+const Category = require("../model/categoryModel");
 const { log, rtnRes } = require("../utils/helper");
 
 // ADD CATEGORY

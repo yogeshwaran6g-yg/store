@@ -6,37 +6,42 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 /**
  * Create Axios instance
  */
+
 const http = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000,
   headers: {
-    "Content-Type": "application/json",
     Accept: "application/json",
     "ngrok-skip-browser-warning": "true",
   },
 });
 
+
 /**
  * Request Interceptor
  * Attach auth token
  */
-http.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("accessToken");
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+http.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
 
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
 
-/**
- * Response Interceptor
- * Handle common errors
- */
+  // 🔑 Let browser handle FormData
+  if (config.data instanceof FormData) {
+    delete config.headers["Content-Type"];
+  } else {
+    config.headers["Content-Type"] = "application/json";
+  }
+
+  return config;
+});
+
+
+
+
 http.interceptors.response.use(
   (response) => response.data,
   (error) => {
@@ -68,12 +73,16 @@ http.interceptors.response.use(
 );
 
 
+/**
+ * Response Interceptor
+ * Handle common errors
+ */
 
 
 export const api = {
   get: (url, params = {}) => http.get(url, { params }),
-  post: (url, data = {}) => http.post(url, data),
-  put: (url, data = {}) => http.put(url, data),
-  delete: (url) => http.delete(url),
+  post: (url, data = {}, config = {}) => http.post(url, data, config),
+  put: (url, data = {}, config = {}) => http.put(url, data, config),
+  delete: (url, config = {}) => http.delete(url, config),
 };
 

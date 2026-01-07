@@ -141,3 +141,21 @@ exports.clearCart = async (req, res) => {
         rtnRes(res, 500, error.message);
     }
 };
+
+exports.getUserCartByAdmin = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const cart = await Cart.findOne({ userId }).populate(
+            "items.product",
+            "title prices images slug"
+        );
+
+        if (!cart) {
+            return rtnRes(res, 200, "Cart is empty", { items: [] });
+        }
+
+        rtnRes(res, 200, "User cart retrieved successfully", cart);
+    } catch (error) {
+        rtnRes(res, 500, error.message);
+    }
+};

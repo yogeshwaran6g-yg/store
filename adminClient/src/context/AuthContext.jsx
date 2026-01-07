@@ -50,7 +50,8 @@ export function DataContextProvider ({children}){
       try {
         const res = await authService.login(email, password);
         // Assuming res contains { token, user } or similar structure
-        const { token, user: userData } = res; 
+        const { token, user: userData } = res.data; 
+        console.log({userData})
         
         // Admin Check
         if(userData.role !== 'admin' && userData.role !== 'super_admin') {

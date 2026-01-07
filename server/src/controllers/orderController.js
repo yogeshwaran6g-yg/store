@@ -148,11 +148,11 @@ const createOrderFromCart = async (req, res) => {
       paymentMethod,
     });
 
-    /* 5️⃣ Clear cart */
-    await Cart.updateOne(
-      { userId },
-      { $set: { items: [] } }
-    );
+    /* 5️⃣ Clear cart - MOVED TO WEBHOOK/SUCCESS HANDLER */
+    // await Cart.updateOne(
+    //   { userId },
+    //   { $set: { items: [] } }
+    // );
 
     return rtnRes(res, 200, "Order created", {
       orderId: order._id,

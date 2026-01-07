@@ -6,7 +6,8 @@ import ProtectedRoute from "./components/ProtectedRoutes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import SidebarLayout from "./components/SidebarLayout";
 import { Navigate } from "react-router-dom";
-import { DataContextProvider } from "./context/AuthContext";
+import { DataContextProvider } from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import Modal from "react-modal";
 
 const withLayout = (Page, layout) =>
@@ -23,35 +24,37 @@ function App() {
   Modal.setAppElement("#root");
 
   return (
-    <BrowserRouter>
-      <DataContextProvider>
-        <ToastContainer />
-        <QueryClientProvider client={queryClient}>
-          <Routes>
-            {routes.map(
-              ({ path, element: Page, layout, protected: isProtected }) => {
-                const content = withLayout(Page, layout);
-                return (
-                  <Route
-                    key={path}
-                    path={path}
-                    element={
-                      isProtected ? (
-                        <ProtectedRoute>{content}</ProtectedRoute>
-                      ) : (
-                        content
-                      )
-                    }
-                  />
-                );
-              }
-            )}
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <DataContextProvider>
+          <BrowserRouter>
+            <ToastContainer />
+            <Routes>
+              {routes.map(
+                ({ path, element: Page, layout, protected: isProtected }) => {
+                  const content = withLayout(Page, layout);
+                  return (
+                    <Route
+                      key={path}
+                      path={path}
+                      element={
+                        isProtected ? (
+                          <ProtectedRoute>{content}</ProtectedRoute>
+                        ) : (
+                          content
+                        )
+                      }
+                    />
+                  );
+                }
+              )}
 
-            <Route path="" element={<Navigate to="/orders" replace />} />
-          </Routes>
-        </QueryClientProvider>
-      </DataContextProvider>
-    </BrowserRouter>
+              <Route path="" element={<Navigate to="/orders" replace />} />
+            </Routes>
+          </BrowserRouter>
+        </DataContextProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

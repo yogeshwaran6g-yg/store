@@ -12,3 +12,11 @@
     display users
     
     
+user display
+
+ user id
+ username
+ email 
+ inactive user 
+ 
+add check isblocked in login fucncion
