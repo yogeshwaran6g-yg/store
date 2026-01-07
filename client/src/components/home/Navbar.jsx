@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCartContext } from "../context/CartContext";
 import CartIcon from "@components/cart/CartIcon";
 export default function Navbar() {
@@ -9,6 +10,26 @@ export default function Navbar() {
 
   const { cartState } = useCartContext();
   const isCartOpen = cartState.isCartOpen;
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleScroll = (id) => {
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) element.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      } else if (id === "home") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+  };
 
   useEffect(() => {
     if (isCartOpen) {
@@ -52,17 +73,19 @@ export default function Navbar() {
         className={`
           flex items-center justify-between
           px-4 py-2 md:px-8 md:py-4
-          bg-yellow-100
+          bg-yellow-200
           transition-all duration-500
-          ${
-            scrolled
-              ? "rounded-2xl md:rounded-full shadow-[0_10px_25px_rgba(0,0,0,0.25)] md:shadow-[0_20px_40px_rgba(0,0,0,0.6)]"
-              : "rounded-none"
+          ${scrolled
+            ? "rounded-2xl md:rounded-full shadow-[0_10px_25px_rgba(0,0,0,0.25)] md:shadow-[0_20px_40px_rgba(0,0,0,0.6)]"
+            : "rounded-none"
           }
         `}
       >
         {/* LOGO */}
-        <div className="text-xl md:text-2xl font-extrabold tracking-wide">
+        <div
+          onClick={() => handleScroll("home")}
+          className="text-xl md:text-2xl font-extrabold tracking-wide cursor-pointer"
+        >
           <span className="text-purple-600">AR</span>
           <span className="bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent">
             Book
@@ -71,15 +94,40 @@ export default function Navbar() {
 
         {/* DESKTOP MENU */}
         <ul className="hidden md:flex items-center gap-10 font-bold text-black">
-          {["Home", "Programs", "About", "Contact"].map((item) => (
-            <li key={item} className="hover:text-yellow-500 transition">
-              {item}
+          {[
+            { name: "Home", id: "home" },
+            { name: "Programs", id: "programs" },
+            { name: "About", id: "about" },
+            { name: "Contact", id: "contact" },
+          ].map((item) => (
+            <li
+              key={item.name}
+              onClick={() => handleScroll(item.id)}
+              className="hover:text-yellow-500 transition cursor-pointer"
+            >
+              {item.name}
             </li>
           ))}
         </ul>
-        <div className= "flex items-center gap-5">
-          <CartIcon        
-          />
+        <div className="flex items-center gap-3 md:gap-4">
+
+          <CartIcon />
+
+          {/* LOGIN BUTTON */}
+          <Link
+            to="/auth/login"
+            className="
+             hidden md:block
+              bg-white text-black font-bold
+              px-5 py-2 text-sm md:px-7 md:py-3 md:text-base
+              rounded-full
+              border-2 border-yellow-400
+              hover:bg-yellow-50
+              transition-all
+            "
+          >
+            Login
+          </Link>
 
           {/* CTA */}
           <button

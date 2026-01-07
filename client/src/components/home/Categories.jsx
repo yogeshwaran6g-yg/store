@@ -35,23 +35,22 @@ export default function Categories() {
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-b from-blue-50 to-purple-50">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="relative overflow-hidden py-16 md:py-24 bg-gray-50">
+
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
 
         {/* Title */}
-        <h2 className="text-4xl font-extrabold text-center mb-4">
-          Learning{" "}
-          <span className="bg-gradient-to-r from-purple-600 to-purple-400 bg-clip-text text-transparent">
-            Categories
-          </span>
+        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-4 text-gray-900">
+          Learning <span className="text-yellow-400">Categories</span>
         </h2>
 
         <p className="text-center text-gray-600 max-w-xl mx-auto mb-14">
           Explore fun and interactive learning areas designed specially for kids.
         </p>
 
-        {/* Categories */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Categories Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {categories.map((cat, i) => (
             <motion.div
               key={i}
@@ -59,6 +58,7 @@ export default function Categories() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: i * 0.1 }}
               whileHover={{ scale: 1.03 }}
+              viewport={{ once: true }}
               className="
                 group relative bg-white rounded-3xl p-8
                 shadow-sm hover:shadow-xl
@@ -101,6 +101,9 @@ export default function Categories() {
           ))}
         </div>
       </div>
+
+
+
     </section>
   );
 }

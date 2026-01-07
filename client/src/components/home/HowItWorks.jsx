@@ -17,13 +17,14 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section className="py-28 bg-gradient-to-b from-white via-purple-50 to-blue-50">
-      <div className="max-w-6xl mx-auto px-6">
+    <section className="relative overflow-hidden py-16 md:py-28">
+
+      <div className="relative z-10 max-w-6xl mx-auto px-6">
 
         {/* Title */}
-        <h2 className="text-4xl font-extrabold text-center mb-4">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-4 text-gray-900">
           How{" "}
-          <span className="bg-gradient-to-r from-yellow-400 via-purple-500 to-blue-500 bg-clip-text text-transparent">
+          <span className="text-yellow-400">
             It Works
           </span>
         </h2>
@@ -33,7 +34,7 @@ export default function HowItWorks() {
         </p>
 
         {/* Steps */}
-        <div className="relative grid md:grid-cols-3 gap-10">
+        <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
 
           {/* Connector Line */}
           <div className="hidden md:block absolute top-12 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 via-purple-400 to-blue-400 rounded-full" />

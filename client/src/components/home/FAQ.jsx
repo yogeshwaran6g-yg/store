@@ -24,13 +24,14 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <section className="py-24 md:py-28 bg-gradient-to-b from-purple-50 via-blue-50 to-purple-100">
-      <div className="max-w-4xl mx-auto px-5 md:px-6">
+    <section className="relative overflow-hidden py-16 md:py-28">
+
+      <div className="relative z-10 max-w-4xl mx-auto px-5 md:px-6">
 
         {/* Title */}
-        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-4">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-4 text-gray-900">
           Frequently Asked{" "}
-          <span className="bg-gradient-to-r from-yellow-400 via-purple-500 to-blue-500 bg-clip-text text-transparent">
+          <span className="text-yellow-400">
             Questions
           </span>
         </h2>
@@ -72,10 +73,9 @@ export default function FAQ() {
                       w-10 h-10 rounded-full
                       text-xl font-bold
                       transition-colors
-                      ${
-                        isOpen
-                          ? "bg-yellow-400 text-black"
-                          : "bg-purple-100 text-purple-600"
+                      ${isOpen
+                        ? "bg-yellow-400 text-black"
+                        : "bg-purple-100 text-purple-600"
                       }
                     `}
                   >

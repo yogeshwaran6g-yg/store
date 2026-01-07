@@ -26,13 +26,13 @@ export default function Testimonials() {
   ];
 
   return (
-    <section className="py-28 bg-gradient-to-b from-yellow-50 via-purple-50 to-blue-50">
+    <section className="py-16 md:py-28">
       <div className="max-w-6xl mx-auto px-6 text-center">
 
         {/* Title */}
-        <h2 className="text-4xl font-extrabold mb-4">
+        <h2 className="text-3xl md:text-4xl font-extrabold mb-4 text-gray-900">
           What{" "}
-          <span className="bg-gradient-to-r from-yellow-400 via-purple-500 to-blue-500 bg-clip-text text-transparent">
+          <span className="text-yellow-400">
             Parents Say
           </span>
         </h2>
@@ -43,7 +43,7 @@ export default function Testimonials() {
         </p>
 
         {/* Testimonials */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {testimonials.map((item, i) => (
             <motion.div
               key={i}

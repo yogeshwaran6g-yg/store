@@ -27,13 +27,14 @@ export default function Features() {
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-b from-white to-purple-50">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="relative overflow-hidden py-16 md:py-24">
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
 
         {/* Title */}
-        <h2 className="text-4xl font-extrabold text-center mb-4">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-4 text-gray-900">
           Why Choose{" "}
-          <span className="bg-gradient-to-r from-purple-600 to-purple-400 bg-clip-text text-transparent">
+          <span className="text-yellow-400">
             AR Book
           </span>
         </h2>
@@ -44,7 +45,7 @@ export default function Features() {
         </p>
 
         {/* Cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {features.map((item, index) => (
             <div
               key={index}

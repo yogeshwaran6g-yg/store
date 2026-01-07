@@ -1,9 +1,9 @@
-import {React,  useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import ProductCard from "../product/ProductCard";
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { useProductContext } from "../context/ProductContext";
 
-const TrendingProducts = ({title = "Trending Products"}) => {
+const TrendingProducts = ({ title = "Trending Products" }) => {
   const { products, loading, fetchProducts } = useProductContext();
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -12,10 +12,10 @@ const TrendingProducts = ({title = "Trending Products"}) => {
   useEffect(() => {
     // Only fetch if products are empty or we need a fresh set
     // This is a simple guard to prevent re-fetching on every mount if already there
-    if (products.length === 0) {
-      fetchProducts({ limit: 6 });
+    if (!products || products.length === 0) {
+      if (fetchProducts) fetchProducts({ limit: 6 });
     }
-  }, [fetchProducts, products.length]);
+  }, [fetchProducts, products]);
 
   // Check scroll position to show/hide arrows
   const checkScroll = () => {
@@ -48,18 +48,18 @@ const TrendingProducts = ({title = "Trending Products"}) => {
   };
 
   return (
-    <section className="py-16">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        
+    <section className="relative overflow-hidden py-12 md:py-16">
+      <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+
         {/* Heading */}
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-black">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
             {title}
           </h2>
         </div>
 
         <div className="relative">
-          
+
           {/* Left Arrow */}
           {canScrollLeft && (
             <button
@@ -67,7 +67,7 @@ const TrendingProducts = ({title = "Trending Products"}) => {
               className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-black p-2 rounded-full shadow-lg transition-all"
               aria-label="Scroll left"
             >
-              <FaArrowLeft/>
+              <FaArrowLeft />
             </button>
           )}
 
@@ -78,7 +78,7 @@ const TrendingProducts = ({title = "Trending Products"}) => {
               className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-black p-2 rounded-full shadow-lg transition-all"
               aria-label="Scroll right"
             >
-              <FaArrowRight/>
+              <FaArrowRight />
             </button>
           )}
 
@@ -89,32 +89,32 @@ const TrendingProducts = ({title = "Trending Products"}) => {
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {loading ? (
-                <div className="flex items-center justify-center w-full">
-                    <p className="text-gray-500">Loading products...</p>
-                </div>
-            ) : products.length > 0 ? (
-                products.map((product) => (
-                    <ProductCard
-                        key={product._id}
-                        id={product._id}
-                        slug={product.slug}
-                        image={product.images && product.images.length > 0 ? product.images[0] : ""}
-                        title={product.title}
-                        price={product.prices?.price || 0}
-                        originalPrice={product.prices?.originalPrice}
-                        discountPercent={product.prices?.discountPercent}
-                        rating={4.5}
-                        reviewCount={10}
-                        badgeText={product.status === "active" ? "New" : ""}
-                        onAddToCart={() => console.log("Added", product.title)}
-                    />
-                ))
+              <div className="flex items-center justify-center w-full min-h-[300px]">
+                <p className="text-gray-500 text-lg">Loading products...</p>
+              </div>
+            ) : products && products.length > 0 ? (
+              products.map((product) => (
+                <ProductCard
+                  key={product._id}
+                  id={product._id}
+                  slug={product.slug}
+                  image={product.images && product.images.length > 0 ? product.images[0] : ""}
+                  title={product.title}
+                  price={product.prices?.price || 0}
+                  originalPrice={product.prices?.originalPrice}
+                  discountPercent={product.prices?.discountPercent}
+                  rating={4.5}
+                  reviewCount={10}
+                  badgeText={product.status === "active" ? "New" : ""}
+                  onAddToCart={() => console.log("Added", product.title)}
+                />
+              ))
             ) : (
-                <div className="flex items-center justify-center w-full">
-                    <p className="text-gray-500">No products found.</p>
-                </div>
+              <div className="flex items-center justify-center w-full min-h-[300px]">
+                <p className="text-gray-500 text-lg">No products found.</p>
+              </div>
             )}
-            
+
           </div>
         </div>
       </div>

@@ -2,8 +2,9 @@ import { motion } from "framer-motion";
 
 export default function About() {
   return (
-    <section className="py-28 bg-gradient-to-b from-white via-purple-50 to-blue-50">
-      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-center">
+    <section className="relative overflow-hidden py-16 md:py-28">
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14 items-center">
 
         {/* Text Content */}
         <motion.div
@@ -11,19 +12,19 @@ export default function About() {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-4xl font-extrabold mb-6 leading-tight">
+          <h2 className="text-3xl md:text-4xl font-extrabold mb-6 leading-tight text-gray-900">
             About{" "}
-            <span className="bg-gradient-to-r from-yellow-400 via-purple-500 to-blue-500 bg-clip-text text-transparent">
+            <span className="text-yellow-400">
               Our Platform
             </span>
           </h2>
 
-          <p className="text-gray-700 text-lg leading-relaxed">
+          <p className="text-gray-600 text-lg leading-relaxed">
             Our platform blends{" "}
-            <span className="font-semibold text-purple-600">
+            <span className="font-semibold text-yellow-300">
               fun, creativity, and augmented reality
             </span>{" "}
-            to help children learn naturally through play.  
+            to help children learn naturally through play.
             We create magical experiences that spark curiosity and
             build confidence in young learners.
           </p>
@@ -32,15 +33,15 @@ export default function About() {
           <div className="mt-8 space-y-4">
             <div className="flex items-center gap-3">
               <span className="w-3 h-3 rounded-full bg-yellow-400" />
-              <p className="text-gray-600">Play-based & interactive learning</p>
+              <p className="text-gray-700">Play-based & interactive learning</p>
             </div>
             <div className="flex items-center gap-3">
-              <span className="w-3 h-3 rounded-full bg-purple-500" />
-              <p className="text-gray-600">Safe and child-friendly environment</p>
+              <span className="w-3 h-3 rounded-full bg-purple-300" />
+              <p className="text-gray-700">Safe and child-friendly environment</p>
             </div>
             <div className="flex items-center gap-3">
-              <span className="w-3 h-3 rounded-full bg-blue-500" />
-              <p className="text-gray-600">Designed for curiosity & creativity</p>
+              <span className="w-3 h-3 rounded-full bg-blue-300" />
+              <p className="text-gray-700">Designed for curiosity & creativity</p>
             </div>
           </div>
         </motion.div>

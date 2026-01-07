@@ -26,13 +26,14 @@ export default function Courses() {
   ];
 
   return (
-    <section className="py-28 bg-gradient-to-b from-purple-50 to-blue-50">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="relative overflow-hidden py-16 md:py-28">
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
 
         {/* Title */}
-        <h2 className="text-4xl font-extrabold text-center mb-4">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-4 text-gray-900">
           Popular{" "}
-          <span className="bg-gradient-to-r from-yellow-400 via-purple-500 to-blue-500 bg-clip-text text-transparent">
+          <span className="text-yellow-400">
             Courses
           </span>
         </h2>
@@ -42,7 +43,7 @@ export default function Courses() {
         </p>
 
         {/* Course Cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
           {courses.map((course, i) => (
             <motion.div
               key={i}

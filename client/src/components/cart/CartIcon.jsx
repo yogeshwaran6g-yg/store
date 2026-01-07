@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import { FaShoppingCart } from "react-icons/fa";
-import {useCartContext} from "@context/CartContext";
+import { useCartContext } from "@context/CartContext";
 
 const CartIcon = ({ onClick }) => {
-    const { cartState, toggleCartDrawer } = useCartContext();
-    const cartCount = cartState.totalItems || 0;
+  const { cartState, toggleCartDrawer } = useCartContext();
+  const cartCount = cartState.totalItems || 0;
 
   return (
     <motion.button
@@ -16,18 +16,18 @@ const CartIcon = ({ onClick }) => {
         text-black
         font-bold
         w-12 h-12
-        rounded-2xl
-        shadow-[0_5px_0_#d9a400]
+        rounded-full
+        shadow-[0_6px_0_#c9a200]
         flex items-center justify-center
         m-2
       "
       whileHover={{
-        y: 4,
-        boxShadow: "0px 6px 0px #d9a400",
+        y: 2,
+        boxShadow: "0px 4px 0px #c9a200",
       }}
       whileTap={{
-        y: 8,
-        boxShadow: "0px 2px 0px #d9a400",
+        y: 4,
+        boxShadow: "0px 2px 0px #c9a200",
       }}
       transition={{ type: "spring", stiffness: 400, damping: 20 }}
     >

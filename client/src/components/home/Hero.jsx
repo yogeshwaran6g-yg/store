@@ -36,10 +36,10 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative z-20 max-w-7xl mx-auto px-6 pt-40 pb-48 flex flex-col lg:flex-row items-center justify-between">
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-48 flex flex-col lg:flex-row items-center justify-between">
 
         {/* Left Content */}
-        <div className="max-w-xl text-white">
+        <div className="max-w-xl text-white text-center lg:text-left">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
             Discover the Magic of
             <br />
@@ -56,12 +56,12 @@ export default function Hero() {
             through augmented reality learning.
           </p>
 
-          <div className="mt-10 flex items-center gap-4">
-            <button className="bg-yellow-400 text-black font-bold px-8 py-3 rounded-full shadow-[0_10px_0_#d9a400] hover:translate-y-1 hover:shadow-[0_6px_0_#d9a400] transition-all">
+          <div className="mt-8 lg:mt-10 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+            <button className="w-full sm:w-auto bg-yellow-400 text-black font-bold px-8 py-3 rounded-full shadow-[0_10px_0_#d9a400] hover:translate-y-1 hover:shadow-[0_6px_0_#d9a400] transition-all">
               Explore Now
             </button>
 
-            <button className="flex items-center gap-3 px-7 py-3 rounded-full bg-white/20 backdrop-blur-md text-white font-semibold border border-white/30 hover:bg-white/30 transition-all">
+            <button className="w-full sm:w-auto flex items-center justify-center gap-3 px-7 py-3 rounded-full bg-white/20 backdrop-blur-md text-white font-semibold border border-white/30 hover:bg-white/30 transition-all">
               <span className="w-9 h-9 bg-yellow-400 text-black rounded-full flex items-center justify-center shadow-md">
                 ▶
               </span>
@@ -92,83 +92,72 @@ export default function Hero() {
             src="/images/kids-1.png"
             alt="Kid Learning"
             className="
-              w-72 lg:w-[420px]
+              w-64 sm:w-72 lg:w-[420px]
               relative
-              -bottom-12
+              -bottom-33
               z-30
               drop-shadow-[0_30px_60px_rgba(0,0,0,0.4)]
             "
           />
         </div>
       </div>
-
-      {/* ☁️ Cloud Divider (PUSHED DOWN) */}
-        {/* Cloud Divider */}
-      <div className="absolute left-0 w-full overflow-hidden leading-none" style={{ bottom: "-60px" }}>
-             <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
-          
-          {/* CLOUD FILL */}
+      {/* ☁️ Cloud Wave Divider */}
+      <div className="absolute bottom-0 left-0 w-full z-20 pointer-events-none overflow-hidden leading-none">
+        <svg
+          viewBox="0 0 1440 240"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+          className="w-full h-56 md:h-72"
+        >
+          {/* Fill */}
           <path
             d="
-              M0,130
-              C25,100 50,90 75,100
-              C100,110 125,150 150,145
-              C175,140 195,110 220,105
-              C245,100 270,115 295,130
-              C320,145 345,175 370,170
-              C395,165 415,135 440,125
-              C465,115 490,135 515,150
-              C540,165 565,195 590,190
-              C615,185 635,150 660,140
-              C685,130 710,150 735,165
-              C760,180 785,210 810,205
-              C835,200 855,170 880,160
-              C905,150 930,170 955,185
-              C980,200 1005,230 1030,225
-              C1055,220 1075,190 1100,180
-              C1125,170 1150,185 1175,200
-              C1200,215 1225,245 1250,235
-              C1275,225 1300,205 1325,195
-              C1350,185 1380,180 1440,185
-              L1440,320
-              L0,320
-              Z
-            "
-            fill="white"
+        M0,140
+        C35,185 75,95 115,130
+        C155,165 195,205 235,170
+        C275,140 315,90 355,120
+        C395,150 435,195 475,165
+        C515,135 555,85 595,115
+        C635,145 675,190 715,160
+        C755,135 795,95 835,120
+        C875,145 915,185 955,160
+        C995,135 1035,90 1075,115
+        C1115,140 1155,180 1195,155
+        C1235,130 1275,95 1315,120
+        C1355,145 1395,185 1440,150
+        L1440,240
+        L0,240
+        Z
+      "
+            fill="#FFFFFF"
           />
 
-          {/* TOP OUTLINE */}
+          {/* Outline */}
           <path
             d="
-              M0,130
-              C25,100 50,90 75,100
-              C100,110 125,150 150,145
-              C175,140 195,110 220,105
-              C245,100 270,115 295,130
-              C320,145 345,175 370,170
-              C395,165 415,135 440,125
-              C465,115 490,135 515,150
-              C540,165 565,195 590,190
-              C615,185 635,150 660,140
-              C685,130 710,150 735,165
-              C760,180 785,210 810,205
-              C835,200 855,170 880,160
-              C905,150 930,170 955,185
-              C980,200 1005,230 1030,225
-              C1055,220 1075,190 1100,180
-              C1125,170 1150,185 1175,200
-              C1200,215 1225,245 1250,235
-              C1275,225 1300,205 1325,195
-              C1350,185 1380,180 1440,185
-            "
+        M0,140
+        C35,185 75,95 115,130
+        C155,165 195,205 235,170
+        C275,140 315,90 355,120
+        C395,150 435,195 475,165
+        C515,135 555,85 595,115
+        C635,145 675,190 715,160
+        C755,135 795,95 835,120
+        C875,145 915,185 955,160
+        C995,135 1035,90 1075,115
+        C1115,140 1155,180 1195,155
+        C1235,130 1275,95 1315,120
+        C1355,145 1395,185 1440,150
+      "
             fill="none"
-            stroke="black"
-            strokeWidth="6"
+            stroke="#000000"
+            strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
         </svg>
       </div>
+
 
     </section>
   );

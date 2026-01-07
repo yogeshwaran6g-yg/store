@@ -15,23 +15,21 @@ import Hero from "../components/home/Hero";
 import HowItWorks from "../components/home/HowItWorks";
 import Navbar from "../components/home/Navbar";
 import Testimonials from "../components/home/Testimonials";
-import ParentDetailsForm from "../components/home/ParentDetailsForm";
-import DeliveryDetailsForm from "../components/home/DeliveryDetailsForm";
+// import ParentDetailsForm from "../components/home/ParentDetailsForm";
+// import DeliveryDetailsForm from "../components/home/DeliveryDetailsForm";
 
 const Home = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-transparent">
+    <div
+      className="min-h-screen flex flex-col bg-fixed bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/images/sky.png')" }}
+    >
 
-      <div
-        className="fixed inset-0 -z-10 bg-cover bg-center"
-        style={{
-          backgroundImage: "url('/images/bg-magical-forest.png')",
-        }}
-      />
+      <div />
 
       <main className="flex-1 ">
 
-{/* 
+        {/* 
         <StickyCart />
         <HeroSection />
         <ShopByAge />
@@ -41,22 +39,27 @@ const Home = () => {
         <Testimonials />
       */}
 
-       <Navbar/>
-       <Hero/>
-       <TrendingProducts />
-       <Features/>
+        <Navbar />
+        <div id="home"><Hero /></div>
 
-       <Categories/>
-       <About/>
-       <Courses/>
-       <HowItWorks/>
+        <div className="bg-white">
+          <TrendingProducts />
+          <Features />
+          <Categories />
+        </div>
 
-       <Testimonials/>
-       <FAQ/>
-       <ParentDetailsForm/>
-       <DeliveryDetailsForm/>
+        <div className="bg-linear-to-b from-yellow-50 via-purple-50 to-blue-50">
+          <div id="about"><About /></div>
+          <div id="programs"><Courses /></div>
+          <HowItWorks />
 
-       <Footer/>
+          <Testimonials />
+          <FAQ />
+        </div>
+        {/* <ParentDetailsForm/>
+       <DeliveryDetailsForm/> */}
+
+        <div id="contact"><Footer /></div>
       </main>
 
     </div>
