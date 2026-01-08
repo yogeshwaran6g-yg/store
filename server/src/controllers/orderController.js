@@ -3,117 +3,75 @@ const { rtnRes, log } = require("../utils/helper");
 const Cart = require("../model/cartModel");
 
 const getAllOrders = async (req, res) => {
-  const {
-    day,
-    status,
-    page,
-    limit,
-    method,
-    endDate,
-    // download,
-    // sellFrom,
-    startDate,
-    customerName,
-  } = req.query;
-
-  //  day count
-  let date = new Date();
-  const today = date.toString();
-  date.setDate(date.getDate() - Number(day));
-  const dateTime = date.toString();
-
-  const beforeToday = new Date();
-  beforeToday.setDate(beforeToday.getDate() - 1);
-  // const before_today = beforeToday.toString();
-
-  const startDateData = new Date(startDate);
-  startDateData.setDate(startDateData.getDate());
-  const start_date = startDateData.toString();
-
-  // console.log(" start_date", start_date, endDate);
-
-  const queryObject = {};
-
-  if (!status) {
-    queryObject.$or = [
-      { status: { $regex: `Pending`, $options: "i" } },
-      { status: { $regex: `Processing`, $options: "i" } },
-      { status: { $regex: `Delivered`, $options: "i" } },
-      { status: { $regex: `Cancel`, $options: "i" } },
-    ];
-  }
-
-  if (customerName) {
-    queryObject.$or = [
-      { "user_info.name": { $regex: `${customerName}`, $options: "i" } },
-      { invoice: { $regex: `${customerName}`, $options: "i" } },
-    ];
-  }
-
-  if (day) {
-    queryObject.createdAt = { $gte: dateTime, $lte: today };
-  }
-
-  if (status) {
-    queryObject.status = { $regex: `${status}`, $options: "i" };
-  }
-
-  if (startDate && endDate) {
-    queryObject.updatedAt = {
-      $gt: start_date,
-      $lt: endDate,
-    };
-  }
-  if (method) {
-    queryObject.paymentMethod = { $regex: `${method}`, $options: "i" };
-  }
-
-  const pages = Number(page) || 1;
-  const limits = Number(limit);
-  const skip = (pages - 1) * limits;
-
   try {
-    // total orders count
-    const totalDoc = await Order.countDocuments(queryObject);
-    const orders = await Order.find(queryObject)
-      .select(
-        "_id invoice paymentMethod subTotal total user_info discount shippingCost status createdAt updatedAt"
-      )
-      .sort({ updatedAt: -1 })
-      .skip(skip)
-      .limit(limits);
+      console.log(req.query);
+    const {
+      status,
+      page = 1,
+      limit = 10,
+      startDate,
+      endDate,
+      customerName,
+    } = req.query;
 
-    let methodTotals = [];
-    if (startDate && endDate) {
-      const filteredOrders = await Order.find(queryObject, {
-        _id: 1,
-        total: 1,
-        paymentMethod: 1,
-        updatedAt: 1,
-      }).sort({ updatedAt: -1 });
-      for (const order of filteredOrders) {
-        const { paymentMethod, total } = order;
-        const existPayment = methodTotals.find(
-          (item) => item.method === paymentMethod
-        );
+    const query = {};
 
-        if (existPayment) {
-          existPayment.total += total;
-        } else {
-          methodTotals.push({
-            method: paymentMethod,
-            total: total,
-          });
-        }
-      }
+    /* =======================
+       STATUS FILTER
+    ======================= */
+    if (status) {
+      query.status = status; // enum match
     }
 
-    rtnRes(res, 200, "Orders Retrieved Successfully", {
+    /* =======================
+       CUSTOMER SEARCH
+    ======================= */
+    if (customerName) {
+      query.$or = [
+        { "user_info.name": { $regex: customerName, $options: "i" } },
+        { invoice: Number(customerName) || -1 },
+      ];
+    }
+
+    /* =======================
+       DATE RANGE FILTER
+    ======================= */
+    if (startDate && endDate) {
+      query.createdAt = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      };
+    }
+
+    /* =======================
+       PAGINATION
+    ======================= */
+    const pageNumber = Number(page);
+    const pageSize = Number(limit);
+    const skip = (pageNumber - 1) * pageSize;
+
+    /* =======================
+       FETCH DATA
+    ======================= */
+    const [orders, total] = await Promise.all([
+      Order.find(query)
+        .select(
+          "invoice user user_info cart total subTotal discount shippingCost status paymentStatus createdAt"
+        )
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(pageSize),
+      Order.countDocuments(query),
+    ]);
+
+    rtnRes(res, 200, "Orders fetched successfully", {
       orders,
-      limits,
-      pages,
-      totalDoc,
-      methodTotals,
+      pagination: {
+        total,
+        page: pageNumber,
+        limit: pageSize,
+        totalPages: Math.ceil(total / pageSize),
+      },
     });
   } catch (err) {
     rtnRes(res, 500, err.message);
@@ -190,11 +148,11 @@ const createOrderFromCart = async (req, res) => {
       paymentMethod,
     });
 
-    /* 5️⃣ Clear cart */
-    await Cart.updateOne(
-      { userId },
-      { $set: { items: [] } }
-    );
+    /* 5️⃣ Clear cart - MOVED TO WEBHOOK/SUCCESS HANDLER */
+    // await Cart.updateOne(
+    //   { userId },
+    //   { $set: { items: [] } }
+    // );
 
     return rtnRes(res, 200, "Order created", {
       orderId: order._id,

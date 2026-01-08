@@ -7,14 +7,16 @@ const { addProduct, addAllProducts,
      updateStatus, deleteProduct,
      deleteManyProducts } = require("../controllers/productController");
 
-router.post("/addProduct", addProduct);
+const upload = require("../middleware/uploadMiddleware");
+
+router.post("/addProduct", upload.array("images", 5), addProduct);
 router.post("/addProduct/bulk", addAllProducts);
 
 router.get("/getProduct", getAllProducts);
 router.get("/getProduct/:slug", getProductBySlug);
 router.get("/getProduct/id/:id", getProductById);
 
-router.put("/updateProduct/:id", updateProduct);
+router.put("/updateProduct/:id", upload.array("images", 5), updateProduct);
 
 router.patch("/updateProduct/:id/status", updateStatus);
 

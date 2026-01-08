@@ -82,6 +82,29 @@ const createPaymentSession = async (req, res) => {
 };
 
 
+const handleOrderSuccess = async (orderId) => {
+  try {
+    const order = await Order.findById(orderId);
+    if (!order || order.paymentStatus !== "PAID") return;
+
+    // 1. Decrement Stock
+    for (const item of order.cart) {
+      if (item.product) {
+        await Product.findByIdAndUpdate(item.product, {
+          $inc: { stock: -item.quantity }
+        });
+      }
+    }
+
+    // 2. Clear Cart (userId is stored in order.user)
+    await Cart.deleteOne({ userId: order.user });
+    
+    log("Order success processed (stock & cart)", "info", orderId);
+  } catch (err) {
+    log("handleOrderSuccess Error", "error", err.message);
+  }
+};
+
 const verifyCashfreePayment = async (req, res) => {
   try {
     const { cfOrderId } = req.params;
@@ -129,17 +152,23 @@ const verifyCashfreePayment = async (req, res) => {
       payment.verifiedAt = new Date();
       // payment.order.isPaid = true;
       payment.order.paidAt = new Date();
+      
+      await payment.save();
+      await payment.order.save();
+
+      // NEW: Handle Stock and Cart
+      await handleOrderSuccess(payment.order._id);
+
     } else if (order_status === "FAILED" || order_status === "EXPIRED") {
       payment.status = "FAILED";
       payment.order.paymentStatus = "FAILED";
       payment.rawVerifyResponse = cfOrder;
-
+      await payment.save();
+      await payment.order.save();
     } else {
       payment.status = "PENDING";
+      await payment.save();
     }
-
-    await payment.save();
-    await payment.order.save();
 
     // 5️⃣ Response to frontend
     return rtnRes(res, 200, "Payment verification completed", {
@@ -163,10 +192,84 @@ const verifyCashfreePayment = async (req, res) => {
 
 
 
+const updatePayment = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const payment = await Payment.findById(req.params.id).populate("order");
+    if (!payment) return rtnRes(res, 404, "Payment not found");
+
+    const oldStatus = payment.status;
+    payment.status = status;
+    
+    if (status === "SUCCESS" && oldStatus !== "SUCCESS") {
+        payment.order.paymentStatus = "PAID";
+        payment.order.paidAt = new Date();
+        await payment.order.save();
+        await handleOrderSuccess(payment.order._id);
+    }
+
+    await payment.save();
+    rtnRes(res, 200, "Payment updated successfully");
+  } catch (err) {
+    rtnRes(res, 500, err.message);
+  }
+};
+
+
+const getAllPayments = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+
+    const pageNumber = Number(page);
+    const pageSize = Number(limit);
+    const skip = (pageNumber - 1) * pageSize;
+
+    const [payments, total] = await Promise.all([
+      Payment.find({})
+        .sort({ createdAt: -1 })
+        .populate("order", "invoice user_info")
+        .skip(skip)
+        .limit(pageSize),
+      Payment.countDocuments({}),
+    ]);
+
+    rtnRes(res, 200, "Payments fetched successfully", {
+      payments,
+      pagination: {
+        total,
+        page: pageNumber,
+        limit: pageSize,
+        totalPages: Math.ceil(total / pageSize),
+      },
+    });
+  } catch (err) {
+    rtnRes(res, 500, err.message);
+  }
+};
+
+const getPaymentByOrderId = async (req, res) => {
+  try {
+    const { id:orderId } = req.params;    
+    const payment = await Payment.findOne({ order: orderId }).populate("order");
+    console.log(payment);
+    if (!payment) {
+      return rtnRes(res, 404, "Payment not found for this order");
+    }
+
+    rtnRes(res, 200, "Payment fetched successfully", payment);
+  } catch (err) {
+    rtnRes(res, 500, err.message);
+  }
+};
+
+
 module.exports = {
-  createPaymentSession,
+  createPaymentSession,//using
   verifyCashfreePayment,
-  cashfreeWebhook
+  cashfreeWebhook,//using
+  getAllPayments,//using
+  updatePayment,//using
+  getPaymentByOrderId//using
 };
 
 // Webhook handler
@@ -192,7 +295,6 @@ async function cashfreeWebhook(req, res) {
     const { type, data } = payload;
 
     const gatewayOrderId = data.order.order_id;
-    const cfPayment = data.payment;
 
     const payment = await Payment.findOne({
       gatewayOrderId
@@ -213,37 +315,36 @@ async function cashfreeWebhook(req, res) {
       return rtnRes(res, 200, "Already processed");
     }
     
-    console.log(type)
+    log(`Webhook Type: ${type}`, "info");
+
     if (type === "PAYMENT_SUCCESS_WEBHOOK") {
       payment.status = "SUCCESS";
       order.paymentStatus = "PAID";
       payment.webhookResponse = payload;
       payment.verifiedAt = new Date();
-      order.paymentMethod = payload.data.payment.payment_group;
+      order.paymentMethod = data.payment.payment_group;
       order.paidAt = new Date();
-      await Cart.deleteOne({ user: order.user });
-      await Cart.save();
 
-    }
-
-    if (type === "PAYMENT_FAILED_WEBHOOK") {
+      await payment.save();
+      await order.save();
+      
+      // Stock and Cart
+      await handleOrderSuccess(order._id);
+    } else if (type === "PAYMENT_FAILED_WEBHOOK") {
       payment.status = "FAILED";
       order.paymentStatus = "FAILED";
       payment.webhookResponse = payload;
 
-    }
-
-    
-    if (type === "PAYMENT_USER_DROPPED_WEBHOOK") {
-      // optional: track abandoned payments
+      await payment.save();
+      await order.save();
+    } else if (type === "PAYMENT_USER_DROPPED_WEBHOOK") {
       order.paymentStatus = "UNPAID";
-      payment.status = "ABANDONED"
+      payment.status = "ABANDONED";
       payment.webhookResponse = payload;
 
+      await payment.save();
+      await order.save();
     }
-
-    await payment.save();
-    await order.save();
 
     return rtnRes(res, 200, "OK");
   } catch (err) {

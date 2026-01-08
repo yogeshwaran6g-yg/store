@@ -89,6 +89,11 @@ exports.login = async (req, res) => {
         return rtnRes(res, 401, "Please verify your email address first.");
     }
 
+    // 4) Check if user is blocked
+    if (user.isBlocked) {
+        return rtnRes(res, 403, "Your account has been blocked. Please contact support.");
+    }
+
     // 4) If everything ok, send token to client
     createSendToken(user, 200, res);
 
@@ -274,6 +279,60 @@ exports.addShippingAddress = async (req, res) => {
         await user.save();
         
         rtnRes(res, 200, "Address added successfully", { user });
+    } catch (error) {
+        rtnRes(res, 500, error.message);
+    }
+};
+
+exports.getAllUsers = async (req, res) => {
+    try {
+        const { page = 1, limit = 10 } = req.query;
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
+        const skip = (pageNumber - 1) * limitNumber;
+
+        const [users, total] = await Promise.all([
+            User.find().select("-password").skip(skip).limit(limitNumber).sort({ createdAt: -1 }),
+            User.countDocuments(),
+        ]);
+
+        rtnRes(res, 200, "Users fetched successfully", {
+            users,
+            pagination: {
+                total,
+                page: pageNumber,
+                limit: limitNumber,
+                totalPages: Math.ceil(total / limitNumber),
+            },
+        });
+    } catch (error) {
+        rtnRes(res, 500, error.message);
+    }
+};
+
+exports.getUserById = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return rtnRes(res, 404, "User not found");
+        }
+        rtnRes(res, 200, "User fetched successfully", user);
+    } catch (error) {
+        rtnRes(res, 500, error.message);
+    }
+};
+
+exports.blockUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return rtnRes(res, 404, "User not found");
+        }
+        
+        user.isBlocked = !user.isBlocked;
+        await user.save({ validateBeforeSave: false });
+
+        rtnRes(res, 200, user.isBlocked ? "User blocked successfully" : "User unblocked successfully", user);
     } catch (error) {
         rtnRes(res, 500, error.message);
     }

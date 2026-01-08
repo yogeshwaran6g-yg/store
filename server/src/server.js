@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const path = require("path");
 const ngrok = require('@ngrok/ngrok');
 const helmet = require("helmet");
 const cors = require("cors");
@@ -13,7 +14,9 @@ const app = express();
 connectDB();
 // MIDDLEWARES
 app.use(cors());
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 app.use(morgan("dev"));
 // ROUTES
 // 🔥 Webhook FIRST — before express.json()
@@ -32,6 +35,12 @@ app.use("/api/v1/product",require("./routes/productRoute"));
 app.use("/api/v1/cart", require("./routes/cartRoutes"));
 app.use("/api/v1/order", require("./routes/orderRoutes"));
 app.use("/api/v1/payment", require("./routes/paymentRoutes"));
+app.use("/api/v1/category", require("./routes/categoryRoutes"));
+
+
+// Serve static files
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
 // 404 HANDLING
 app.use((req, res) => {
   rtnRes(res,404,"Route not found")

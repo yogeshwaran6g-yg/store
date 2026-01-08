@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const orderController = require("../controllers/orderController");
-const {protect}= require("../middleware/authMiddleware")
+const { protect, admin } = require("../middleware/authMiddleware")
 // add order
 router.post("/create", protect,orderController.createOrderFromCart);
 
 // get all orders
-router.get("/", orderController.getAllOrders);
+router.get("/getAllOrders", protect, admin, orderController.getAllOrders);
 
 // get order by id
 router.get("/:id", orderController.getOrderById);
