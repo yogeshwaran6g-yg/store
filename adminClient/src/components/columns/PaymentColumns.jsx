@@ -183,10 +183,10 @@ export const paymentColumns = [
     cell: ({ row, table }) => (
       <button
         onClick={() => table.options.meta?.onEdit?.(row.original)}
-        className="px-3 py-1 text-xs font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 transition"
+        className="p-1.5 text-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors"
+        title="Edit Payment"
       >
-                                        <AiOutlineEdit />
-        
+        <AiOutlineEdit className="w-4 h-4" />
       </button>
     ),
   }),

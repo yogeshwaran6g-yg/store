@@ -247,12 +247,29 @@ const getAllPayments = async (req, res) => {
   }
 };
 
+const getPaymentByOrderId = async (req, res) => {
+  try {
+    const { id:orderId } = req.params;    
+    const payment = await Payment.findOne({ order: orderId }).populate("order");
+    console.log(payment);
+    if (!payment) {
+      return rtnRes(res, 404, "Payment not found for this order");
+    }
+
+    rtnRes(res, 200, "Payment fetched successfully", payment);
+  } catch (err) {
+    rtnRes(res, 500, err.message);
+  }
+};
+
+
 module.exports = {
-  createPaymentSession,
+  createPaymentSession,//using
   verifyCashfreePayment,
-  cashfreeWebhook,
-  getAllPayments,
-  updatePayment,
+  cashfreeWebhook,//using
+  getAllPayments,//using
+  updatePayment,//using
+  getPaymentByOrderId//using
 };
 
 // Webhook handler

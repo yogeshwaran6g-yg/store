@@ -17,8 +17,8 @@ export const routes = [
   {
     path: "/details/:id",
     element: DetailDashboard,
-    protected: false,
-    layout: false
+    protected: true,
+    layout: true
   },
   {
     path: "/orders",
@@ -35,7 +35,7 @@ export const routes = [
   },
 
   {
-    path: "/payment",
+    path: "/payment/:id?",
     element: Payments,
     protected: true,
     layout: true

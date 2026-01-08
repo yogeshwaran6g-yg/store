@@ -19,6 +19,7 @@ export const endPoints = {
     },
     payment: {
         list: `${paymentBase}/getAllPayments`,
+        getPaymentByOrderId: (id) => `${paymentBase}/getPaymentByOrderId/${id}`,
         update: (id) => `${paymentBase}/${id}`,
     },
     auth:{

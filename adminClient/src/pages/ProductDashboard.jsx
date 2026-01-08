@@ -11,6 +11,7 @@ const ProductDashboard = () => {
   const [page, setPage] = useState(1);
   const limit = 10;
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const PRODUCT_CLIENT_URL = import.meta.env.VITE_PRODUCT_CLIENT_URL;
   const { data: productsData, isLoading } = useProducts({ page, limit, search });
   const { data: categoriesData } = useCategories();
   
@@ -22,8 +23,8 @@ const ProductDashboard = () => {
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
     setEditingProduct(null);
+    setIsModalOpen(false);
   };
 
   const handleDelete = (id) => {
@@ -65,8 +66,9 @@ const ProductDashboard = () => {
           <table className="w-full text-left border-collapse">
             <thead className="bg-gray-50 dark:bg-[#363636] text-gray-600 dark:text-gray-400 uppercase text-xs">
               <tr>
-                <th className="p-4">Image</th>
+                <th className="p-4"></th>
                 <th className="p-4">Product Name</th>
+                <th className="p-4">SKU</th>
                 <th className="p-4">Category</th>
                 <th className="p-4">Price</th>
                 <th className="p-4">Stock</th>
@@ -83,14 +85,34 @@ const ProductDashboard = () => {
                 products.map((product) => (
                   <tr key={product._id} className="hover:bg-gray-50 dark:hover:bg-[#323232] transition-colors group">
                     <td className="p-4">
-                      <div className="w-12 h-12 bg-gray-200 dark:bg-gray-600 rounded overflow-hidden">
+                      <a 
+                        href={`${PRODUCT_CLIENT_URL}/product/${product._id}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="block w-12 h-12 bg-gray-200 dark:bg-gray-600 rounded overflow-hidden hover:ring-2 hover:ring-indigo-500 transition-all"
+                      >
                         {product.images?.[0] ? 
-                          <img src={`${API_BASE_URL}${product.images[0]}`} alt="" className="w-full h-full object-cover" /> : 
-                          <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-500">No Img</div>
+                          <img src={`${API_BASE_URL}${product.images[0]}`} alt="" className="w-full h-full object-cover" 
+                            title="view product"
+                           /> : 
+                          <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-500"
+                            title="view product"
+                          >No Img</div>
                         }
-                      </div>
+                      </a>
                     </td>
-                    <td className="p-4 font-medium text-gray-900 dark:text-white">{product.title}</td>
+                    <td className="p-4">
+                        <a 
+                            href={`${PRODUCT_CLIENT_URL}/product/${product._id}`} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            title="view product"
+                            className="font-medium text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors underline decoration-dotted underline-offset-4"
+                        >
+                            {product.title}
+                        </a>
+                    </td>
+                    <td className="p-4 text-xs font-mono text-gray-500 dark:text-gray-400">{product.sku || "-"}</td>
                     <td className="p-4 text-gray-600 dark:text-gray-400">{product.categoryId?.name || "Uncategorized"}</td>
                     <td className="p-4 font-mono">
                       <div className="text-indigo-600 dark:text-indigo-300">₹{product.prices?.price}</div>
@@ -112,19 +134,17 @@ const ProductDashboard = () => {
                       <div className="flex justify-center gap-2">
                         <button 
                             onClick={() => openModal(product)} 
-                            className="p-2 text-blue-600 dark:text-blue-400 
-                            hover:bg-blue-50 dark:hover:bg-blue-400/10 rounded-full
-                             transition-colors"
+                            className="p-1.5 text-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors"
+                            title="Edit Product"
                         >
-                                <AiOutlineEdit />
+                                <AiOutlineEdit className="w-4 h-4" />
                         </button>
                         <button 
                             onClick={() => handleDelete(product._id)} 
-                            className="p-2 text-red-600 dark:text-red-400
-                             hover:bg-red-50 dark:hover:bg-red-400/10 rounded-full
-                              transition-colors"
+                            className="p-1.5 text-red-600 bg-red-50 dark:bg-red-900/20 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
+                            title="Delete Product"
                         >
-                                <AiOutlineDelete />
+                                <AiOutlineDelete className="w-4 h-4" />
                         </button>
                       </div>
                     </td>

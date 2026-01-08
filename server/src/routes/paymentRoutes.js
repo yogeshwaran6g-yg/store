@@ -8,4 +8,5 @@ router.post("/create", paymentController.createPaymentSession);
 router.get("/payment/verify/:cfOrderId",paymentController.verifyCashfreePayment);
 router.get("/getAllPayments", protect, admin, paymentController.getAllPayments);
 router.put("/:id", protect, admin, paymentController.updatePayment);
+router.get("/getPaymentByOrderId/:id", protect, admin, paymentController.getPaymentByOrderId);
 module.exports = router;

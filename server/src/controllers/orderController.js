@@ -56,7 +56,7 @@ const getAllOrders = async (req, res) => {
     const [orders, total] = await Promise.all([
       Order.find(query)
         .select(
-          "invoice userId user_info total subTotal discount shippingCost status paymentStatus createdAt"
+          "invoice user user_info cart total subTotal discount shippingCost status paymentStatus createdAt"
         )
         .sort({ createdAt: -1 })
         .skip(skip)

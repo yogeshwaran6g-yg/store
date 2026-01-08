@@ -10,11 +10,12 @@ export const userColumns = [
           const name = info.getValue() || "Unknown";
           const initial = name.charAt(0).toUpperCase();
           return (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 cursor-pointer" title="View user details">
                   <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold text-xs">
                       {initial}
                   </div>
-                  <span className="font-medium text-gray-900 dark:text-white">{name}</span>
+                  <span className="font-medium text-gray-900 dark:text-white">
+                    {name}</span>
               </div>
           );
       },

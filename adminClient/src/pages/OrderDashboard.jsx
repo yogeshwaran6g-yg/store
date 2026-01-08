@@ -1,14 +1,18 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { orderColumns } from "@columns/OrderColumns";
 import DataTable from "@/components/DataTable";
 import { useOrdersList } from "@services/orderService";
 import { Search } from "lucide-react";
 
 import EditOrderModal from "@components/modal/EditOrderModal";
+import OrderItemsModal from "@components/modal/OrderItemsModal";
 
 export default function Orders() {
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   
   // Input state (what user types)
@@ -110,6 +114,16 @@ export default function Orders() {
             onEdit: (order) => {
                 setSelectedOrder(order);
                 setIsEditModalOpen(true);
+            },
+            onView: (order) => {
+                setSelectedOrder(order);
+                setIsViewModalOpen(true);
+            },
+            onUserClick: (userId) => {
+                navigate(`/details/${userId}`);
+            },
+            onPaymentClick: (orderId) => {
+                navigate(`/payment/${orderId}`);
             }
         }}
       />
@@ -117,6 +131,14 @@ export default function Orders() {
         isOpen={isEditModalOpen}
         onClose={() => {
             setIsEditModalOpen(false);
+            setSelectedOrder(null);
+        }}
+        order={selectedOrder}
+      />
+      <OrderItemsModal 
+        isOpen={isViewModalOpen}
+        onClose={() => {
+            setIsViewModalOpen(false);
             setSelectedOrder(null);
         }}
         order={selectedOrder}

@@ -26,6 +26,7 @@ const ProductModal = ({ isOpen, onClose, product, categories }) => {
           price: product.prices.price,
           originalPrice: product.prices.originalPrice,
           stock: product.stock,
+          sku: product.sku,
           categoryId: product.categoryId?._id,
           description: product.description,
           status: product.status,
@@ -40,15 +41,29 @@ const ProductModal = ({ isOpen, onClose, product, categories }) => {
         setMediaItems(existingInfo);
 
       } else {
-        reset({ status: "ACTIVE" });
+        reset({
+            title: "",
+            slug: "",
+            price: "",
+            originalPrice: "",
+            stock: "",
+            sku: "",
+            categoryId: "",
+            description: "",
+            status: "ACTIVE"          
+        });
         setMediaItems([]);
       }
     }
   }, [isOpen, product, reset]);
 
   useEffect(() => {
-    if (title && !product && isOpen) {
-      setValue("slug", title.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, ""));
+    if (!product && isOpen) {
+      if (title) {
+        setValue("slug", title.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, ""));
+      } else {
+        setValue("slug", "");
+      }
     }
   }, [title, product, setValue, isOpen]);
 
@@ -102,6 +117,7 @@ const ProductModal = ({ isOpen, onClose, product, categories }) => {
     formData.append("slug", data.slug);
     formData.append("stock", data.stock);
     formData.append("categoryId", data.categoryId);
+    formData.append("sku", data.sku || "");
     formData.append("status", data.status);
     formData.append("description", data.description || "");
 
@@ -156,6 +172,10 @@ const ProductModal = ({ isOpen, onClose, product, categories }) => {
             <div className="space-y-1">
               <label className="text-sm text-gray-600 dark:text-gray-400">Slug</label>
               <input {...register("slug", { required: true })} className="w-full bg-gray-50 dark:bg-[#363636] text-gray-900 dark:text-white p-2 rounded focus:ring-1 focus:ring-indigo-500 outline-none border border-gray-200 dark:border-gray-600" placeholder="product-slug" />
+            </div>
+            <div className="space-y-1">
+              <label className="text-sm text-gray-600 dark:text-gray-400">SKU (Stock Keeping Unit)</label>
+              <input {...register("sku")} className="w-full bg-gray-50 dark:bg-[#363636] text-gray-900 dark:text-white p-2 rounded focus:ring-1 focus:ring-indigo-500 outline-none border border-gray-200 dark:border-gray-600" placeholder="e.g. PROD-001" />
             </div>
           </div>
 

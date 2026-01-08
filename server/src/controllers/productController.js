@@ -221,6 +221,7 @@ const updateProduct = async (req, res) => {
       "stock",
       "prices",
       "images",
+      "sku"
     ];
 
     allowedFields.forEach(field => {

@@ -18,21 +18,25 @@ const orderSchema = new mongoose.Schema(
         type: String,
         required: false,
       },
+      lastName: {
+        type: String,
+        required: false,
+      },
       email: {
         type: String,
         required: false,
       },
       contact: {
         type: String,
-        required: false,
+        required: true,
       },
       address: {
         type: String,
-        required: false,
+        required: true,
       },
       city: {
         type: String,
-        required: false,
+        required: true,
       },
       country: {
         type: String,
@@ -40,7 +44,7 @@ const orderSchema = new mongoose.Schema(
       },
       zipCode: {
         type: String,
-        required: false,
+        required: true,
       },
     },
     subTotal: {
@@ -101,3 +105,14 @@ orderSchema.plugin(AutoIncrement, {
   start_seq: 10000,
 });
 module.exports = Order;
+
+
+
+
+
+
+// product:694f78e1805eb21f2ba88de3
+// title:"Alphabet Learning Book"
+// quantity:2
+// price:199
+// image:"alphabet-book.jpg"

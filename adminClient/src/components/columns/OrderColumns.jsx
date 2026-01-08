@@ -1,5 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
 const columnHelper = createColumnHelper();
 
 export const orderColumns = [
@@ -8,6 +8,31 @@ export const orderColumns = [
     header: "Invoice",
     cell: info => <span className="font-medium text-gray-900 dark:text-white">#{info.getValue()}</span>,
   }),
+  columnHelper.accessor("user", {
+    header: "User ID",
+    cell: info => (
+      <button
+        onClick={() => info.table.options.meta?.onUserClick?.(info.getValue())}
+        className="cursor-pointer text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 font-mono text-xs underline decoration-dotted capitalize"
+        title="View User Details"
+      >
+        {info.getValue()}
+      </button>
+    ),
+  }),
+  columnHelper.accessor("_id", {
+    header: "Order ID",
+    cell: info => (
+      <button
+        onClick={() => info.table.options.meta?.onPaymentClick?.(info.getValue())}
+        className="cursor-pointer text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 font-mono text-xs underline decoration-dotted capitalize"
+        title="View Payment Details"
+      >
+        {info.getValue()}
+      </button>
+    ),
+  }),
+
 
   columnHelper.accessor(
     row => row.user_info?.name ?? "-",
@@ -48,15 +73,18 @@ export const orderColumns = [
         paid: "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700",
         unpaid: "bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-700",
         failed: "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border-red-200 dark:border-red-700",
-        
       };
       
-      const theme = colors[status] || colors.default;
+      const theme = colors[status] || "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700";
 
       return (
-        <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${theme} capitalize`}>
+        <button
+          onClick={() => info.table.options.meta?.onPaymentClick?.(info.row.original._id)}
+          className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${theme} capitalize hover:ring-2 hover:ring-indigo-500/20 transition-all cursor-pointer`}
+          title="View Payment Details"
+        >
           {info.getValue() || "Pending"}
-        </span>
+        </button>
       );
     },
   }),
@@ -73,7 +101,7 @@ export const orderColumns = [
         canceled: "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border-red-200 dark:border-red-700",
       };
       
-      const theme = colors[status] || colors.default;
+      const theme = colors[status] || "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700";
 
       return (
         <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${theme} capitalize`}>
@@ -101,12 +129,22 @@ export const orderColumns = [
     id: "actions",
     header: "Actions",
     cell: ({ row, table }) => (
-      <button
-        onClick={() => table.options.meta?.onEdit?.(row.original)}
-        className="px-3 py-1 text-xs font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 transition"
-      >                                        <AiOutlineEdit />
-        
-      </button>
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => table.options.meta?.onView?.(row.original)}
+          className="p-1.5 text-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors"
+          title="View Products"
+        >
+          <AiOutlineEye className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => table.options.meta?.onEdit?.(row.original)}
+          className="p-1.5 text-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors"
+          title="Edit Status"
+        >
+          <AiOutlineEdit className="w-4 h-4" />
+        </button>
+      </div>
     ),
   }),
 ];

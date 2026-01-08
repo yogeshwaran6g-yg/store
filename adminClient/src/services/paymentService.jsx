@@ -15,13 +15,14 @@ export const usePaymentsList = ({
       const res = await axios.get(endPoints.payment.list, {        
           page,
           limit,
-        });
+      });
 
       return res.data; // { payments, pagination }
     },
     keepPreviousData: true,
   });
 };
+
 
 export const useUpdatePayment = () => {
     const queryClient = useQueryClient();
@@ -37,5 +38,16 @@ export const useUpdatePayment = () => {
         onError: (error) => {
              toast.error(error.response?.data?.message || "Update failed");
         }
+    });
+};
+
+export const usePaymentByOrderId = (id) => {
+    return useQuery({
+        queryKey: ["payment", id],
+        queryFn: async () => {
+            const res = await axios.get(endPoints.payment.getPaymentByOrderId(id));
+            return res.data;
+        },
+        enabled: !!id,
     });
 };
