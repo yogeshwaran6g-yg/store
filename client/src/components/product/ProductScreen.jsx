@@ -8,6 +8,7 @@ import ShippingCard from "./ShippingCard";
 import FAQ from "../faq/Faq";
 import { faqData } from "../../config/constants";
 import ProductFeature from "../home/FeaturedProducts";
+import ProductDescription from "./ProductDescription";
 
 const ProductScreen = () => {
   const { slug } = useParams();
@@ -158,9 +159,10 @@ const ProductScreen = () => {
               </span>
             </div>
 
-            <p className="text-gray-600 text-sm leading-7 mb-6">
-              {currentProduct.description}
-            </p>
+            <ProductDescription 
+              description={currentProduct.description} 
+              className="text-gray-600 text-sm leading-7 mb-6"
+            />
 
             {/* QTY + CART */}
             <div className="flex gap-4">
