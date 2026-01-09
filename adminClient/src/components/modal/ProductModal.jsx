@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineClose, AiOutlineCloudUpload, AiOutlineDelete } from "react-icons/ai";
+import MDEditor from "@uiw/react-md-editor";
 import { useAddProduct, useUpdateProduct } from "../../services/productService";
 import { toast } from "react-toastify";
 
@@ -49,7 +50,7 @@ const ProductModal = ({ isOpen, onClose, product, categories }) => {
             stock: "",
             sku: "",
             categoryId: "",
-            description: "",
+            description: "**Features**\n- High quality material\n- Durable and long-lasting\n- Available in multiple colors\n\n**Specifications**\n- Material: 100% Cotton\n- Weight: 200g\n\n**Care Instructions**\n- Machine wash cold\n- Do not bleach",
             status: "ACTIVE"          
         });
         setMediaItems([]);
@@ -214,10 +215,16 @@ const ProductModal = ({ isOpen, onClose, product, categories }) => {
             </div>
           </div>
 
-          <div className="space-y-1">
             <label className="text-sm text-gray-600 dark:text-gray-400">Description</label>
-            <textarea {...register("description")} rows="3" className="w-full bg-gray-50 dark:bg-[#363636] text-gray-900 dark:text-white p-2 rounded focus:ring-1 focus:ring-indigo-500 outline-none border border-gray-200 dark:border-gray-600" placeholder="Product description..."></textarea>
-          </div>
+            <div data-color-mode="light">
+                <MDEditor
+                    value={watch("description") || ""}
+                    onChange={(val) => setValue("description", val)}
+                    preview="edit"
+                    height={200}
+                    className="w-full"
+                />
+            </div>
 
           <div className="space-y-2">
             <label className="text-sm text-gray-600 dark:text-gray-400">Product Images</label>
