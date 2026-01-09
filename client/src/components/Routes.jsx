@@ -11,6 +11,7 @@ import UpdateProfile from "@/components/user/update-profile";
 import ChangePassword from "@/components/user/change-password";
 import AddShippingAddress from "@/components/user/add-shipping-address";
 import CashfreeCheckout from "@pages/CashfreeCheckout";
+import PaymentStatus from "@/pages/PaymentStatus";
 import Checkout from "@/components/Checkout/Checkout";
 
 export const routes = [
@@ -100,5 +101,11 @@ export const routes = [
     path: "/createSession/:orderId",
     element: CashfreeCheckout,
     layout: { header: true, footer: true },
+  },
+  {
+    path: "/payment/status",
+    element: PaymentStatus,
+    layout: { header: true, footer: true },
+    protected: true,
   },
 ];

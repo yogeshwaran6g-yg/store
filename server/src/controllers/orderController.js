@@ -202,10 +202,18 @@ const getOrderById = async (req, res) => {
 
 const updateOrder = async (req, res) => {
   try {
-    const newStatus = req.body.status;
+    const { status, paymentStatus } = req.body;
+    const updateFields = {};
+    if (status) updateFields.status = status;
+    if (paymentStatus) updateFields.paymentStatus = paymentStatus;
+
+    if (Object.keys(updateFields).length === 0) {
+      return rtnRes(res, 400, "No fields to update");
+    }
+
     await Order.updateOne(
       { _id: req.params.id },
-      { $set: { status: newStatus } }
+      { $set: updateFields }
     );
     rtnRes(res, 200, "Order Updated Successfully!");
   } catch (err) {
@@ -236,10 +244,10 @@ const getDashboardRecentOrder = async (req, res) => {
     const queryObject = {};
 
     queryObject.$or = [
-      { status: { $regex: `Pending`, $options: "i" } },
-      { status: { $regex: `Processing`, $options: "i" } },
-      { status: { $regex: `Delivered`, $options: "i" } },
-      { status: { $regex: `Cancel`, $options: "i" } },
+      { status: { $regex: /^PENDING$/i } },
+      { status: { $regex: /^PROCESSING$/i } },
+      { status: { $regex: /^DELIVERED$/i } },
+      { status: { $regex: /^CANCELED$/i } },
     ];
 
     const totalDoc = await Order.countDocuments(queryObject);

@@ -56,9 +56,7 @@ const RecentOrder = ({ data, loading, error }) => {
                         <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-right w-[15%]">
                           Total
                         </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-right w-[15%]">
-                          Action
-                        </th>
+
                       </tr>
                     </thead>
 
@@ -72,20 +70,7 @@ const RecentOrder = ({ data, loading, error }) => {
                           <OrderHistory order={order} />
 
                           {/* ACTION */}
-                          <td className="px-6 py-3 text-right">
-                            <Link
-                              to={`/order/${order._id}`}
-                              className="
-                                inline-block px-4 py-1.5 rounded-full
-                                bg-gradient-to-r from-yellow-400 to-yellow-300
-                                text-purple-900 text-xs font-semibold
-                                hover:from-purple-600 hover:to-purple-500
-                                hover:text-white transition-all shadow-md
-                              "
-                            >
-                              Details
-                            </Link>
-                          </td>
+
                         </tr>
                       ))}
                     </tbody>

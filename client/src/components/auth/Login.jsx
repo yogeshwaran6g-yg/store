@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { FiLock, FiMail } from "react-icons/fi";
-import { FaCube, FaBook, FaStar } from "react-icons/fa";
+import { FiLock, FiMail, FiPhone } from "react-icons/fi";
+import { FaCube, FaBook, FaStar, FaShieldAlt } from "react-icons/fa";
 import { MdOutlineViewInAr } from "react-icons/md";
+import { toast } from "react-toastify";
 
 // internal imports
 import Error from "../form/Error";
@@ -10,8 +11,8 @@ import InputArea from "../form/InputArea";
 import useLoginSubmit from "../../hooks/useAuthSubmit";
 
 const Login = () => {
-  const { handleSubmit, submitHandler, register, errors, loading } =
-    useLoginSubmit();
+  const { handleSubmit, submitHandler, register, errors, loading, showOtpInput, resendOtp, phone, validationRules } =
+    useLoginSubmit("login");
 
   const parallaxRef = useRef(null);
 
@@ -74,31 +75,70 @@ const Login = () => {
           onSubmit={handleSubmit(submitHandler)}
           className="flex flex-col space-y-5"
         >
-          <div className="form-group">
-            <InputArea
-              register={register}
-              defaultValue="admin@gmail.com"
-              label="Email"
-              name="email"
-              type="email"
-              placeholder="Your Email"
-              Icon={FiMail}
-            />
-            <Error errorName={errors.email} />
-          </div>
+          {!showOtpInput ? (
+            <>
+              <div className="form-group">
+                <InputArea
+                  register={register}
+                  label="Phone"
+                  name="phone"
+                  type="text"
+                  placeholder="Your Phone Number"
+                  rules={validationRules.phone}
+                  Icon={FiPhone}
+                />
+                <Error errorName={errors.phone} />
+              </div>
 
-          <div className="form-group">
-            <InputArea
-              register={register}
-              defaultValue="12345678"
-              label="Password"
-              name="password"
-              type="password"
-              placeholder="Your Password"
-              Icon={FiLock}
-            />
-            <Error errorName={errors.password} />
-          </div>
+              <div className="form-group">
+                <InputArea
+                  register={register}
+                  label="Password"
+                  name="password"
+                  type="password"
+                  placeholder="Your Password"
+                  rules={validationRules.password}
+                  Icon={FiLock}
+                />
+                <Error errorName={errors.password} />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-center mb-4">
+                <p className="text-sm text-gray-600">Please verify your identity. OTP sent to <span className="font-bold">{phone}</span></p>
+              </div>
+              <div className="form-group">
+                <InputArea
+                  register={register}
+                  label="OTP"
+                  name="otp"
+                  type="text"
+                  placeholder="Enter 6-digit OTP"
+                  rules={validationRules.otp}
+                  Icon={FaShieldAlt}
+                  maxLength={6}
+                />
+                <Error errorName={errors.otp} />
+              </div>
+              <div className="text-right mt-1">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      await resendOtp({ phone });
+                      toast.success("OTP resent successfully");
+                    } catch (err) {
+                      toast.error(err.message || "Failed to resend OTP");
+                    }
+                  }}
+                  className="text-sm text-purple-600 font-semibold hover:underline"
+                >
+                  Resend OTP?
+                </button>
+              </div>
+            </>
+          )}
 
           <div className="flex items-center justify-between">
             <div className="flex items-center">
@@ -142,7 +182,7 @@ const Login = () => {
               disabled:opacity-60 disabled:cursor-not-allowed
             "
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Processing..." : showOtpInput ? "Verify & Login" : "Login"}
           </button>
         </form>
 

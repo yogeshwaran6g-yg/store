@@ -45,6 +45,16 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   }, []);
 
+  const verifyOtp = useCallback(async (otpData) => {
+    const data = await AuthService.verifyOtp(otpData);
+    setUser(data.user);
+    return data;
+  }, []);
+
+  const resendOtp = useCallback(async (phone) => {
+    return await AuthService.resendOtp(phone);
+  }, []);
+
   const forgetPassword = useCallback(async (email) => {
     return await AuthService.forgetPassword(email);
   }, []);
@@ -61,10 +71,12 @@ export const AuthProvider = ({ children }) => {
     login,
     signup,
     logout,
+    verifyOtp,
+    resendOtp,
     forgetPassword,
     resetPassword,
     hasShippingAddress
-  }), [user, loading, login, signup, logout, forgetPassword, resetPassword, hasShippingAddress]);
+  }), [user, loading, login, signup, logout, verifyOtp, resendOtp, forgetPassword, resetPassword, hasShippingAddress]);
 
   return (
     <AuthContext.Provider value={value}>

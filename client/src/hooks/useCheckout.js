@@ -21,7 +21,8 @@ const useCheckout = () => {
       
 
       const payload = {        
-         user_info
+         user_info,
+         shippingOption
       };
 
       // 2. Create Order

@@ -4,8 +4,8 @@ const authApiBAseUrl = "/api/v1/auth"
 
 const AuthService = {
 
-  login: async ({ email, password }) => {
-    const { data } = await api.post(`${authApiBAseUrl}/login`, { email, password });
+  login: async ({ phone, password }) => {
+    const { data } = await api.post(`${authApiBAseUrl}/login`, { phone, password });
 
     localStorage.setItem("accessToken", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
@@ -13,22 +13,34 @@ const AuthService = {
     return data;
   },
 
-  signup: async ({ name, email, password }) => {
+  signup: async ({ name, phone, password }) => {
     const { data } = await api.post(`${authApiBAseUrl}/signup`, {
-      name,
-      email,
+      username: name,
+      phone,
       password,
     });
     return data;
   },
 
-  forgetPassword: async ({ email }) => {
-    const { data } = await api.post(`${authApiBAseUrl}/forget-password`, { email });
+  verifyOtp: async ({ phone, otp }) => {
+    const { data } = await api.post(`${authApiBAseUrl}/verify-otp`, { phone, otp });
+    localStorage.setItem("accessToken", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
     return data;
   },
 
-  resetPassword: async ({ token, password }) => {
-    const { data } = await api.post(`${authApiBAseUrl}/reset-password/${token}`, { password });
+  resendOtp: async ({ phone }) => {
+    const { data } = await api.post(`${authApiBAseUrl}/resend-otp`, { phone });
+    return data;
+  },
+
+  forgetPassword: async ({ phone }) => {
+    const { data } = await api.post(`${authApiBAseUrl}/forgot-password`, { phone });
+    return data;
+  },
+
+  resetPassword: async ({ phone, otp, password }) => {
+    const { data } = await api.post(`${authApiBAseUrl}/reset-password`, { phone, otp, password });
     return data;
   },
 

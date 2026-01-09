@@ -1,4 +1,4 @@
-export default function Input({ label, type = "text", placeholder }) {
+export default function Input({ label, type = "text", placeholder, ...props }) {
   return (
     <div>
       <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -14,6 +14,7 @@ export default function Input({ label, type = "text", placeholder }) {
           focus:outline-none
         "
         required
+        {...props}
       />
     </div>
   );

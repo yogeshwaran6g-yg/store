@@ -52,6 +52,7 @@ const EditPaymentModal = ({ isOpen, onClose, payment }) => {
                 onChange={(e) => setStatus(e.target.value)}
                 className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-[#404040] text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none"
              >
+                <option value="CREATED">CREATED</option>
                 <option value="PENDING">PENDING</option>
                 <option value="SUCCESS">SUCCESS</option>
                 <option value="FAILED">FAILED</option>

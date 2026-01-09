@@ -14,12 +14,13 @@ const userSchema = new mongoose.Schema(
 
     email: {
       type: String,
-      required: true,
       unique: true,
+      sparse: true,       
       lowercase: true,
       trim: true,
       match: [/^\S+@\S+\.\S+$/, "Invalid email address"],
     },
+
 
     password: {
       type: String,
@@ -30,7 +31,24 @@ const userSchema = new mongoose.Schema(
 
     phone: {
       type: String,
+      required: true,
+      unique: true,
       trim: true,
+    },
+
+    isPhoneVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    otp: {
+      type: String,
+      select: false,
+    },
+
+    otpExpires: {
+      type: Date,
+      select: false,
     },
     
     address: {

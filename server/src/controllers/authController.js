@@ -9,7 +9,7 @@ const signToken = (id) => {
   });
 };
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = (user, statusCode, res, msg = "Success") => {
   const token = signToken(user._id);
   
   // Remove password from output
@@ -18,48 +18,63 @@ const createSendToken = (user, statusCode, res) => {
   rtnRes(res, statusCode, "Success", { token, user });
 };
 
+const otpGen = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
+};
+
 exports.signup = async (req, res) => {
   try {
-    const { username, email, password, phone } = req.body;
+    const { username, password } = req.body;
+    let phone = Number(req.body.phone);
+    
+    if (!username || !phone || !password) {
+        return rtnRes(res, 400, "All fields (username, phone, password) are required");
+    } 
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return rtnRes(res, 400, "User already exists with this email");
+    if (!/^[6-9]\d{9}$/.test(phone.toString())) {
+      return rtnRes(res, 400, "Invalid Indian phone number. Must be 10 digits starting with 6-9.");
     }
 
-    // Since we don't have a real email service, we'll auto-verify or log a token
-    // For this task specifically: "signup and login with email verification"
-    // I will generate a token, log it, and require verification.
-    
-    // Using a simple crypto token for email verification, separate from JWT
-    const emailVerificationToken = crypto.randomBytes(32).toString('hex');
-    // const passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return rtnRes(res, 400, "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+    }
 
-    // Currently User model doesn't store verification token, I might need to update it or 
-    // just use a JWT for verification link as well if I want to be stateless, 
-    // but schema wasn't asked to be changed significantly.
-    // Let's check schema again... 
-    // Schema has 'isEmailVerified'. It doesn't have a field store the token.
-    // I'll skip storing token in DB for now and just send a JWT as the verification link that contains the user ID.
-    // When they click the link, we verify the JWT and set isEmailVerified to true.
+    const usernameRegex = /^[a-zA-Z0-9_]{3,30}$/;
+    if (!usernameRegex.test(username)) {
+      return rtnRes(res, 400, "Username must be 3-30 characters long and can only contain letters, numbers, and underscores.");
+    }
+
+
+    const existingUser = await User.findOne({ phone });
+    if (existingUser) {
+      return rtnRes(res, 400, "User already exists with this phone number");
+    }
+
+    const otp = otpGen();
+    const otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+    log("user","info",{ username,
+      phone,
+      password,
+      otp,
+      otpExpires,
+      isPhoneVerified: false})
 
     const newUser = await User.create({
       username,
-      email,
-      password,
       phone,
-      isEmailVerified: false 
+      password,
+      otp,
+      otpExpires,
+      isPhoneVerified: false
+      
     });
 
-    const verificationToken = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-    
-    const verificationUrl = `${req.protocol}://${req.get("host")}/api/auth/verify/${verificationToken}`;
-    
-    log(`Verification Email Link (Simulated): ${verificationUrl}`, "info");
+    log(`Signup OTP for ${phone}: ${otp}`, "info");
 
-    rtnRes(res, 201, "User registered successfully. Please check server logs for verification link.", { 
-       // returning token for convenient testing as per plan
-       verificationToken 
+    rtnRes(res, 201, "User registered successfully. Please verify your phone number with the OTP sent.", { 
+       phone 
     });
 
   } catch (error) {
@@ -68,33 +83,99 @@ exports.signup = async (req, res) => {
   }
 };
 
+exports.verifyOtp = async (req, res) => {
+    try {
+        const { phone, otp } = req.body;
+
+        if (!phone || !otp) {
+            return rtnRes(res, 400, "Phone and OTP are required");
+        }
+
+        const user = await User.findOne({ 
+            phone, 
+            otp, 
+            otpExpires: { $gt: Date.now() } 
+        });
+
+        if (!user) {
+            return rtnRes(res, 400, "Invalid or expired OTP");
+        }
+
+        user.isPhoneVerified = true;
+        user.otp = undefined;
+        user.otpExpires = undefined;
+        await user.save({ validateBeforeSave: false });
+
+        createSendToken(user, 200, res, "Phone verified successfully");
+
+    } catch (error) {
+        log("OTP Verification Error", "error", error);
+        rtnRes(res, 500, error.message);
+    }
+};
+
+exports.resendOtp = async (req, res) => {
+    try {
+        const { phone } = req.body;
+
+        if (!phone) {
+            return rtnRes(res, 400, "Phone number is required");
+        }
+
+        const user = await User.findOne({ phone });
+        if (!user) {
+            return rtnRes(res, 404, "User not found");
+        }
+
+        const otp = otpGen();
+        const otpExpires = Date.now() + 10 * 60 * 1000;
+
+        user.otp = otp;
+        user.otpExpires = otpExpires;
+        await user.save({ validateBeforeSave: false });
+
+        log(`Resend OTP for ${phone}: ${otp}`, "info");
+
+        rtnRes(res, 200, "OTP resent successfully");
+
+    } catch (error) {
+        log("Resend OTP Error", "error", error);
+        rtnRes(res, 500, error.message);
+    }
+};
+
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { phone, password } = req.body;
 
-    // 1) Check if email and password exist
-    if (!email || !password) {
-      return rtnRes(res, 400, "Please provide email and password");
+    if (!phone || !password) {
+      return rtnRes(res, 400, "Please provide phone number and password");
     }
 
-    // 2) Check if user exists && password is correct
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ phone }).select("+password");
 
     if (!user || !(await user.comparePassword(password))) {
-      return rtnRes(res, 401, "Incorrect email or password");
+      return rtnRes(res, 401, "Incorrect phone number or password");
     }
-
-    // 3) Check if email is verified
-    if (!user.isEmailVerified) {
-        return rtnRes(res, 401, "Please verify your email address first.");
-    }
-
-    // 4) Check if user is blocked
     if (user.isBlocked) {
         return rtnRes(res, 403, "Your account has been blocked. Please contact support.");
     }
 
-    // 4) If everything ok, send token to client
+    if (!user.isPhoneVerified) {
+        // Optionially trigger OTP here or tell them to verify
+        const otp = otpGen();
+        const otpExpires = Date.now() + 10 * 60 * 1000;
+        
+        user.otp = otp;
+        user.otpExpires = otpExpires;
+        await user.save({ validateBeforeSave: false });
+        
+        log(`Login required verification OTP for ${phone}: ${otp}`, "info");
+        return rtnRes(res, 401, "Please verify your phone number first. OTP sent to your phone.", { needsVerification: true });
+    }
+
+    
+
     createSendToken(user, 200, res);
 
   } catch (error) {
@@ -103,98 +184,51 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.verifyEmail = async (req, res) => {
-    try {
-        const token = req.params.token;
-        
-        if (!token) {
-            return rtnRes(res, 400, "Invalid verification request");
-        }
-
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
-        const user = await User.findById(decoded.id);
-
-        if (!user) {
-            return rtnRes(res, 400, "User not found or invalid token");
-        }
-
-        if (user.isEmailVerified) {
-            return rtnRes(res, 200, "Email already verified. You can login.");
-        }
-
-        user.isEmailVerified = true;
-        await user.save({ validateBeforeSave: false });
-
-        rtnRes(res, 200, "Email verified successfully");
-
-    } catch (error) {
-        log("Verification Error", "error", error);
-        rtnRes(res, 400, "Invalid or expired token");
-    }
-};
-
 exports.forgotPassword = async (req, res) => {
     try {
-        const { email } = req.body;
-        // 1) Get user based on POSTed email
-        const user = await User.findOne({ email });
+        const { phone } = req.body;
+        const user = await User.findOne({ phone });
         if (!user) {
-            return rtnRes(res, 404, "There is no user with that email address.");
+            return rtnRes(res, 404, "There is no user with that phone number.");
         }
 
-        // 2) Generate the random reset token
-        const resetToken = user.createPasswordResetToken();
+        const otp = otpGen();
+        user.otp = otp;
+        user.otpExpires = Date.now() + 10 * 60 * 1000;
         await user.save({ validateBeforeSave: false });
 
-        // 3) Send it to user's email
-        // For now we just log it as per plan since no email service
-        const resetURL = `${req.protocol}://${req.get("host")}/auth/reset-password/${resetToken}`;
+        log(`Forgot Password OTP for ${phone}: ${otp}`, "info");
 
-        // In a real app check environment variables to decide where to point the link (frontend vs backend)
-        // Since the prompt implies frontend integration, the link should probably point to the frontend route I'll create:
-        // /auth/reset-password/:token
-        // Ideally this URL should be the frontend URL.
-        // Assuming client runs on port 5173 or similar, but let's just constructing it relatively or 
-        // relying on the user to copy/paste from logs for now as "Simulated Email".
-        // Let's make it clear in the logs.
-        
-        log(`Password Reset Link (Simulated): ${resetURL}`, "info");
-
-        rtnRes(res, 200, "Token sent to email!", { resetToken }); 
+        rtnRes(res, 200, "OTP sent to your phone!", { phone }); 
 
     } catch (error) {
         log("Forgot Password Error", "error", error);
-        rtnRes(res, 500, "There was an error sending the email. Try again later!");
+        rtnRes(res, 500, "There was an error sending the OTP. Try again later!");
     }
 };
 
 exports.resetPassword = async (req, res) => {
     try {
-        // 1) Get user based on the token
-        const hashedToken = crypto
-            .createHash("sha256")
-            .update(req.params.token)
-            .digest("hex");
+        const { phone, otp, password } = req.body;
 
         const user = await User.findOne({
-            passwordResetToken: hashedToken,
-            passwordResetExpires: { $gt: Date.now() },
+            phone,
+            otp,
+            otpExpires: { $gt: Date.now() },
         });
 
-        // 2) If token has not expired, and there is user, set the new password
         if (!user) {
-            return rtnRes(res, 400, "Token is invalid or has expired");
+            return rtnRes(res, 400, "Invalid or expired OTP");
         }
 
-        user.password = req.body.password;
-        user.passwordResetToken = undefined;
-        user.passwordResetExpires = undefined;
+        user.password = password;
+        user.otp = undefined;
+        user.otpExpires = undefined;
+        user.isPhoneVerified = true; // Mark verified if তারা reset Password verify complete করে
 
         await user.save();
 
-        // 3) Log the user in, send JWT
-        createSendToken(user, 200, res);
+        createSendToken(user, 200, res, "Password reset successfully");
 
     } catch (error) {
         log("Reset Password Error", "error", error);
@@ -284,6 +318,7 @@ exports.addShippingAddress = async (req, res) => {
     }
 };
 
+//using
 exports.getAllUsers = async (req, res) => {
     try {
         const { page = 1, limit = 10 } = req.query;
@@ -292,7 +327,7 @@ exports.getAllUsers = async (req, res) => {
         const skip = (pageNumber - 1) * limitNumber;
 
         const [users, total] = await Promise.all([
-            User.find().select("-password").skip(skip).limit(limitNumber).sort({ createdAt: -1 }),
+            User.find().select("-password +otp +otpExpires").skip(skip).limit(limitNumber).sort({ createdAt: -1 }),
             User.countDocuments(),
         ]);
 
@@ -310,6 +345,7 @@ exports.getAllUsers = async (req, res) => {
     }
 };
 
+//using
 exports.getUserById = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
@@ -322,6 +358,7 @@ exports.getUserById = async (req, res) => {
     }
 };
 
+//using
 exports.blockUser = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);

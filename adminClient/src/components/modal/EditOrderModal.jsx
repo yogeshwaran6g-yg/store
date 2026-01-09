@@ -3,23 +3,22 @@ import { AiOutlineClose } from "react-icons/ai";
 import { useUpdateOrder } from "../../services/orderService";
 
 const EditOrderModal = ({ isOpen, onClose, order }) => {
-  const [status, setStatus] = useState(order?.status || "");
+  const [status, setStatus] = useState(order?.status || "PENDING");
+  const [paymentStatus, setPaymentStatus] = useState(order?.paymentStatus || "PENDING");
   const updateMutation = useUpdateOrder();
 
-  // Reset status when order changes
-  if (order && status !== order.status && !isOpen) {
-     setStatus(order.status);
-  }
-
-  // Effect to sync status when modal opens
+  // Effect to sync status when modal opens or order changes
   useState(() => {
-      if(order) setStatus(order.status)
-  }, [order])
+    if (order) {
+      setStatus(order.status);
+      setPaymentStatus(order.paymentStatus);
+    }
+  }, [order, isOpen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     updateMutation.mutate(
-      { id: order._id, status },
+      { id: order._id, status, paymentStatus },
       {
         onSuccess: () => {
           onClose();
@@ -36,7 +35,7 @@ const EditOrderModal = ({ isOpen, onClose, order }) => {
         {/* Header */}
         <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-white dark:bg-[#363636]">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-            Edit Order Status
+            Edit Order Details
           </h2>
           <button
             onClick={onClose}
@@ -47,8 +46,8 @@ const EditOrderModal = ({ isOpen, onClose, order }) => {
         </div>
 
         {/* Content */}
-        <form onSubmit={handleSubmit} className="p-6">
-          <div className="mb-4">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div>
              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Order Status
              </label>
@@ -62,7 +61,21 @@ const EditOrderModal = ({ isOpen, onClose, order }) => {
                 <option value="SHIPPED">SHIPPED</option>                
                 <option value="DELIVERED">DELIVERED</option>
                 <option value="CANCELED">CANCELED</option>
-           
+             </select>
+          </div>
+
+          <div>
+             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Payment Status
+             </label>
+             <select
+                value={paymentStatus}
+                onChange={(e) => setPaymentStatus(e.target.value)}
+                className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-[#404040] text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+             >
+                <option value="PENDING">PENDING</option>
+                <option value="PAID">PAID</option>
+                <option value="FAILED">FAILED</option>
              </select>
           </div>
 

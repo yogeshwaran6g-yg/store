@@ -68,11 +68,11 @@ export const orderColumns = [
   columnHelper.accessor("paymentStatus", {
     header: "Payment",
     cell: info => {
-      const status = info.getValue()?.toLowerCase();
+      const status = info.getValue()?.toUpperCase();
       const colors = {
-        paid: "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700",
-        unpaid: "bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-700",
-        failed: "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border-red-200 dark:border-red-700",
+        PAID: "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700",
+        PENDING: "bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-700",
+        FAILED: "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border-red-200 dark:border-red-700",
       };
       
       const theme = colors[status] || "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700";
@@ -83,7 +83,7 @@ export const orderColumns = [
           className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${theme} capitalize hover:ring-2 hover:ring-indigo-500/20 transition-all cursor-pointer`}
           title="View Payment Details"
         >
-          {info.getValue() || "Pending"}
+          {info.getValue() || "PENDING"}
         </button>
       );
     },
@@ -92,20 +92,20 @@ export const orderColumns = [
   columnHelper.accessor("status", {
     header: "Status",
     cell: info => {
-      const status = info.getValue()?.toLowerCase();
+      const status = info.getValue()?.toUpperCase();
       const colors = {
-        pending: "bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-700",
-        processing: "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700",
-        shipped: "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600",
-        delivered: "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700",
-        canceled: "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border-red-200 dark:border-red-700",
+        PENDING: "bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-700",
+        PROCESSING: "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700",
+        SHIPPED: "bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-700",
+        DELIVERED: "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700",
+        CANCELED: "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border-red-200 dark:border-red-700",
       };
       
       const theme = colors[status] || "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700";
 
       return (
         <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${theme} capitalize`}>
-          {info.getValue() || "Pending"}
+          {info.getValue() || "PENDING"}
         </span>
       );
     },

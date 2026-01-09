@@ -47,8 +47,8 @@ export const useCustomerOrders = ({ id, page = 1, limit = 10 }) => {
 export const useUpdateOrder = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async ({ id, status }) => {
-            const res = await axios.put(endPoints.order.update(id), { status });
+        mutationFn: async ({ id, status, paymentStatus }) => {
+            const res = await axios.put(endPoints.order.update(id), { status, paymentStatus });
             return res.data;
         },
         onSuccess: () => {

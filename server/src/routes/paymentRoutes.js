@@ -5,7 +5,8 @@ const { protect, admin } = require("../middleware/authMiddleware");
 
 router.post("/create", paymentController.createPaymentSession);
 // Verify payment
-router.get("/payment/verify/:cfOrderId",paymentController.verifyCashfreePayment);
+// router.get("/payment/verify/:cfOrderId",paymentController.verifyCashfreePayment);
+router.get("/verify/:id", paymentController.verifyPayment);
 router.get("/getAllPayments", protect, admin, paymentController.getAllPayments);
 router.put("/:id", protect, admin, paymentController.updatePayment);
 router.get("/getPaymentByOrderId/:id", protect, admin, paymentController.getPaymentByOrderId);

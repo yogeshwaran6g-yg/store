@@ -39,7 +39,7 @@ const ChangePassword = () => {
   };
 
   useEffect(() => {
-    setValue("email", user?.email);
+    setValue("phone", user?.phone);
   }, [user, setValue]);
 
   return (
@@ -56,17 +56,17 @@ const ChangePassword = () => {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
-            {/* Email */}
+            {/* Phone */}
             <div>
               <InputArea
                 register={register}
-                label="Email Address"
-                name="email"
-                type="email"
-                placeholder="Email Address"
+                label="Phone Number"
+                name="phone"
+                type="text"
+                placeholder="Phone Number"
                 readOnly
               />
-              <Error errorName={errors.email} />
+              <Error errorName={errors.phone} />
             </div>
 
             {/* Current Password */}

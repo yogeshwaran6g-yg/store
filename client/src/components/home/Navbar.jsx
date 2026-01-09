@@ -15,6 +15,7 @@ const MENU_ITEMS = [
 
 /* USER MENU (AFTER LOGIN) */
 const USER_MENU = [
+  { name: "Home", path: "/" },
   { name: "Dashboard", path: "/user/dashboard" },
   { name: "My Orders", path: "/user/my-orders" },
   { name: "My Account", path: "/user/my-account" },

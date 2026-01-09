@@ -3,10 +3,44 @@ import Input from "@components/form/HomeInput";
 import DeliveryDetailsForm from "./DeliveryDetailsForm";
 import { MdOutlineViewInAr } from "react-icons/md";
 import { FaCube, FaBook, FaStar } from "react-icons/fa";
+import { notifyError } from "../../utils/toast";
 
 export default function Checkout() {
   const [step, setStep] = useState(1);
   const parallaxRef = useRef(null);
+  
+  const [parentInfo, setParentInfo] = useState({
+    parentName: "",
+    email: "",
+    contact: "",
+    childName: ""
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setParentInfo(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleContinue = () => {
+    const { parentName, email, contact, childName } = parentInfo;
+    
+    if (!parentName || !email || !contact || !childName) {
+      notifyError("All fields are required!");
+      return;
+    }
+    
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      notifyError("Please enter a valid email address!");
+      return;
+    }
+
+    setStep(2);
+  };
 
   /* 🌌 PARALLAX EFFECT */
   useEffect(() => {
@@ -27,7 +61,7 @@ export default function Checkout() {
   }, []);
 
   if (step === 2) {
-    return <DeliveryDetailsForm onBack={() => setStep(1)} />;
+    return <DeliveryDetailsForm onBack={() => setStep(1)} parentInfo={parentInfo} />;
   }
 
   return (
@@ -69,22 +103,40 @@ export default function Checkout() {
           </p>
 
           <form className="space-y-5">
-            <Input label="Parent Name" placeholder="Full name" />
+            <Input 
+              label="Parent Name" 
+              placeholder="Full name" 
+              name="parentName"
+              value={parentInfo.parentName}
+              onChange={handleInputChange}
+            />
             <Input
               label="Email Address"
               type="email"
               placeholder="example@email.com"
+              name="email"
+              value={parentInfo.email}
+              onChange={handleInputChange}
             />
             <Input
               label="Phone Number"
               type="tel"
               placeholder="+91 98765 43210"
+              name="contact"
+              value={parentInfo.contact}
+              onChange={handleInputChange}
             />
-            <Input label="Child Name" placeholder="Child name" />
+            <Input 
+              label="Child Name" 
+              placeholder="Child name" 
+              name="childName"
+              value={parentInfo.childName}
+              onChange={handleInputChange}
+            />
 
             <button
               type="button"
-              onClick={() => setStep(2)}
+              onClick={handleContinue}
               className="
                 w-full mt-4
                 bg-yellow-400 text-black font-bold

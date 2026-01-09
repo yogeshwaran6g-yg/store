@@ -8,8 +8,8 @@ import InputArea from "@components/form/InputArea";
 import useLoginSubmit from "../../hooks/useAuthSubmit";
 
 const ResetPassword = () => {
-  const { handleSubmit, submitHandler, register, errors, loading } =
-    useLoginSubmit();
+  const { handleSubmit, submitHandler, register, errors, loading, validationRules } =
+    useLoginSubmit("reset-password");
 
   return (
     <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">
@@ -22,7 +22,7 @@ const ResetPassword = () => {
                   Reset Password
                 </Link>
                 <p className="text-sm md:text-base text-gray-500 mt-2 mb-8 sm:mb-10">
-                  Enter your new password
+                  Enter your phone, OTP and new password
                 </p>
               </div>
 
@@ -34,10 +34,36 @@ const ResetPassword = () => {
                   <div className="form-group">
                     <InputArea
                       register={register}
+                      label="Phone"
+                      name="phone"
+                      type="text"
+                      placeholder="Your Phone Number"
+                      rules={validationRules.phone}
+                    />
+                    <Error errorName={errors?.phone} />
+                  </div>
+
+                  <div className="form-group">
+                    <InputArea
+                      register={register}
+                      label="OTP"
+                      name="otp"
+                      type="text"
+                      placeholder="6-digit OTP"
+                      rules={validationRules.otp}
+                      maxLength={6}
+                    />
+                    <Error errorName={errors?.otp} />
+                  </div>
+
+                  <div className="form-group">
+                    <InputArea
+                      register={register}
                       label="New Password"
                       name="newPassword"
                       type="password"
                       placeholder="New Password"
+                      rules={validationRules.password}
                       Icon={FiLock}
                     />
                     <Error errorName={errors?.newPassword} />
@@ -50,6 +76,7 @@ const ResetPassword = () => {
                       name="confirmPassword"
                       type="password"
                       placeholder="Confirm Password"
+                      rules={validationRules.confirmPassword}
                       Icon={FiLock}
                     />
                     <Error errorName={errors?.confirmPassword} />

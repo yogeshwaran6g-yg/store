@@ -28,11 +28,31 @@ add check isblocked in login fucncion
 when place order the detail of name and email required send from client
 
 
-1.order
-    not place order when payment not paid
-    and invoice creaion and that model
 
-2.auth 
+2. auth 
     refresh token
-    change users model to adjuss for mobile and
+    token expire check
+    change users model to adjust for mobile and
+
+    1.signup change 
+    resend needs to check the timer 
+
+    use validator in all inputs
+    to test
+
+    signup 
+    verify
+    resend 
+    login
+    forgot 
+    reset
+
+    create a send otp function add it to all auth
+
+3. checkout page add validations 
+    checkout page match db latest  user_info
+    then proper toast 
+    then when payment happen mean only order placed 
+
+
 

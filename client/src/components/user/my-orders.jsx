@@ -72,7 +72,6 @@ const MyOrders = () => {
                         "Method",
                         "Status",
                         "Total",
-                        "Action",
                       ].map((head) => (
                         <th
                           key={head}
@@ -93,20 +92,7 @@ const MyOrders = () => {
                       >
                         <OrderHistory order={order} />
 
-                        <td className="px-5 py-3 text-right text-sm">
-                          <Link
-                            to={`/order/${order._id}`}
-                            className="
-                              inline-block px-4 py-1.5 rounded-full
-                              bg-gradient-to-r from-yellow-400 to-yellow-300
-                              text-purple-900 text-xs font-semibold
-                              hover:from-purple-600 hover:to-purple-500
-                              hover:text-white transition-all shadow-md
-                            "
-                          >
-                            Details
-                          </Link>
-                        </td>
+
                       </tr>
                     ))}
                   </tbody>

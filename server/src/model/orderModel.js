@@ -16,15 +16,19 @@ const orderSchema = new mongoose.Schema(
     user_info: {
       name: {
         type: String,
-        required: false,
+        required: true,
       },
       lastName: {
         type: String,
         required: false,
       },
+      childName: {
+        type: String,
+        required: true,
+      },
       email: {
         type: String,
-        required: false,
+        required: true,
       },
       contact: {
         type: String,
@@ -84,8 +88,16 @@ const orderSchema = new mongoose.Schema(
 
     paymentStatus: {
       type: String,
-      enum: ["UNPAID", "PAID", "FAILED"],
-      default: "UNPAID",
+      enum: ["PENDING", "PAID", "FAILED"],
+      default: "PENDING",
+    },
+    cartProcessed: {
+      type: Boolean,
+      default: false,
+    },
+    stockProcessed : {
+      type: Boolean,
+      default: false,
     },
     paidAt: {
       type: Date,

@@ -1,15 +1,80 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Input from "@components/form/HomeInput";
 import { useCartContext } from "../context/CartContext";
 import CartItem from "../cart/CartItem";
 import { IoBagHandle } from "react-icons/io5";
 import { MdOutlineViewInAr } from "react-icons/md";
 import { FaCube, FaBook, FaStar } from "react-icons/fa";
+import { notifyError, notifySuccess } from "../../utils/toast";
+import useCheckout from "../../hooks/useCheckout";
 
-export default function DeliveryDetailsForm({ onBack }) {
+export default function DeliveryDetailsForm({ onBack, parentInfo }) {
     const { cartState, updateQuantity, removeItem } = useCartContext();
     const { items, cartTotal } = cartState;
     const parallaxRef = useRef(null);
+    const { handleCheckout, loading } = useCheckout();
+
+    const [deliveryInfo, setDeliveryInfo] = useState({
+        address: "",
+        city: "",
+        state: "",
+        zipCode: ""
+    });
+    const [shippingOption, setShippingOption] = useState("EXPRESS");
+
+    const shippingCost = shippingOption === "EXPRESS" ? 100 : 50;
+    const grandTotal = cartTotal + shippingCost;
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        
+        // Pincode validation: Numbers only, max 6 digits
+        if (name === "zipCode") {
+            const numericValue = value.replace(/[^0-9]/g, "").slice(0, 6);
+            setDeliveryInfo(prev => ({
+                ...prev,
+                [name]: numericValue
+            }));
+            return;
+        }
+
+        setDeliveryInfo(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        const { address, city, state, zipCode } = deliveryInfo;
+
+        if (!address?.trim() || !city?.trim() || !state?.trim() || !zipCode?.trim()) {
+            notifyError("All delivery fields are required!");
+            return;
+        }
+        
+        if (zipCode.length !== 6) {
+             notifyError("Pincode must be exactly 6 digits!");
+             return;
+        }
+
+        const user_info = {
+            ...parentInfo,
+            name: parentInfo.parentName, 
+            ...deliveryInfo,
+            country: "India", 
+        };
+
+        const result = await handleCheckout({ 
+            user_info,
+            shippingOption 
+        });
+        
+        if (!result.success && result.error) {
+           notifyError(result.error);
+        }
+    };
 
     /* 🌌 PARALLAX EFFECT */
     useEffect(() => {
@@ -84,18 +149,24 @@ export default function DeliveryDetailsForm({ onBack }) {
                         </div>
 
                         {/* TOTAL */}
-                        <div className="mt-4 border-t pt-4">
+                        <div className="mt-4 border-t pt-4 space-y-2">
                             <div className="flex justify-between text-sm text-gray-600">
                                 <span>Subtotal</span>
                                 <span className="font-semibold">
-                                    ${cartTotal.toFixed(2)}
+                                    ₹{cartTotal.toFixed(2)}
+                                </span>
+                            </div>
+                            <div className="flex justify-between text-sm text-gray-600">
+                                <span>Shipping ({shippingOption})</span>
+                                <span className="font-semibold">
+                                    ₹{shippingCost.toFixed(2)}
                                 </span>
                             </div>
 
-                            <div className="flex justify-between text-base font-bold mt-2">
-                                <span>Total</span>
+                            <div className="flex justify-between text-base font-bold mt-2 pt-2 border-t">
+                                <span>Grand Total</span>
                                 <span className="text-purple-700">
-                                    ${cartTotal.toFixed(2)}
+                                    ₹{grandTotal.toFixed(2)}
                                 </span>
                             </div>
                         </div>
@@ -112,17 +183,90 @@ export default function DeliveryDetailsForm({ onBack }) {
                                 Enter delivery details to complete your order
                             </p>
 
-                            <form className="space-y-5">
-                                <Input label="Address Line 1" placeholder="House / Flat / Street" />
-                                <Input label="City" placeholder="City" />
-                                <Input label="State" placeholder="State" />
-                                <Input label="Pincode" placeholder="Pincode" />
+                            <form className="space-y-5" onSubmit={handleSubmit}>
+                                <Input 
+                                    label="Address Line 1" 
+                                    placeholder="House / Flat / Street" 
+                                    name="address"
+                                    value={deliveryInfo.address}
+                                    onChange={handleInputChange}
+                                />
+                                <Input 
+                                    label="City" 
+                                    placeholder="City" 
+                                    name="city"
+                                    value={deliveryInfo.city}
+                                    onChange={handleInputChange}
+                                />
+                                <Input 
+                                    label="State" 
+                                    placeholder="State" 
+                                    name="state"
+                                    value={deliveryInfo.state}
+                                    onChange={handleInputChange}
+                                />
+                                <Input 
+                                    label="Pincode" 
+                                    placeholder="Pincode" 
+                                    name="zipCode"
+                                    value={deliveryInfo.zipCode}
+                                    onChange={handleInputChange}
+                                />
+                                
+                                {/* SHIPPING METHOD */}
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                        Shipping Method
+                                    </label>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <label className={`
+                                            cursor-pointer p-4 rounded-xl border-2 transition-all
+                                            flex flex-col items-center gap-2
+                                            ${shippingOption === "EXPRESS" 
+                                                ? "border-yellow-400 bg-yellow-50" 
+                                                : "border-gray-200 hover:border-gray-300"}
+                                        `}>
+                                            <input 
+                                                type="radio" 
+                                                name="shipping" 
+                                                value="EXPRESS"
+                                                className="hidden"
+                                                checked={shippingOption === "EXPRESS"}
+                                                onChange={(e) => setShippingOption(e.target.value)}
+                                            />
+                                            <span className="font-bold text-gray-800">Express</span>
+                                            <span className="text-xs text-gray-500">Within 24 hours</span>
+                                            <span className="text-purple-700 font-bold">₹100</span>
+                                        </label>
+
+                                        <label className={`
+                                            cursor-pointer p-4 rounded-xl border-2 transition-all
+                                            flex flex-col items-center gap-2
+                                            ${shippingOption === "STANDARD" 
+                                                ? "border-yellow-400 bg-yellow-50" 
+                                                : "border-gray-200 hover:border-gray-300"}
+                                        `}>
+                                            <input 
+                                                type="radio" 
+                                                name="shipping" 
+                                                value="STANDARD"
+                                                className="hidden"
+                                                checked={shippingOption === "STANDARD"}
+                                                onChange={(e) => setShippingOption(e.target.value)}
+                                            />
+                                            <span className="font-bold text-gray-800">Standard</span>
+                                            <span className="text-xs text-gray-500">Within 3-5 days</span>
+                                            <span className="text-purple-700 font-bold">₹50</span>
+                                        </label>
+                                    </div>
+                                </div>
 
                                 {/* ACTION BUTTONS */}
                                 <div className="flex gap-4 mt-6">
                                     <button
                                         type="button"
                                         onClick={onBack}
+                                        disabled={loading}
                                         className="
                       w-1/2 py-3 rounded-full
                       bg-gray-200 text-gray-800 font-bold
@@ -135,6 +279,7 @@ export default function DeliveryDetailsForm({ onBack }) {
 
                                     <button
                                         type="submit"
+                                        disabled={loading}
                                         className="
                       w-1/2 py-3
                       bg-yellow-400 text-black font-bold
@@ -145,9 +290,10 @@ export default function DeliveryDetailsForm({ onBack }) {
                       active:translate-y-[2px]
                       active:shadow-[0_2px_0_#c9a200]
                       transition-all
+                      disabled:opacity-70 disabled:cursor-not-allowed
                     "
                                     >
-                                        Pay ${cartTotal.toFixed(2)}
+                                        {loading ? "Processing..." : `Pay ₹${grandTotal.toFixed(2)}`}
                                     </button>
                                 </div>
                             </form>

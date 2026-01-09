@@ -2,15 +2,15 @@ import {api} from "../util/axios";
 
 
 
-const verifyCashfreePayment = async (cfOrderId) => {
-  if (!cfOrderId) {
-    throw new Error("Cashfree Order ID is required for verification");
+const verifyPayment = async (gatewayOrderId) => {
+  if (!gatewayOrderId) {
+    throw new Error("Gateway Order ID is required for verification");
   }
 
   try {
-    const response = await api.get(`/api/v1/payment/verify/${cfOrderId}`,
+    const response = await api.get(`/api/v1/payment/verify/${gatewayOrderId}`,
       {
-        withCredentials: true, // if you use cookies / auth
+        withCredentials: true, 
       }
     );
 
@@ -27,6 +27,6 @@ const createPaymentSession = async (data) => {
 };
 
 export default {
-  verifyCashfreePayment,
+  verifyPayment,
   createPaymentSession,
 };

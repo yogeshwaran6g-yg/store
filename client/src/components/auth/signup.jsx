@@ -1,16 +1,17 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { FiLock, FiMail, FiUser } from "react-icons/fi";
-import { FaCube, FaBook, FaStar } from "react-icons/fa";
+import { FiLock, FiMail, FiUser, FiPhone } from "react-icons/fi";
+import { FaCube, FaBook, FaStar, FaShieldAlt } from "react-icons/fa";
 import { MdOutlineViewInAr } from "react-icons/md";
+import { toast } from "react-toastify";
 
 import Error from "../form/Error";
 import InputArea from "../form/InputArea";
 import useLoginSubmit from "../../hooks/useAuthSubmit";
 
 const SignUp = () => {
-  const { handleSubmit, submitHandler, register, errors, loading } =
-    useLoginSubmit();
+  const { handleSubmit, submitHandler, register, errors, loading, showOtpInput, resendOtp, phone ,validationRules} =
+    useLoginSubmit("signup");
 
   const parallaxRef = useRef(null);
 
@@ -72,48 +73,91 @@ const SignUp = () => {
           onSubmit={handleSubmit(submitHandler)}
           className="mt-6 space-y-5"
         >
-          {/* NAME */}
-          <InputArea
-            register={register}
-            label="Name"
-            name="name"
-            type="text"
-            placeholder="Full Name"
-            Icon={FiUser}
-          />
-          <Error errorName={errors.name} />
+          {!showOtpInput ? (
+            <>
+              {/* NAME */}
+              <InputArea
+                register={register}
+                label="Name"
+                name="name"
+                type="text"
+                placeholder="Full Name"
+                rules={validationRules.name}
+                Icon={FiUser}
+              />
+              <Error errorName={errors.name} />
 
-          {/* EMAIL */}
-          <InputArea
-            register={register}
-            label="Email"
-            name="email"
-            type="email"
-            placeholder="Enter your email"
-            Icon={FiMail}
-          />
-          <Error errorName={errors.email} />
+              {/* PHONE */}
+              <InputArea
+                register={register}
+                label="Phone"
+                name="phone"
+                type="text"
+                placeholder="Enter your phone number"
+                rules={validationRules.phone}
+                Icon={FiPhone}
+              />
+              <Error errorName={errors.phone} />
 
-          {/* PASSWORD */}
-          <InputArea
-            register={register}
-            label="Password"
-            name="password"
-            type="password"
-            placeholder="Create a password"
-            Icon={FiLock}
-            pattern={
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/
-            }
-            patternMessage={[
-              "1. Minimum 8 characters",
-              "2. One uppercase letter",
-              "3. One lowercase letter",
-              "4. One number",
-              "5. One special character",
-            ]}
-          />
-          <Error errorName={errors.password} />
+              {/* PASSWORD */}
+              <InputArea
+                register={register}
+                label="Password"
+                name="password"
+                type="password"
+                placeholder="Create a password"
+                rules={validationRules.password}
+                Icon={FiLock}
+                pattern={
+                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/
+                }
+                patternMessage={[
+                  "1. Minimum 8 characters",
+                  "2. One uppercase letter",
+                  "3. One lowercase letter",
+                  "4. One number",
+                  "5. One special character",
+                ]}
+              />
+              <Error errorName={errors.password} />
+            </>
+          ) : (
+            <>
+              {/* OTP */}
+              <div className="text-center mb-4">
+                <p className="text-sm text-gray-600">OTP sent to <span className="font-bold">{phone}</span></p>
+              </div>
+              <InputArea
+  register={register}
+  label="OTP"
+  name="otp"
+  type="text"
+  rules={validationRules.otp}
+  Icon={FaShieldAlt}
+  inputMode="numeric"
+  maxLength={6}
+/>
+
+              <Error errorName={errors.otp} />
+
+              <div className="text-right mt-1">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      await resendOtp({ phone });
+                      toast.success("OTP resent successfully");
+                    } catch (err) {
+                      toast.error(err.message || "Failed to resend OTP");
+                    }
+                  }}
+                  className="text-sm text-purple-600 font-semibold hover:underline"
+                >
+                  Resend OTP?
+                </button>
+              </div>
+            </>
+          )}
 
           <button
             type="submit"
@@ -133,7 +177,7 @@ const SignUp = () => {
     disabled:cursor-not-allowed
   "
 >
-            {loading ? "Processing..." : "Register"}
+            {loading ? "Processing..." : showOtpInput ? "Verify OTP" : "Register"}
           </button>
         </form>
 

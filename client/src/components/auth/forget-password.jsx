@@ -1,8 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FiMail } from "react-icons/fi";
+import { FiMail, FiPhone, FiLock } from "react-icons/fi";
 import { MdOutlineViewInAr } from "react-icons/md";
-import { FaCube, FaBook, FaStar } from "react-icons/fa";
+import { FaCube, FaBook, FaStar, FaShieldAlt } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 // internal imports
 import Error from "@components/form/Error";
@@ -10,8 +11,8 @@ import InputArea from "@components/form/InputArea";
 import useLoginSubmit from "../../hooks/useAuthSubmit";
 
 const ForgetPassword = () => {
-  const { handleSubmit, submitHandler, register, errors, loading } =
-    useLoginSubmit();
+  const { handleSubmit, submitHandler, register, errors, loading, showOtpInput, resendOtp, phone, validationRules } =
+    useLoginSubmit("forget-password");
 
   const parallaxRef = useRef(null);
 
@@ -74,17 +75,82 @@ const ForgetPassword = () => {
           onSubmit={handleSubmit(submitHandler)}
           className="flex flex-col justify-center space-y-5"
         >
-          <div className="form-group">
-            <InputArea
-              register={register}
-              label="Email"
-              name="email"
-              type="email"
-              placeholder="Your Registered Email"
-              Icon={FiMail}
-            />
-            <Error errorName={errors?.email} />
-          </div>
+          {!showOtpInput ? (
+            <div className="form-group">
+              <InputArea
+                register={register}
+                label="Phone"
+                name="phone"
+                type="text"
+                placeholder="Your Registered Phone"
+                rules={validationRules.phone}
+                Icon={FiPhone}
+              />
+              <Error errorName={errors?.phone} />
+            </div>
+          ) : (
+            <>
+              <div className="text-center mb-4">
+                <p className="text-sm text-gray-600">OTP sent to <span className="font-bold">{phone}</span></p>
+              </div>
+              <div className="form-group">
+                <InputArea
+                  register={register}
+                  label="OTP"
+                  name="otp"
+                  type="text"
+                  placeholder="Enter 6-digit OTP"
+                  rules={validationRules.otp}
+                  Icon={FaShieldAlt}
+                  maxLength={6}
+                />
+                <Error errorName={errors?.otp} />
+              </div>
+              
+              <div className="form-group">
+                <InputArea
+                  register={register}
+                  label="New Password"
+                  name="newPassword"
+                  type="password"
+                  placeholder="New Password"
+                  rules={validationRules.password}
+                  Icon={FiLock}
+                />
+                <Error errorName={errors?.newPassword} />
+              </div>
+
+              <div className="form-group">
+                <InputArea
+                  register={register}
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="Confirm Password"
+                  rules={validationRules.confirmPassword}
+                  Icon={FiLock}
+                />
+                <Error errorName={errors?.confirmPassword} />
+              </div>
+
+              <div className="text-right mt-1">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      await resendOtp({ phone });
+                      toast.success("OTP resent successfully");
+                    } catch (err) {
+                      toast.error(err.message || "Failed to resend OTP");
+                    }
+                  }}
+                  className="text-sm text-purple-600 font-semibold hover:underline"
+                >
+                  Resend OTP?
+                </button>
+              </div>
+            </>
+          )}
 
           <button
             type="submit"
@@ -102,7 +168,7 @@ const ForgetPassword = () => {
               disabled:opacity-60 disabled:cursor-not-allowed
             "
           >
-            {loading ? "Processing..." : "Recover password"}
+            {loading ? "Processing..." : showOtpInput ? "Reset Password" : "Get OTP"}
           </button>
 
           <div className="flex items-center justify-center mt-4">

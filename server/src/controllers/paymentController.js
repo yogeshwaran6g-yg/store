@@ -1,5 +1,7 @@
 const Order = require("../model/orderModel");
 const Payment = require("../model/paymentModel");
+const Cart = require("../model/cartModel");
+const Product = require("../model/productModel");
 const { rtnRes, log } = require("../utils/helper");
 const { Cashfree } = require("cashfree-pg");
 const rawBodyParser = require("raw-body")
@@ -52,7 +54,7 @@ const createPaymentSession = async (req, res) => {
         customer_phone: order.user_info?.contact || "9999999999",
       },      
       order_meta: {
-        return_url: "https://yourdomain.com/payment/status?order_id={order_id}"
+        return_url: `${process.env.PRODUCT_CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173"}/payment/status?order_id={order_id}`
       }
     };
 
@@ -66,7 +68,7 @@ const createPaymentSession = async (req, res) => {
       currency: "INR",
       gatewayOrderId: cfResponse.data.order_id,
       paymentSessionId: cfResponse.data.payment_session_id,
-      status: "PENDING",
+      status: "CREATED",
       createResponse: cfResponse.data,
     });
 
@@ -81,114 +83,40 @@ const createPaymentSession = async (req, res) => {
   }
 };
 
-
-const handleOrderSuccess = async (orderId) => {
-  try {
+const handleOrdersCart= async (orderId)=>{
+  try{  
     const order = await Order.findById(orderId);
-    if (!order || order.paymentStatus !== "PAID") return;
-
-    // 1. Decrement Stock
-    for (const item of order.cart) {
-      if (item.product) {
-        await Product.findByIdAndUpdate(item.product, {
-          $inc: { stock: -item.quantity }
-        });
-      }
-    }
-
-    // 2. Clear Cart (userId is stored in order.user)
+     if (!order || order.cartProcessed) return;    
+    //reduce cart
     await Cart.deleteOne({ userId: order.user });
+
+    // 2 Mark as processed (VERY IMPORTANT)
+    order.cartProcessed = true;
+    await order.save();
+
+  }catch(err){
+    log("err from handleordersCart :","info", err)
+      throw new Error("Unable to process the cart Internal Error");
     
-    log("Order success processed (stock & cart)", "info", orderId);
-  } catch (err) {
-    log("handleOrderSuccess Error", "error", err.message);
   }
-};
+}
 
-const verifyCashfreePayment = async (req, res) => {
-  try {
-    const { cfOrderId } = req.params;
+const handleOrdersStockReduce = async (orderId) => {
+  const order = await Order.findById(orderId);
+  if (!order || order.stockProcessed) return;
 
-    if (!cfOrderId) {
-      return rtnRes(res, 400, "Cashfree order ID is required");
-    }
-
-    // 1️⃣ Fetch order from Cashfree
-    const cfResponse = await cashfree.PGFetchOrder(cfOrderId);
-    const cfOrder = cfResponse.data;
-
-    if (!cfOrder) {
-      return rtnRes(res, 404, "Cashfree order not found");
-    }
-
-    const {
-      order_status,
-      order_amount,
-      order_currency,
-    } = cfOrder;
-
-    // 2️⃣ Find payment record
-    const payment = await Payment.findOne({
-      gatewayOrderId: cfOrderId,
-    }).populate("order");
-
-    if (!payment) {
-      return rtnRes(res, 404, "Payment record not found");
-    }
-
-    // 3️⃣ Idempotency check
-    if (payment.status === "SUCCESS") {
-      return rtnRes(res, 200, "Payment already verified", {
-        status: payment.status,
-      });
-    }
-
-    // 4️⃣ Update payment + order based on status
-    if (order_status === "PAID") {
-      payment.status = "SUCCESS";
-      payment.order.paymentStatus = "PAID";
-      payment.rawResponse = cfOrder;
-
-      payment.verifiedAt = new Date();
-      // payment.order.isPaid = true;
-      payment.order.paidAt = new Date();
-      
-      await payment.save();
-      await payment.order.save();
-
-      // NEW: Handle Stock and Cart
-      await handleOrderSuccess(payment.order._id);
-
-    } else if (order_status === "FAILED" || order_status === "EXPIRED") {
-      payment.status = "FAILED";
-      payment.order.paymentStatus = "FAILED";
-      payment.rawVerifyResponse = cfOrder;
-      await payment.save();
-      await payment.order.save();
-    } else {
-      payment.status = "PENDING";
-      await payment.save();
-    }
-
-    // 5️⃣ Response to frontend
-    return rtnRes(res, 200, "Payment verification completed", {
-      orderId: payment.order._id,
-      cfOrderId,
-      paymentStatus: payment.status,
-      cashfreeStatus: order_status,
-      amount: order_amount,
-      currency: order_currency,
+  for (const item of order.cart) {
+    await Product.findByIdAndUpdate(item.product, {
+      $inc: { stock: -item.quantity }
     });
-  } catch (err) {
-    log(
-      "VerifyCashfreePayment Error",
-      "error",
-      err.response?.data || err.message
-    );
-
-    return rtnRes(res, 500, err.response?.data?.message || err.message);
   }
+
+  order.stockProcessed = true;
+  await order.save();
 };
+
+
+
 
 
 
@@ -205,7 +133,8 @@ const updatePayment = async (req, res) => {
         payment.order.paymentStatus = "PAID";
         payment.order.paidAt = new Date();
         await payment.order.save();
-        await handleOrderSuccess(payment.order._id);
+        await handleOrdersStockReduce(payment.order._id);
+        await handleOrdersCart(payment.order._id);
     }
 
     await payment.save();
@@ -263,13 +192,35 @@ const getPaymentByOrderId = async (req, res) => {
 };
 
 
-module.exports = {
-  createPaymentSession,//using
-  verifyCashfreePayment,
-  cashfreeWebhook,//using
-  getAllPayments,//using
-  updatePayment,//using
-  getPaymentByOrderId//using
+const verifyPayment = async (req, res) => {
+  try {
+    const { id: gatewayOrderId } = req.params;
+    
+    // We are looking up by the Gateway Order ID provided in the return URL
+    // e.g., CF_INV-123_173645...
+    const payment = await Payment.findOne({ gatewayOrderId }).populate("order");
+
+    if (!payment) {
+      return rtnRes(res, 404, "Payment record not found");
+    }
+
+    const order = payment.order;
+    
+    // If successful, we return success
+    // The frontend can then decide to clear cart etc.
+    // Note: The actual status update happens via Webhook usually.
+    // But if webhook is slow, checking here confirms the record exists.
+    // Real-time verification with Cashfree API could be added here if needed,
+    // but for now we trust our DB or just return what we have.
+    
+    rtnRes(res, 200, "Payment verification status", {
+      status: payment.status,
+      paymentStatus: order.paymentStatus,
+      orderId: order._id
+    });
+  } catch (err) {
+    rtnRes(res, 500, err.message);
+  }
 };
 
 // Webhook handler
@@ -311,35 +262,37 @@ async function cashfreeWebhook(req, res) {
       return rtnRes(res, 409, "Order not linked with payment");
     }
 
-    if (payment.status === "SUCCESS") {
-      return rtnRes(res, 200, "Already processed");
-    }
+    if (payment.verifiedAt || payment.status === "FAILED" || payment.status === "ABANDONED") {
+  return rtnRes(res, 200, "Already processed");
+}
+
     
     log(`Webhook Type: ${type}`, "info");
 
     if (type === "PAYMENT_SUCCESS_WEBHOOK") {
       payment.status = "SUCCESS";
-      order.paymentStatus = "PAID";
+      order.paymentStatus = "PAID";      
+      order.status = "PROCESSING";      
       payment.webhookResponse = payload;
       payment.verifiedAt = new Date();
       order.paymentMethod = data.payment.payment_group;
       order.paidAt = new Date();
-
       await payment.save();
       await order.save();
+      await handleOrdersCart(order._id);
+      await handleOrdersStockReduce(order._id);  
       
-      // Stock and Cart
-      await handleOrderSuccess(order._id);
-    } else if (type === "PAYMENT_FAILED_WEBHOOK") {
+    }else if (type === "PAYMENT_FAILED_WEBHOOK") {
       payment.status = "FAILED";
       order.paymentStatus = "FAILED";
       payment.webhookResponse = payload;
-
+      order.status = "CANCELED";
       await payment.save();
       await order.save();
     } else if (type === "PAYMENT_USER_DROPPED_WEBHOOK") {
-      order.paymentStatus = "UNPAID";
+
       payment.status = "ABANDONED";
+      order.paymentStatus = "FAILED";      
       payment.webhookResponse = payload;
 
       await payment.save();
@@ -354,3 +307,12 @@ async function cashfreeWebhook(req, res) {
 }
 
 
+module.exports = {
+  createPaymentSession,//using
+
+  cashfreeWebhook,//using
+  getAllPayments,//using
+  updatePayment,//using
+  getPaymentByOrderId, //using
+  verifyPayment //using
+};
