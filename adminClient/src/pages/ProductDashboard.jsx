@@ -103,7 +103,7 @@ const ProductDashboard = () => {
                     </td>
                     <td className="p-4">
                         <a 
-                            href={`${PRODUCT_CLIENT_URL}/product/${product._id}`} 
+                            href={`${PRODUCT_CLIENT_URL}/product/${product.slug}`} 
                             target="_blank" 
                             rel="noopener noreferrer"
                             title="view product"
