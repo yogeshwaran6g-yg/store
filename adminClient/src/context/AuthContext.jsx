@@ -45,10 +45,10 @@ export function DataContextProvider ({children}){
        }, seconds * 1000);
     };
 
-    const loginUser = async (email, password) => {
+    const loginUser = async (phone, password) => {
       setLoading(true);
       try {
-        const res = await authService.login(email, password);
+        const res = await authService.login(phone, password);
         // Assuming res contains { token, user } or similar structure
         const { token, user: userData } = res.data; 
         console.log({userData})

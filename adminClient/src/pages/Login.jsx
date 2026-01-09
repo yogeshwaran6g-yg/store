@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FiMail, FiLock } from "react-icons/fi";
+import { FiPhone, FiLock } from "react-icons/fi";
 import { FaCube, FaBook, FaStar } from "react-icons/fa";
 import { MdOutlineViewInAr } from "react-icons/md";
 import { useAuthContext } from "@/context/AuthContext";
@@ -32,14 +32,14 @@ const Login = () => {
   const { loginUser } = useAuthContext();
   const navigate = useNavigate();
   
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({ phone: "", password: "" });
   const [loading, setLoading] = useState(false);
   const parallaxRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const success = await loginUser(formData.email, formData.password);
+    const success = await loginUser(formData.phone, formData.password);
     setLoading(false);
     if (success) {
       navigate("/orders");
@@ -111,14 +111,15 @@ const Login = () => {
           className="mt-6 space-y-5"
         >
           <InputArea
-            name="email"
-            label="Email"
-            type="email"
-            placeholder="Enter your email"
-            value={formData.email}
+            name="phone"
+            label="Phone"
+            type="text"
+            placeholder="Enter your phone"
+            value={formData.phone}
             onChange={handleChange}
-            Icon={FiMail}
+            Icon={FiPhone} 
           />
+          {/* Using FiMail as temp placeholder or should import FiPhone? I'll import FiPhone */}
           
           <InputArea
             name="password"
@@ -157,5 +158,6 @@ const Login = () => {
     </div>
   );
 };
+
 
 export default Login;

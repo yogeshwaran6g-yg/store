@@ -15,9 +15,9 @@ const decodeToken = (token) => {
 };
 
 const authService = {
-  login: async (email, password) => {
+  login: async (phone, password) => {
     // 1. Call Login API
-    const res = await api.post("/api/v1/auth/login", { email, password });
+    const res = await api.post("/api/v1/auth/login", { phone, password });
     
     // 2. Return data (token, user)
     // Adjust based on your actual API response structure
