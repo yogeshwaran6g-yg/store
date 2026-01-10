@@ -14,7 +14,7 @@ export default function Orders() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  
+
   // Input state (what user types)
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -60,49 +60,113 @@ export default function Orders() {
     <div className="p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Orders</h1>
-        
-        <div className="flex flex-col items-end gap-1">
-          <div className={`flex bg-white dark:bg-[#2d2d2d] items-center gap-2 border p-1.5 pl-3 rounded-lg shadow-sm ${isInvalidDate ? 'border-red-300 ring-1 ring-red-100 dark:border-red-700 dark:ring-red-900' : 'border-gray-200 dark:border-gray-700'}`}>
-            <input 
-              type="date" 
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="text-sm border-none focus:ring-0 text-gray-600 dark:text-gray-300 dark:bg-[#2d2d2d] outline-none p-1"
-              placeholder="Start Date"
-            />
-            <span className="text-gray-400">-</span>
-            <input 
-              type="date" 
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="text-sm border-none focus:ring-0 text-gray-600 dark:text-gray-300 dark:bg-[#2d2d2d] outline-none p-1"
-              placeholder="End Date"
-            />
-            
-            <div className="flex items-center gap-1 border-l dark:border-gray-700 pl-2 ml-1">
-              <button 
-                onClick={handleSearch}
-                disabled={!startDate || !endDate || isInvalidDate}
-                className="p-1.5 bg-gray-900 dark:bg-indigo-600 text-white rounded-md hover:bg-gray-800 dark:hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                title="Search Dates"
-              >
-                <Search className="w-4 h-4" />
-              </button>
-              
-              {(startDate || endDate) && (
-                <button 
-                  onClick={handleClear}
-                  className="text-xs text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 px-2 font-medium"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-          </div>
-          {isInvalidDate && (
-            <span className="text-xs text-red-500 dark:text-red-400 font-medium">End date must be after start date</span>
-          )}
-        </div>
+
+        <div className="w-full sm:w-auto space-y-1">
+
+  {/* SEARCH BAR CONTAINER */}
+  <div
+    className={`
+      flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0
+      p-[2px] rounded-2xl
+      bg-gradient-to-r from-purple-600 via-purple-500 to-amber-400
+      shadow-lg
+      transition-all
+      ${isInvalidDate ? "animate-pulse" : ""}
+    `}
+  >
+    {/* INNER BAR */}
+    <div
+      className={`
+        flex flex-col sm:flex-row items-stretch sm:items-center gap-2
+        bg-white dark:bg-[#2d2d2d]
+        rounded-2xl px-3 py-2 sm:py-1.5
+        w-full
+        ${isInvalidDate ? "ring-2 ring-red-400" : ""}
+      `}
+    >
+      {/* START DATE */}
+      <input
+        type="date"
+        value={startDate}
+        onChange={(e) => setStartDate(e.target.value)}
+        className="
+          w-full sm:w-auto
+          text-sm
+          bg-transparent
+          text-gray-700 dark:text-gray-200
+          outline-none
+          focus:ring-0
+          px-2 py-1
+        "
+      />
+
+      {/* DASH */}
+      <span className="hidden sm:block text-gray-400 px-1">—</span>
+
+      {/* END DATE */}
+      <input
+        type="date"
+        value={endDate}
+        onChange={(e) => setEndDate(e.target.value)}
+        className="
+          w-full sm:w-auto
+          text-sm
+          bg-transparent
+          text-gray-700 dark:text-gray-200
+          outline-none
+          focus:ring-0
+          px-2 py-1
+        "
+      />
+
+      {/* ACTIONS */}
+      <div className="flex items-center justify-between sm:justify-start gap-2 sm:ml-2 border-t sm:border-t-0 sm:border-l border-gray-200 dark:border-gray-700 pt-2 sm:pt-0 sm:pl-2">
+        {/* SEARCH BUTTON */}
+        <button
+          onClick={handleSearch}
+          disabled={!startDate || !endDate || isInvalidDate}
+          className="
+            inline-flex items-center justify-center
+            p-2 rounded-xl
+            bg-gradient-to-r from-purple-600 to-amber-500
+            text-white
+            shadow-md
+            hover:shadow-lg hover:scale-105
+            active:scale-95
+            disabled:opacity-40 disabled:cursor-not-allowed
+            transition-all
+          "
+          title="Search"
+        >
+          <Search className="w-4 h-4" />
+        </button>
+
+        {/* CLEAR */}
+        {(startDate || endDate) && (
+          <button
+            onClick={handleClear}
+            className="
+              text-xs font-semibold
+              text-amber-600
+              hover:text-purple-700
+              transition-colors
+            "
+          >
+            Clear
+          </button>
+        )}
+      </div>
+    </div>
+  </div>
+
+  {/* ERROR MESSAGE */}
+  {isInvalidDate && (
+    <span className="block text-xs font-semibold text-red-500 pl-2">
+      End date must be after start date
+    </span>
+  )}
+</div>
+
       </div>
 
       <DataTable
@@ -111,35 +175,35 @@ export default function Orders() {
         pagination={data?.pagination}
         onPageChange={setPage}
         meta={{
-            onEdit: (order) => {
-                setSelectedOrder(order);
-                setIsEditModalOpen(true);
-            },
-            onView: (order) => {
-                setSelectedOrder(order);
-                setIsViewModalOpen(true);
-            },
-            onUserClick: (userId) => {
-                navigate(`/details/${userId}`);
-            },
-            onPaymentClick: (orderId) => {
-                navigate(`/payment/${orderId}`);
-            }
+          onEdit: (order) => {
+            setSelectedOrder(order);
+            setIsEditModalOpen(true);
+          },
+          onView: (order) => {
+            setSelectedOrder(order);
+            setIsViewModalOpen(true);
+          },
+          onUserClick: (userId) => {
+            navigate(`/details/${userId}`);
+          },
+          onPaymentClick: (orderId) => {
+            navigate(`/payment/${orderId}`);
+          }
         }}
       />
-      <EditOrderModal 
+      <EditOrderModal
         isOpen={isEditModalOpen}
         onClose={() => {
-            setIsEditModalOpen(false);
-            setSelectedOrder(null);
+          setIsEditModalOpen(false);
+          setSelectedOrder(null);
         }}
         order={selectedOrder}
       />
-      <OrderItemsModal 
+      <OrderItemsModal
         isOpen={isViewModalOpen}
         onClose={() => {
-            setIsViewModalOpen(false);
-            setSelectedOrder(null);
+          setIsViewModalOpen(false);
+          setSelectedOrder(null);
         }}
         order={selectedOrder}
       />

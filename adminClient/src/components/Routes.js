@@ -4,10 +4,17 @@ import Users from "../pages/UserDashboard";
 import Login from "../pages/Login";
 import DetailDashboard from "../pages/DetailsDashboard";
 import ProductDashboard from "../pages/ProductDashboard";
+import Dashboard from "../pages/Dashboard";
 import { Navigate } from "react-router-dom";
 
 
 export const routes = [
+  {
+    path: "/dashboard",
+    element: Dashboard,
+    protected: true,
+    layout: true
+  },
   {
     path: "/login",
     element: Login,
@@ -26,7 +33,7 @@ export const routes = [
     protected: true,
     layout: true
   },
-  
+
   {
     path: "/users",
     element: Users,

@@ -1,195 +1,185 @@
 import { useSearchParams } from "react-router-dom";
 
-//internal imports
+// internal imports
 import Dashboard from "./dashboard";
 import Error from "@components/form/Error";
-import { countries } from "@config/constants";
 import InputArea from "@components/form/InputArea";
-import SelectOption from "@components/form/SelectOption";
 import useShippingAddressSubmit from "@hooks/useShippingAddressSubmit";
 
 const AddShippingAddress = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
 
-  //   console.log("id", id);
-
   const {
     register,
     onSubmit,
     errors,
-    cities,
-    areas,
     handleSubmit,
-    selectedValue,
     isSubmitting,
-    handleInputChange,
   } = useShippingAddressSubmit(id);
-
-  //   console.log("selectedValues", selectedValue);
 
   return (
     <Dashboard
-      title="add-shipping-address"
-      description="This is my account page"
+      title="Add Shipping Address"
+      description="Add a new shipping address"
     >
-      <div className="max-w-screen-2xl">
-        <div className="md:grid md:grid-cols-3 md:gap-6">
-          <div className="md:col-span-1">
-            <div className="px-4 sm:px-0">
-              <h2 className="text-xl font-semibold mb-5">
-                Add Shipping Address
-              </h2>
-            </div>
-          </div>
+      <div className="max-w-screen-xl mx-auto pt-6">
+
+        {/* ===== Header ===== */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-serif font-semibold text-purple-700">
+            Add Shipping Address
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Please provide accurate delivery details
+          </p>
         </div>
+
+        {/* ===== Card ===== */}
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mt-5 md:mt-0 md:col-span-2">
-            <div className="mt-10 sm:mt-0">
-              <div className="md:grid-cols-6 md:gap-6">
-                <div className="mt-5 md:mt-0 md:col-span-2">
-                  <div className="lg:mt-6 mt-4 bg-white">
-                    <div className="grid grid-cols-6 gap-6">
-                      <div className="col-span-6 sm:col-span-3">
-                        <InputArea
-                          register={register}
-                          rules={{ required: "Full Name is required" }}
-                          label="Full Name"
-                          name="name"
-                          type="text"
-                          placeholder="Input your full name"
-                        />
+          <div className="rounded-2xl bg-white/70 backdrop-blur-xl border border-purple-200 shadow-xl p-6 sm:p-8">
 
-                        <Error errorName={errors.name} />
-                      </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
-                      <div className="col-span-6 sm:col-span-3">
-                        <InputArea
-                          register={register}
-                          rules={{
-                            required: "Full Address is required",
-                            minLength: {
-                              value: 15,
-                              message: "Address must be at least 15 characters long",
-                            },
-                          }}
-                          label="Full Address"
-                          name="address"
-                          type="text"
-                          placeholder="Input your full address"
-                        />
+              {/* Full Name */}
+              <div>
+                <InputArea
+                  register={register}
+                  rules={{ required: "Full Name is required" }}
+                  label="Full Name"
+                  name="name"
+                  type="text"
+                  placeholder="Enter your full name"
+                />
+                <Error errorName={errors.name} />
+              </div>
 
-                        <Error errorName={errors.address} />
-                      </div>
+              {/* Phone */}
+              <div>
+                <InputArea
+                  register={register}
+                  rules={{ required: "Phone number is required" }}
+                  label="Phone"
+                  name="contact"
+                  type="tel"
+                  placeholder="Phone / Mobile"
+                />
+                <Error errorName={errors.contact} />
+              </div>
 
-                      <div className="col-span-6 sm:col-span-3">
-                        <InputArea
-                          register={register}
-                          rules={{ required: "Phone number is required" }}
-                          label="Phone"
-                          name="contact"
-                          type="tel"
-                          placeholder="Phone/Mobile"
-                        />
+              {/* Email */}
+              <div>
+                <InputArea
+                  register={register}
+                  label="Email"
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  readOnly
+                />
+                <Error errorName={errors.email} />
+              </div>
 
-                        <Error errorName={errors.contact} />
-                      </div>
-                      <div className="col-span-6 sm:col-span-3">
-                        <InputArea
-                          register={register}
-                          label="Email"
-                          name="email"
-                          type="email"
-                          placeholder="Email"
-                          readOnly={true}
-                        />
+              {/* Country */}
+              <div>
+                <InputArea
+                  register={register}
+                  label="Country"
+                  name="country"
+                  type="text"
+                  defaultValue="India"
+                  readOnly
+                />
+                <Error errorName={errors.country} />
+              </div>
 
-                        <Error errorName={errors.email} />
-                      </div>
+              {/* City */}
+              <div>
+                <InputArea
+                  register={register}
+                  rules={{ required: "City is required" }}
+                  label="City"
+                  name="city"
+                  type="text"
+                  placeholder="Enter your city"
+                />
+                <Error errorName={errors.city} />
+              </div>
 
-                      <div className="col-span-6 sm:col-span-3">
-                        <InputArea
-                          register={register}
-                          label="Country"
-                          name="country"
-                          type="text"
-                          placeholder="Country"
-                          defaultValue="India"
-                          readOnly={true}
-                        />
-                        <Error errorName={errors.country} />
-                      </div>
-                      <div className="col-span-6 sm:col-span-3">
-                        <InputArea
-                          register={register}
-                          rules={{ required: "City is required" }}
-                          label="City"
-                          name="city"
-                          type="text"
-                          placeholder="Enter your city"
-                        />
-                        <Error errorName={errors.city} />
-                      </div>
-                      <div className="col-span-6 sm:col-span-3">
-                        <InputArea
-                          register={register}
-                          rules={{ required: "Area is required" }}
-                          label="Area"
-                          name="area"
-                          type="text"
-                          placeholder="Enter your area"
-                        />
-                        <Error errorName={errors.area} />
-                      </div>
-                      <div className="col-span-6 sm:col-span-3">
-                        <InputArea
-                          register={register}
-                          rules={{
-                            required: "Zip Code is required",
-                            pattern: {
-                              value: /^[0-9]+$/,
-                              message: "Zip Code must be a number",
-                            },
-                          }}
-                          maxLength={6}
-                          label="Zip Code"
-                          name="zipCode"
-                          type="text"
-                          placeholder="Zip Code"
-                        />
+              {/* Area */}
+              <div>
+                <InputArea
+                  register={register}
+                  rules={{ required: "Area is required" }}
+                  label="Area"
+                  name="area"
+                  type="text"
+                  placeholder="Enter your area"
+                />
+                <Error errorName={errors.area} />
+              </div>
 
-                        <Error errorName={errors.zipCode} />
-                      </div>
-                    </div>
-                    <div className="col-span-6 sm:col-span-3 mt-5 text-right">
-                      {isSubmitting ? (
-                        <button
-                          disabled={isSubmitting}
-                          type="submit"
-                          className="cursor-progress md:text-sm leading-5 inline-flex items-center transition ease-in-out duration-300 font-medium text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-cyan-600 text-white px-5 md:px-6 lg:px-8 py-2 md:py-3 lg:py-3 hover:text-white hover:bg-cyan-700 h-12 mt-1 text-sm lg:text-sm w-full sm:w-auto"
-                        >
-                          <img
-                            src="/loader/spinner.gif"
-                            alt="Loading"
-                            width={20}
-                            height={10}
-                          />
-                          <span className=" ml-2 font-light">Processing</span>
-                        </button>
-                      ) : (
-                        <button
-                          disabled={isSubmitting}
-                          type="submit"
-                          className="md:text-sm leading-5 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-medium text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-cyan-600 text-white px-5 md:px-6 lg:px-8 py-2 md:py-3 lg:py-3 hover:text-white hover:bg-cyan-700 h-12 mt-1 text-sm lg:text-sm w-full sm:w-auto"
-                        >
-                          Add Shipping Address
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
+              {/* Zip Code */}
+              <div>
+                <InputArea
+                  register={register}
+                  rules={{
+                    required: "Zip Code is required",
+                    pattern: {
+                      value: /^[0-9]+$/,
+                      message: "Zip Code must be numeric",
+                    },
+                  }}
+                  maxLength={6}
+                  label="Zip Code"
+                  name="zipCode"
+                  type="text"
+                  placeholder="Zip Code"
+                />
+                <Error errorName={errors.zipCode} />
+              </div>
+
+              {/* Full Address */}
+              <div className="sm:col-span-2">
+                <InputArea
+                  register={register}
+                  rules={{
+                    required: "Full Address is required",
+                    minLength: {
+                      value: 15,
+                      message: "Address must be at least 15 characters",
+                    },
+                  }}
+                  label="Full Address"
+                  name="address"
+                  type="text"
+                  placeholder="House no, street, landmark"
+                />
+                <Error errorName={errors.address} />
               </div>
             </div>
+
+            {/* ===== Action ===== */}
+            <div className="mt-8 flex justify-end">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="
+                  w-full sm:w-auto
+                  px-8 py-3
+                  rounded-full
+                  bg-purple-600 hover:bg-purple-700
+                  text-white font-semibold
+                  shadow-md
+                  transition
+                  active:scale-95
+                  disabled:opacity-60
+                "
+              >
+                {isSubmitting ? "Processing..." : "Add Shipping Address"}
+              </button>
+            </div>
+
           </div>
         </form>
       </div>

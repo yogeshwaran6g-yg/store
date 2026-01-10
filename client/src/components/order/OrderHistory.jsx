@@ -1,54 +1,51 @@
-import React from "react";
-import { useCopyToClipboard } from "usehooks-ts";
 import { Link } from "react-router-dom";
 
-
-
 const OrderHistory = ({ order }) => {
-  const [, copy] = useCopyToClipboard();
+  const displayId =
+    order.invoice ||
+    (order._id ? order._id.slice(-8).toUpperCase() : "—");
 
   return (
     <>
-      {/* ID */}
-      <td className="px-6 py-3 text-sm text-left whitespace-nowrap">
-        <span
-          className="uppercase font-medium cursor-pointer"
-          title="copy"
-          onClick={() => copy(order?._id)}
-        >
-          {order?._id?.substring(0, 8)}
-        </span>
+      {/* ✅ ID (FIXED) */}
+      <td className="px-6 py-4 text-left font-medium">
+        {displayId}
       </td>
 
       {/* Order Time */}
-      <td className="px-6 py-3 text-sm text-center whitespace-nowrap">
+      <td className="px-6 py-4 text-center">
         {new Date(order.createdAt).toLocaleDateString()}
       </td>
 
-      {/* Payment Method */}
-      <td className="px-6 py-3 text-sm text-center whitespace-nowrap">
+      {/* Method */}
+      <td className="px-6 py-4 text-center capitalize">
         {order.paymentMethod}
       </td>
 
       {/* Status */}
-      <td className="px-6 py-3 text-sm text-center whitespace-nowrap">
+      <td className="px-6 py-4 text-center">
         <span className="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
           {order.status}
         </span>
       </td>
 
       {/* Total */}
-      <td className="px-6 py-3 text-sm text-right font-bold whitespace-nowrap">
-        ${order.total}
+      <td className="px-6 py-4 text-right font-semibold tabular-nums">
+        ${Number(
+          order.totalAmount ??
+          order.totalPrice ??
+          order.total ??
+          0
+        ).toLocaleString()}
       </td>
 
       {/* Details */}
-      <td className="px-6 py-3 text-sm text-center whitespace-nowrap">
+      <td className="px-6 py-4 text-center w-[120px]">
         <Link
-            to={`/user/order/${order._id}`}
-            className="px-3 py-1 bg-purple-50 text-purple-600 rounded-md text-xs font-semibold hover:bg-purple-100 transition-colors"
+          to={`/user/order/${order._id}`}
+          className="px-4 py-1 rounded-full bg-purple-100 text-purple-700 text-sm font-medium"
         >
-            Details
+          Details
         </Link>
       </td>
     </>

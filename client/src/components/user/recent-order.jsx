@@ -13,19 +13,20 @@ const RecentOrder = ({ data, loading, error }) => {
   const pageCount = Math.ceil((data?.totalDoc || 0) / 10);
 
   return (
-    <div className="max-w-screen-2xl mx-auto px-4">
+<div className="mx-auto md:max-w-screen-2xl md:px-4">
       <div className="rounded-2xl font-serif bg-white/70 backdrop-blur-xl shadow-xl border border-purple-200">
         <div className="flex flex-col p-6">
 
           {/* Header */}
-          <h3 className="text-xl font-semibold mb-6 text-purple-700 flex items-center gap-2">
-           Recent Orders
+          <h3 className="text-xl font-semibold mb-6 text-purple-700">
+            Recent Orders
           </h3>
 
           <div className="overflow-x-auto">
             <div className="min-w-full rounded-xl border border-purple-100 bg-white/60">
               <div className="overflow-hidden rounded-xl">
 
+                {/* ================= LOADING ================= */}
                 {loading ? (
                   <OrderHistorySkeleton rows={5} />
 
@@ -37,51 +38,140 @@ const RecentOrder = ({ data, loading, error }) => {
                     </p>
                   </div>
                 ) : (
-                  <table className="min-w-full table-fixed divide-y divide-purple-100">
+                  <>
+                    {/* ================= MOBILE CARD VIEW ================= */}
+{/* ================= MOBILE CARD VIEW (SEPARATE BOXES) ================= */}
+<div className="md:hidden py-4 space-y-6">
+  {data.orders.map((order) => (
+    <div
+      key={order._id}
+      className="
+        mx-4
+        rounded-2xl
+        bg-white
+        border border-purple-200
+        shadow-sm
+        px-5 py-6
+      "
+    >
+      {/* ===== Header ===== */}
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-sm font-semibold text-purple-700">
+          Order #{order.invoice}
+        </span>
 
-                    {/* ===== TABLE HEADER ===== */}
-                    <thead className="bg-gradient-to-r from-purple-100 to-purple-50">
-                      <tr>
-                        <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-left w-[16%]">
-                          ID
-                        </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-center w-[18%]">
-                          Order Time
-                        </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-center w-[18%]">
-                          Method
-                        </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-center w-[18%]">
-                          Status
-                        </th>
-						<th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-right w-[15%]">
-                          Total
-                        </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-center w-[10%]">
-                          Details
-                        </th>
+        <span
+          className={`inline-flex items-center gap-2 px-1 py-1 rounded-full text-[10px] font-semibold
+            ${
+              order.status === "Delivered"
+                ? "bg-emerald-100 text-emerald-700"
+                : order.status === "Pending"
+                ? "bg-yellow-100 text-yellow-700"
+                : "bg-indigo-100 text-indigo-700"
+            }
+          `}
+        >
+          <span
+            className={`w-2 h-2 rounded-full
+              ${
+                order.status === "Delivered"
+                  ? "bg-emerald-600"
+                  : order.status === "Pending"
+                  ? "bg-yellow-500"
+                  : "bg-indigo-600"
+              }
+            `}
+          />
+          {order.status}
+        </span>
+      </div>
 
-                      </tr>
-                    </thead>
+      {/* ===== Info ===== */}
+      <div className="grid grid-cols-2 gap-y-3 text-sm">
+        <span className="text-gray-500">Order Date</span>
+        <span className="text-right text-gray-700">
+          {new Date(order.createdAt).toLocaleDateString()}
+        </span>
 
-                    {/* ===== TABLE BODY ===== */}
-                    <tbody className="bg-white divide-y divide-purple-50">
-                      {data.orders.map((order) => (
-                        <tr
-                          key={order._id}
-                          className="hover:bg-purple-50/60 transition-all"
-                        >
-                          <OrderHistory order={order} />
+        <span className="text-gray-500">Payment</span>
+        <span className="text-right text-gray-700 capitalize">
+          {order.paymentMethod}
+        </span>
 
-                          {/* ACTION */}
+        <span className="text-gray-500">Total</span>
+        <span className="text-right font-semibold text-purple-700">
+          ₹{Number(
+            order.totalAmount ??
+            order.totalPrice ??
+            order.total ??
+            0
+          ).toLocaleString()}
+        </span>
+      </div>
 
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+      {/* ===== Action ===== */}
+      <Link
+        to={`/order/${order._id}`}
+        className="
+          mt-5 block w-full
+          text-center rounded-full
+          bg-purple-600 text-white
+          py-1 text-[12px] font-semibold
+          shadow-sm
+          active:scale-95
+          transition
+        "
+      >
+        Details
+      </Link>
+    </div>
+  ))}
+</div>
+
+
+
+                    {/* ================= DESKTOP TABLE VIEW ================= */}
+                    <div className="hidden md:block">
+                      <table className="min-w-full table-fixed divide-y divide-purple-100">
+                        <thead className="bg-gradient-to-r from-purple-100 to-purple-50">
+                          <tr>
+                            <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-left w-[16%]">
+                              ID
+                            </th>
+                            <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-center w-[18%]">
+                              Order Time
+                            </th>
+                            <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-center w-[18%]">
+                              Method
+                            </th>
+                            <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-center w-[18%]">
+                              Status
+                            </th>
+                            <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-right w-[15%]">
+                              Total
+                            </th>
+                            <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-center w-[10%]">
+                              Details
+                            </th>
+                          </tr>
+                        </thead>
+
+                        <tbody className="bg-white divide-y divide-purple-50">
+                          {data.orders.map((order) => (
+                            <tr
+                              key={order._id}
+                              className="hover:bg-purple-50/60 transition-all"
+                            >
+                              <OrderHistory order={order} />
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
                 )}
 
-                {/* PAGINATION */}
+                {/* ================= PAGINATION ================= */}
                 {data?.totalDoc > 10 && (
                   <div className="flex justify-center py-6">
                     <ReactPaginate
