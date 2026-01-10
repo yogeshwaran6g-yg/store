@@ -6,7 +6,10 @@ import { FaCube, FaBook, FaStar } from "react-icons/fa";
 import { notifyError } from "../../utils/toast";
 import {toast } from "react-toastify"
 
+import { useAuth } from "@context/AuthContext";
+
 export default function Checkout() {
+  const { user, refreshUser } = useAuth();
   const [step, setStep] = useState(1);
   const parallaxRef = useRef(null);
   
@@ -16,6 +19,21 @@ export default function Checkout() {
     contact: "",
     childName: ""
   });
+
+  useEffect(() => {
+    refreshUser();
+  }, [refreshUser]);
+
+  useEffect(() => {
+    if (user) {
+      setParentInfo(prev => ({
+        ...prev,
+        parentName: prev.parentName || user.username || user.name || "",
+        email: prev.email || user.email || "",
+        contact: prev.contact || user.phone || ""
+      }));
+    }
+  }, [user]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -75,7 +93,7 @@ export default function Checkout() {
       {/* GRID BACKGROUND */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px]" />
 
-      {/* ✨ SPARKLES */}
+      {/*  SPARKLES */}
       {[...Array(15)].map((_, i) => (
         <span
           key={i}

@@ -6,7 +6,11 @@ import Dashboard from "./dashboard";
 import { useAuth } from "@context/AuthContext";
 
 const MyAccount = () => {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
+
+  React.useEffect(() => {
+    refreshUser();
+  }, [refreshUser]);
 
   return (
     <Dashboard title="My Account" description="User profile and address details">
@@ -14,7 +18,7 @@ const MyAccount = () => {
 
         {/* Page Title */}
         <h2 className="text-2xl font-serif font-semibold text-purple-700 mb-6">
-          ✨ My Account
+          My Account
         </h2>
 
         <div className="grid gap-6 lg:grid-cols-2">
@@ -51,7 +55,7 @@ const MyAccount = () => {
             >
               <h5 className="text-base font-semibold text-gray-800 flex items-center gap-2 mb-2">
                 <FiMapPin className="text-purple-600" />
-                {addr.fullName}
+                {addr.name} {addr.lastName}
                 {addr.isDefault && (
                   <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 font-semibold">
                     Default
@@ -59,32 +63,36 @@ const MyAccount = () => {
                 )}
               </h5>
 
-              <p className="text-sm text-gray-600">{addr.phone}</p>
+              <p className="text-sm text-gray-600">{addr.contact}</p>
               <p className="text-sm text-gray-600 mt-1">
-                {addr.addressLine1}, {addr.city}, {addr.state},{" "}
-                {addr.country} - {addr.postalCode}
+                {addr.addressLine1}, {addr.addressLine2 ? addr.addressLine2 + ", " : ""}{addr.city}, {addr.state},{" "}
+                {addr.country} - {addr.zipCode}
               </p>
             </div>
           ))}
 
+          
           {/* ================= ADD NEW ADDRESS ================= */}
-          <Link
-            to={`/user/add-shipping-address?id=${user?._id}`}
-            className="
-              rounded-2xl
-              border-2 border-dashed border-purple-300
-              bg-purple-50/70
-              hover:bg-purple-100
-              transition-all
-              p-6
-              flex items-center justify-center gap-3
-              text-purple-700 font-semibold
-              shadow-sm
-            "
-          >
-            <FiPlus className="text-xl" />
-            Add Shipping Address
-          </Link>
+          {/* Only show if user has no addresses */}
+          {(!user?.addresses || user.addresses.length === 0) && (
+            <Link
+              to={`/user/add-shipping-address?id=${user?._id}`}
+              className="
+                rounded-2xl
+                border-2 border-dashed border-purple-300
+                bg-purple-50/70
+                hover:bg-purple-100
+                transition-all
+                p-6
+                flex items-center justify-center gap-3
+                text-purple-700 font-semibold
+                shadow-sm
+              "
+            >
+              <FiPlus className="text-xl" />
+              Add Shipping Address
+            </Link>
+          )}
         </div>
       </div>
     </Dashboard>

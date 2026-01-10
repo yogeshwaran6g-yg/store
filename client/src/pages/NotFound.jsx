@@ -164,7 +164,7 @@ const NotFound = () => {
           <motion.img
   src="/images/man.png"
   alt="Lost astronaut searching"
-  className="w-156 md:w-200 lg:w-280 h-auto mb-4"
+  className="w-[580px] md:w-[450px] lg:w-[800px] md:h-[450px] lg:h-[800px] h-[480px] mb-0"
   animate={{
     y: [-6, 6, -6],
     rotate: [-1.5, 1.5, -1.5],
@@ -179,7 +179,7 @@ const NotFound = () => {
         </motion.div>
 
         <motion.h1
-          className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-primary mb-2 tracking-tight"
+          className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-sky-500 mb-2 tracking-tight"
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3, type: "spring", stiffness: 200 }}
@@ -213,7 +213,7 @@ const NotFound = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <Button asChild size="lg" className="px-8 font-semibold">
+          <Button asChild size="lg" className="px-8 font-semibold bg-sky-500 hover:bg-sky-600 text-white border-none shadow-lg shadow-sky-200">
             
             <Link to="/">Back to Home</Link>
           </Button>

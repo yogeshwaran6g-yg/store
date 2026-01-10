@@ -8,7 +8,7 @@ import Dashboard from "./dashboard";
 import Loading from "@components/preloader/Loading";
 import OrderHistory from "@components/order/OrderHistory";
 import { useSideBar } from "../context/SidebarContext";
-import CMSkeletonTwo from "@components/preloader/CMSkeletonTwo";
+import OrderHistorySkeleton from "@components/preloader/OrderHistorySkeleton";
 
 const MyOrders = () => {
   const { currentPage, handleChangePage, isLoading, setIsLoading } =
@@ -40,7 +40,7 @@ const MyOrders = () => {
 
           {/* Header */}
           <h2 className="text-2xl font-serif font-semibold mb-6 text-purple-700 flex items-center gap-2">
-            ✨ My Orders
+             My Orders
           </h2>
 
           {/* Table Wrapper */}
@@ -48,12 +48,7 @@ const MyOrders = () => {
             <div className="min-w-full rounded-xl overflow-hidden border border-purple-100">
 
               {loading ? (
-                <CMSkeletonTwo
-                  count={10}
-                  width={100}
-                  error={error}
-                  loading={loading}
-                />
+                <OrderHistorySkeleton rows={10} />
               ) : data.orders.length === 0 ? (
                 <div className="text-center py-20">
                   <IoBagHandle className="mx-auto text-6xl text-purple-400 mb-4" />
@@ -72,6 +67,7 @@ const MyOrders = () => {
                         "Method",
                         "Status",
                         "Total",
+                        "Action",
                       ].map((head) => (
                         <th
                           key={head}

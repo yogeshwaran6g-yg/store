@@ -18,20 +18,23 @@ const useShippingAddressSubmit = (id) => {
     if (user?.email) {
       setValue("email", user.email);
     }
-    setValue("country", "India");
-  }, [user, setValue]);
+    setValue("country", "India");    
+  }, [user.email, setValue]); // 
 
   const onSubmit = async (data) => {
     try {
       const payload = {
-        fullName: data.name,
-        phone: data.contact,
+        name: data.name,
+        lastName: data.lastName,
+        contact: data.contact,
+        email: data.email,
         addressLine1: data.address,
+        addressLine2: data.area, // Mapping 'area' input to 'addressLine2'
         city: data.city,
+        state: data.state,
         country: data.country,
-        state: data.area,
-        postalCode: data.zipCode,
-        isDefault: false,
+        zipCode: data.zipCode,
+        isDefault: true, // Force default if it's the only one, or as requested
       };
 
       const response = await AuthService.addShippingAddress(payload);

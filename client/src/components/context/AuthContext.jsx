@@ -63,9 +63,24 @@ export const AuthProvider = ({ children }) => {
     return await AuthService.resetPassword(data);
   }, []);
 
+  const refreshUser = useCallback(async () => {
+    try {
+      const data = await AuthService.getMe();
+      if (data?.user) {
+        setUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+      return data.user;
+    } catch (error) {
+      console.error("Refresh user error:", error);
+      return null;
+    }
+  }, []);
+
   const value = useMemo(() => ({
     user,
     setUser,
+    refreshUser,
     isAuthenticated: !!user,
     loading,
     login,

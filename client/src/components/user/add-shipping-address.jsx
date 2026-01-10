@@ -53,14 +53,26 @@ const AddShippingAddress = () => {
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea
                           register={register}
-                          rules={{ required: "Full Name is required" }}
-                          label="Full Name"
+                          rules={{ required: "First Name is required" }}
+                          label="First Name"
                           name="name"
                           type="text"
-                          placeholder="Input your full name"
+                          placeholder="First Name"
                         />
 
                         <Error errorName={errors.name} />
+                      </div>
+
+                      <div className="col-span-6 sm:col-span-3">
+                        <InputArea
+                          register={register}
+                          rules={{ required: "Last Name is required" }}
+                          label="Last Name"
+                          name="lastName"
+                          type="text"
+                          placeholder="Last Name"
+                        />
+                        <Error errorName={errors.lastName} />
                       </div>
 
                       <div className="col-span-6 sm:col-span-3">
@@ -101,7 +113,7 @@ const AddShippingAddress = () => {
                           name="email"
                           type="email"
                           placeholder="Email"
-                          readOnly={true}
+                          readOnly={false}
                         />
 
                         <Error errorName={errors.email} />
@@ -133,13 +145,24 @@ const AddShippingAddress = () => {
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea
                           register={register}
-                          rules={{ required: "Area is required" }}
-                          label="Area"
+                          rules={{ required: "Area / Locality is required" }}
+                          label="Area / Locality"
                           name="area"
                           type="text"
                           placeholder="Enter your area"
                         />
                         <Error errorName={errors.area} />
+                      </div>
+                      <div className="col-span-6 sm:col-span-3">
+                        <InputArea
+                          register={register}
+                          rules={{ required: "State is required" }}
+                          label="State"
+                          name="state"
+                          type="text"
+                          placeholder="Enter your state"
+                        />
+                        <Error errorName={errors.state} />
                       </div>
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea

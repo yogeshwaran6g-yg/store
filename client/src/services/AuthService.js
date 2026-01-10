@@ -59,6 +59,11 @@ const AuthService = {
       return data;
   },
 
+  getMe: async () => {
+    const { data } = await api.get(`${authApiBAseUrl}/me`);
+    return data;
+  },
+
 
 
   logout: () => {

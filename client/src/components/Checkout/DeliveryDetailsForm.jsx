@@ -8,19 +8,54 @@ import { FaCube, FaBook, FaStar } from "react-icons/fa";
 import { notifyError, notifySuccess } from "../../utils/toast";
 import useCheckout from "../../hooks/useCheckout";
 
+import Switch from "react-switch";
+import { useAuth } from "@context/AuthContext";
+
 export default function DeliveryDetailsForm({ onBack, parentInfo }) {
+    const { user, refreshUser } = useAuth();
     const { cartState, updateQuantity, removeItem } = useCartContext();
     const { items, cartTotal } = cartState;
     const parallaxRef = useRef(null);
     const { handleCheckout, loading } = useCheckout();
 
     const [deliveryInfo, setDeliveryInfo] = useState({
+        email: parentInfo?.email || user?.email || "",
         address: "",
         city: "",
         state: "",
         zipCode: ""
     });
+    const [useDefaultAddress, setUseDefaultAddress] = useState(false);
     const [shippingOption, setShippingOption] = useState("EXPRESS");
+
+    useEffect(() => {
+        refreshUser();
+    }, [refreshUser]);
+
+    // Effect to handle "Use Default Address" toggle
+    useEffect(() => {
+        if (useDefaultAddress && user?.addresses?.length > 0) {
+            const defaultAddr = user.addresses[0]; // Since we enforce 1 address for now
+            setDeliveryInfo(prev => ({
+                ...prev,
+                address: defaultAddr.addressLine1 || "",
+                city: defaultAddr.city || "",
+                state: defaultAddr.state || "",
+                zipCode: defaultAddr.zipCode || ""
+            }));
+        } else if (useDefaultAddress && (!user?.addresses || user.addresses.length === 0)) {
+             notifyError("No default address found! Please enter manually.");
+             setUseDefaultAddress(false);
+        } else if (!useDefaultAddress) {
+             setDeliveryInfo(prev => ({
+                ...prev,
+                address: "",
+                city: "",
+                state: "",
+                zipCode: ""
+            }));
+        }
+    }, [useDefaultAddress, user]);
 
     const shippingCost = shippingOption === "EXPRESS" ? 100 : 50;
     const grandTotal = cartTotal + shippingCost;
@@ -99,7 +134,7 @@ export default function DeliveryDetailsForm({ onBack, parentInfo }) {
             {/* GRID BACKGROUND */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px]" />
 
-            {/* ✨ SPARKLES */}
+            {/* SPARKLES */}
             {[...Array(15)].map((_, i) => (
                 <span
                     key={i}
@@ -179,11 +214,36 @@ export default function DeliveryDetailsForm({ onBack, parentInfo }) {
                                 Delivery Details
                             </h2>
 
+                            {/* Use Default Address Switch */}
+                            {user?.addresses?.length > 0 && (
+                                <div className="flex items-center justify-center gap-3 mt-4 mb-2">
+                                    <span className="text-gray-700 font-medium text-sm">Use Default Address</span>
+                                    <Switch
+                                        onChange={setUseDefaultAddress}
+                                        checked={useDefaultAddress}
+                                        onColor="#a855f7" // purple-500
+                                        uncheckedIcon={false}
+                                        checkedIcon={false}
+                                        height={20}
+                                        width={40}
+                                        handleDiameter={18}
+                                    />
+                                </div>
+                            )}
+
                             <p className="text-center text-gray-500 text-sm mt-2 mb-8">
                                 Enter delivery details to complete your order
                             </p>
 
                             <form className="space-y-5" onSubmit={handleSubmit}>
+                                <Input 
+                                    label="Email Address" 
+                                    placeholder="Enter email" 
+                                    name="email"
+                                    type="email"
+                                    value={deliveryInfo.email}
+                                    onChange={handleInputChange}
+                                />
                                 <Input 
                                     label="Address Line 1" 
                                     placeholder="House / Flat / Street" 
