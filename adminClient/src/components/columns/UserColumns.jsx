@@ -106,4 +106,32 @@ export const userColumns = [
       cell: info => <span className="text-gray-500 text-[10px]">{info.getValue()}</span>,
     }
   ),
+
+  // Details / Actions
+columnHelper.display({
+  id: "actions",
+  header: "Details",
+  cell: ({ row, table }) => {
+    return (
+      <button
+        onClick={() => table.options.meta?.onView?.(row.original)}
+        className="
+          inline-flex items-center gap-1.5
+          px-3 py-1
+          rounded-full
+          text-[11px] font-semibold
+          bg-gradient-to-r from-purple-600 to-amber-500
+          text-white
+          shadow-sm
+          hover:shadow-md hover:scale-105
+          active:scale-95
+          transition-all
+        "
+      >
+        View
+      </button>
+    );
+  },
+}),
+
 ];
