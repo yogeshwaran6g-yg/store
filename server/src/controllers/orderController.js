@@ -714,21 +714,25 @@ const getUserDashboardStats = async (req, res) => {
 
     const totalPendingOrder = await Order.countDocuments({
       user: userId,
-      status: "Pending",
+      status: "PENDING",
     });
     const totalProcessingOrder = await Order.countDocuments({
       user: userId,
-      status: "Processing",
+      status: "PROCESSING",
+    });
+    const totalShippedOrder = await Order.countDocuments({
+      user: userId,
+      status: "SHIPPED",
     });
     const totalDeliveredOrder = await Order.countDocuments({
       user: userId,
-      status: "Delivered",
+      status: "DELIVERED",
     });
 
     rtnRes(res, 200, "User Dashboard Stats Retrieved", {
       totalOrder: totalDoc,
       pending: totalPendingOrder,
-      processing: totalProcessingOrder,
+      processing: totalProcessingOrder  + totalShippedOrder,
       delivered: totalDeliveredOrder,
     });
   } catch (err) {

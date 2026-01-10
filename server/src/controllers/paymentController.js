@@ -54,7 +54,7 @@ const createPaymentSession = async (req, res) => {
         customer_phone: order.user_info?.contact || "9999999999",
       },      
       order_meta: {
-        return_url: `${process.env.PRODUCT_CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173"}/payment/status?order_id={order_id}`
+        return_url: `${process.env.PRODUCT_CLIENT_URL}/payment/status?order_id={order_id}`
       }
     };
 
@@ -86,9 +86,18 @@ const createPaymentSession = async (req, res) => {
 const handleOrdersCart= async (orderId)=>{
   try{  
     const order = await Order.findById(orderId);
-     if (!order || order.cartProcessed) return;    
+    if (!order || order.cartProcessed) return;
+    
+    console.log(`Processing Cart Clearing for Order: ${orderId}, User: ${order.user}`);
+
     //reduce cart
-    await Cart.deleteOne({ userId: order.user });
+    const deletedCart = await Cart.findOneAndDelete({ userId: order.user });
+    log("cart","info",deletedCart)
+    if (deletedCart) {
+        console.log(`Cart cleared for user ${order.user}.`);
+    } else {
+        console.log(`Cart not found or already cleared for user ${order.user}.`);
+    }
 
     // 2 Mark as processed (VERY IMPORTANT)
     order.cartProcessed = true;
@@ -96,7 +105,8 @@ const handleOrdersCart= async (orderId)=>{
 
   }catch(err){
     log("err from handleordersCart :","info", err)
-      throw new Error("Unable to process the cart Internal Error");
+    console.error("Error from handleOrdersCart:", err);
+    throw new Error("Unable to process the cart Internal Error");
     
   }
 }
@@ -212,7 +222,7 @@ const verifyPayment = async (req, res) => {
     // But if webhook is slow, checking here confirms the record exists.
     // Real-time verification with Cashfree API could be added here if needed,
     // but for now we trust our DB or just return what we have.
-    
+
     rtnRes(res, 200, "Payment verification status", {
       status: payment.status,
       paymentStatus: order.paymentStatus,
@@ -230,7 +240,7 @@ async function cashfreeWebhook(req, res) {
 
     const signature = req.headers["x-webhook-signature"];
     const timestamp = req.headers["x-webhook-timestamp"];
-
+    console.log(req)
     if (
       !verifyCashfreeSignature(
         rawBody,
@@ -239,6 +249,7 @@ async function cashfreeWebhook(req, res) {
         process.env.CASHFREE_CLIENT_SECRET
       )
     ) {
+      console.error("Webhook Signature Verification Failed");
       return rtnRes(res, 400, "Invalid signature");
     }
 
@@ -246,12 +257,14 @@ async function cashfreeWebhook(req, res) {
     const { type, data } = payload;
 
     const gatewayOrderId = data.order.order_id;
+    console.log(`Webhook Received: ${type} for Order: ${gatewayOrderId}`);
 
     const payment = await Payment.findOne({
       gatewayOrderId
     }).populate("order");
 
     if (!payment) {
+      console.error(`Payment not found for gatewayOrderId: ${gatewayOrderId}`);
       return rtnRes(res, 404, "Payment not found");
     }
 
@@ -262,25 +275,41 @@ async function cashfreeWebhook(req, res) {
       return rtnRes(res, 409, "Order not linked with payment");
     }
 
-    if (payment.verifiedAt || payment.status === "FAILED" || payment.status === "ABANDONED") {
-  return rtnRes(res, 200, "Already processed");
-}
-
-    
-    log(`Webhook Type: ${type}`, "info");
+    // Idempotency check: If already SUCCESS, just return OK (but maybe ensure cart is cleared?)
+    if (payment.status === "SUCCESS") {
+         console.log("Payment already marked SUCCESS. Ensuring cart/stock processed.");
+         // Ensure these run even if previously processed, to be safe (idempotent)
+         if (!order.cartProcessed) await handleOrdersCart(order._id);
+         if (!order.stockProcessed) await handleOrdersStockReduce(order._id);
+         return rtnRes(res, 200, "Already processed");
+    }
 
     if (type === "PAYMENT_SUCCESS_WEBHOOK") {
       payment.status = "SUCCESS";
-      order.paymentStatus = "PAID";      
-      order.status = "PROCESSING";      
       payment.webhookResponse = payload;
       payment.verifiedAt = new Date();
-      order.paymentMethod = data.payment.payment_group;
+      
+      order.paymentStatus = "PAID";      
+      order.status = "PROCESSING";      
+      order.paymentMethod = data.payment.payment_group || "Cashfree";
       order.paidAt = new Date();
+      
       await payment.save();
       await order.save();
-      await handleOrdersCart(order._id);
-      await handleOrdersStockReduce(order._id);  
+      
+      console.log("Payment and Order saved. Processing Cart and Stock...");
+
+      try {
+          await handleOrdersCart(order._id);
+      } catch (e) {
+          console.error("Failed to process cart in webhook:", e);
+      }
+      
+      try {
+          await handleOrdersStockReduce(order._id);
+      } catch (e) {
+          console.error("Failed to process stock in webhook:", e);
+      }
       
     }else if (type === "PAYMENT_FAILED_WEBHOOK") {
       payment.status = "FAILED";
@@ -290,11 +319,9 @@ async function cashfreeWebhook(req, res) {
       await payment.save();
       await order.save();
     } else if (type === "PAYMENT_USER_DROPPED_WEBHOOK") {
-
       payment.status = "ABANDONED";
       order.paymentStatus = "FAILED";      
       payment.webhookResponse = payload;
-
       await payment.save();
       await order.save();
     }

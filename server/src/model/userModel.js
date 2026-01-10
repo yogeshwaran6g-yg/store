@@ -75,14 +75,16 @@ const userSchema = new mongoose.Schema(
 
     addresses: [
       {
-        fullName: String,
-        phone: String,
+        name: String,
+        lastName: String,
+        email: String,
+        contact: String,
         addressLine1: String,
         addressLine2: String,
         city: String,
         state: String,
-        postalCode: String,
         country: String,
+        zipCode: String,
         isDefault: {
           type: Boolean,
           default: false,

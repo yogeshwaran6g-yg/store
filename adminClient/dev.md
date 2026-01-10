@@ -55,4 +55,14 @@ when place order the detail of name and email required send from client
     then when payment happen mean only order placed 
 
 
+4.add default address
+  1.dashboard
+    test processing and shipped orders comes as processing count
+    dashboard ok 
+    skeleton
+  2.my orders
+  3.change password
+  4. my account
+  5. checkout
+    6. add skeleton for products
 
