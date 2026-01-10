@@ -10,6 +10,7 @@ import CartDrawer from "./components/cart/CartDrawer"
 import { SidebarProvider } from "./components/context/SidebarContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CashfreeCheckout from "././pages/CashfreeCheckout";
+import NotFound from "./pages/NotFound";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -22,7 +23,23 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <ToastContainer />
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss={false}
+          draggable
+          pauseOnHover
+          limit={1}
+          stacked
+          theme="colored"
+          toastClassName="!rounded-xl !shadow-2xl !font-sans"
+          bodyClassName="!text-sm !font-medium"
+          progressClassName="!bg-white/30"
+        />
         <AuthProvider>
           <ProductProvider>
             <CartProvider>
@@ -60,7 +77,11 @@ function App() {
                         }
                       />
 
+                      {/* 404 Catch-all Route */}
+                      <Route path="*" element={<NotFound />} />
+
                     </Routes>
+
                   </SidebarProvider>
                 </OrderProvider>
               </ShippingProvider>

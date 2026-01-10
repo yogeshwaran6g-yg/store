@@ -4,6 +4,7 @@ import DeliveryDetailsForm from "./DeliveryDetailsForm";
 import { MdOutlineViewInAr } from "react-icons/md";
 import { FaCube, FaBook, FaStar } from "react-icons/fa";
 import { notifyError } from "../../utils/toast";
+import {toast } from "react-toastify"
 
 export default function Checkout() {
   const [step, setStep] = useState(1);
@@ -28,16 +29,21 @@ export default function Checkout() {
     const { parentName, email, contact, childName } = parentInfo;
     
     if (!parentName || !email || !contact || !childName) {
-      notifyError("All fields are required!");
+      toast.error("All fields are required!");
       return;
     }
     
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      notifyError("Please enter a valid email address!");
+      toast.error("Please enter a valid email address!");
       return;
     }
+    const phoneRegex = /^[6-9]\d{9}$/;
+    if (!phoneRegex.test(contact)) {
+      toast.error("Please enter a valid phone number!");
+      return;
+    } 
 
     setStep(2);
   };

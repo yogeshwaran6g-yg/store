@@ -13,8 +13,15 @@ import AddShippingAddress from "@/components/user/add-shipping-address";
 import CashfreeCheckout from "@pages/CashfreeCheckout";
 import PaymentStatus from "@/pages/PaymentStatus";
 import Checkout from "@/components/Checkout/Checkout";
+import OrderDetails from "@/components/order/OrderDetails";
 
 export const routes = [
+  {
+    path: "/user/order/:id",
+    element: OrderDetails,
+    layout: { header: true, footer: true },
+    protected: true,
+  },
   {
     path: "/checkout",
     element: Checkout,

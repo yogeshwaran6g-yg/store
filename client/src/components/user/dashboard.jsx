@@ -64,7 +64,7 @@ const Dashboard = ({ children }) => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
               <h2 className="text-2xl font-serif font-semibold text-purple-700">
-                ✨ Dashboard Overview
+                 Dashboard Overview
               </h2>
 
               {/* <button

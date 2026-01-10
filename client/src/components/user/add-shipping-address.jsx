@@ -52,7 +52,8 @@ const AddShippingAddress = () => {
                     <div className="grid grid-cols-6 gap-6">
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea
-                          register={register("name", { required: "Full Name is required" })}
+                          register={register}
+                          rules={{ required: "Full Name is required" }}
                           label="Full Name"
                           name="name"
                           type="text"
@@ -64,13 +65,14 @@ const AddShippingAddress = () => {
 
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea
-                          register={register("address", {
+                          register={register}
+                          rules={{
                             required: "Full Address is required",
                             minLength: {
                               value: 15,
                               message: "Address must be at least 15 characters long",
                             },
-                          })}
+                          }}
                           label="Full Address"
                           name="address"
                           type="text"
@@ -82,7 +84,8 @@ const AddShippingAddress = () => {
 
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea
-                          register={register("contact", { required: "Phone number is required" })}
+                          register={register}
+                          rules={{ required: "Phone number is required" }}
                           label="Phone"
                           name="contact"
                           type="tel"
@@ -93,10 +96,10 @@ const AddShippingAddress = () => {
                       </div>
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea
-                          register={register("email")}
+                          register={register}
                           label="Email"
                           name="email"
-                          type="tel"
+                          type="email"
                           placeholder="Email"
                           readOnly={true}
                         />
@@ -106,19 +109,20 @@ const AddShippingAddress = () => {
 
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea
-                          register={register("country")}
+                          register={register}
                           label="Country"
                           name="country"
                           type="text"
                           placeholder="Country"
-                          value="India"
+                          defaultValue="India"
                           readOnly={true}
                         />
                         <Error errorName={errors.country} />
                       </div>
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea
-                          register={register("city", { required: "City is required" })}
+                          register={register}
+                          rules={{ required: "City is required" }}
                           label="City"
                           name="city"
                           type="text"
@@ -128,7 +132,8 @@ const AddShippingAddress = () => {
                       </div>
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea
-                          register={register("area", { required: "Area is required" })}
+                          register={register}
+                          rules={{ required: "Area is required" }}
                           label="Area"
                           name="area"
                           type="text"
@@ -138,13 +143,14 @@ const AddShippingAddress = () => {
                       </div>
                       <div className="col-span-6 sm:col-span-3">
                         <InputArea
-                          register={register("zipCode", {
+                          register={register}
+                          rules={{
                             required: "Zip Code is required",
                             pattern: {
                               value: /^[0-9]+$/,
                               message: "Zip Code must be a number",
                             },
-                          })}
+                          }}
                           maxLength={6}
                           label="Zip Code"
                           name="zipCode"

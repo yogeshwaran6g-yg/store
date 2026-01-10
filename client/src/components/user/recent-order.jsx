@@ -6,7 +6,7 @@ import { SidebarContext } from "@context/SidebarContext";
 
 // internal imports
 import OrderHistory from "@components/order/OrderHistory";
-import CMSkeletonTwo from "@components/preloader/CMSkeletonTwo";
+import OrderHistorySkeleton from "@components/preloader/OrderHistorySkeleton";
 
 const RecentOrder = ({ data, loading, error }) => {
   const { handleChangePage, currentPage } = useContext(SidebarContext);
@@ -19,7 +19,7 @@ const RecentOrder = ({ data, loading, error }) => {
 
           {/* Header */}
           <h3 className="text-xl font-semibold mb-6 text-purple-700 flex items-center gap-2">
-            ✨ Recent Orders
+           Recent Orders
           </h3>
 
           <div className="overflow-x-auto">
@@ -27,7 +27,8 @@ const RecentOrder = ({ data, loading, error }) => {
               <div className="overflow-hidden rounded-xl">
 
                 {loading ? (
-                  <CMSkeletonTwo count={10} width={100} error={error} />
+                  <OrderHistorySkeleton rows={5} />
+
                 ) : data?.orders?.length === 0 ? (
                   <div className="text-center py-20">
                     <IoBagHandle className="mx-auto text-6xl text-purple-400 mb-4" />
@@ -53,8 +54,11 @@ const RecentOrder = ({ data, loading, error }) => {
                         <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-center w-[18%]">
                           Status
                         </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-right w-[15%]">
+						<th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-right w-[15%]">
                           Total
+                        </th>
+                        <th className="px-6 py-3 text-xs font-semibold text-purple-700 uppercase text-center w-[10%]">
+                          Details
                         </th>
 
                       </tr>
