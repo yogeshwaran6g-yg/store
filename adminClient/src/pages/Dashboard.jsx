@@ -44,7 +44,7 @@ export default function Dashboard() {
   const { data: cancelledOrders } = useOrdersList({
     page: 1,
     limit: 1,
-    status: "CANCELLED",
+    status: "CANCELED",
   });
 
   // Payments
