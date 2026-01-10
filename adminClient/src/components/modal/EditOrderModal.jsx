@@ -4,21 +4,23 @@ import { useUpdateOrder } from "../../services/orderService";
 
 const EditOrderModal = ({ isOpen, onClose, order }) => {
   const [status, setStatus] = useState(order?.status || "PENDING");
-  const [paymentStatus, setPaymentStatus] = useState(order?.paymentStatus || "PENDING");
+  // const [paymentStatus, setPaymentStatus] = useState(order?.paymentStatus || "PENDING");
   const updateMutation = useUpdateOrder();
 
   // Effect to sync status when modal opens or order changes
   useState(() => {
     if (order) {
       setStatus(order.status);
-      setPaymentStatus(order.paymentStatus);
+      // setPaymentStatus(order.paymentStatus);
     }
   }, [order, isOpen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     updateMutation.mutate(
-      { id: order._id, status, paymentStatus },
+      { id: order._id, status,
+        //  paymentStatus
+         },
       {
         onSuccess: () => {
           onClose();
@@ -64,7 +66,7 @@ const EditOrderModal = ({ isOpen, onClose, order }) => {
              </select>
           </div>
 
-          <div>
+          {/* <div>
              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Payment Status
              </label>
@@ -77,7 +79,7 @@ const EditOrderModal = ({ isOpen, onClose, order }) => {
                 <option value="PAID">PAID</option>
                 <option value="FAILED">FAILED</option>
              </select>
-          </div>
+          </div> */}
 
           <div className="flex gap-3 justify-end mt-6">
             <button

@@ -47,6 +47,7 @@ export default function Dashboard() {
     status: "CANCELED",
   });
 
+
   // Payments
   const { data: successPayments } = usePaymentsList({
     page: 1,
@@ -58,6 +59,8 @@ export default function Dashboard() {
     limit: 1,
     status: "FAILED",
   });
+
+  
 
   // Today's Orders
   const todayStart = new Date();
