@@ -59,6 +59,19 @@ export default function Dashboard() {
     status: "failed",
   });
 
+  // Today's Orders
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const todayEnd = new Date();
+  todayEnd.setHours(23, 59, 59, 999);
+
+  const { data: todayOrders } = useOrdersList({
+    page: 1,
+    limit: 1,
+    startDate: todayStart.toISOString(),
+    endDate: todayEnd.toISOString(),
+  });
+
   const getCount = (data) =>
     data?.pagination?.totalDocs || data?.pagination?.total || 0;
 
@@ -87,6 +100,12 @@ export default function Dashboard() {
     {
       title: "Total Orders",
       count: getCount(allOrders),
+      icon: ShoppingBag,
+      path: "/orders",
+    },
+    {
+      title: "Today's Orders",
+      count: getCount(todayOrders),
       icon: ShoppingBag,
       path: "/orders",
     },
