@@ -157,19 +157,33 @@ const updatePayment = async (req, res) => {
 
 const getAllPayments = async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 10, status } = req.query;
 
     const pageNumber = Number(page);
     const pageSize = Number(limit);
     const skip = (pageNumber - 1) * pageSize;
 
+    // Build query with optional status filter (supports comma-separated statuses or 'ALL')
+    const query = {};
+    if (status && String(status).toUpperCase() !== "ALL") {
+      const statuses = String(status)
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      if (statuses.length === 1) {
+        query.status = statuses[0];
+      } else if (statuses.length > 1) {
+        query.status = { $in: statuses };
+      }
+    }
+
     const [payments, total] = await Promise.all([
-      Payment.find({})
+      Payment.find(query)
         .sort({ createdAt: -1 })
         .populate("order", "invoice user_info")
         .skip(skip)
         .limit(pageSize),
-      Payment.countDocuments({}),
+      Payment.countDocuments(query),
     ]);
 
     rtnRes(res, 200, "Payments fetched successfully", {
