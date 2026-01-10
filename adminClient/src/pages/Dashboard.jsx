@@ -34,29 +34,29 @@ export default function Dashboard() {
   const { data: completedOrders } = useOrdersList({
     page: 1,
     limit: 1,
-    status: "delivered",
+    status: "DELIVERED",
   });
   const { data: pendingOrders } = useOrdersList({
     page: 1,
     limit: 1,
-    status: "pending",
+    status: "PENDING",
   });
   const { data: cancelledOrders } = useOrdersList({
     page: 1,
     limit: 1,
-    status: "cancelled",
+    status: "CANCELLED",
   });
 
   // Payments
   const { data: successPayments } = usePaymentsList({
     page: 1,
     limit: 1,
-    status: "success",
+    status: "SUCCESS",
   });
   const { data: failedPayments } = usePaymentsList({
     page: 1,
     limit: 1,
-    status: "failed",
+    status: "FAILED",
   });
 
   // Today's Orders
